@@ -3,6 +3,10 @@
 		{
 			"title": "Summary",
 			"to": "/projects"
+		},
+		{
+			"title": "Login",
+			"to": "/login"
 		}
 	],
 	"Projects": [

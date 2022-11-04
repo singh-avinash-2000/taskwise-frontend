@@ -1,0 +1,19 @@
+#sidebar{
+	background-color: white;
+	z-index: 1;
+}
+
+#nav-item-custom {
+	background-color: inherit;
+	height: 70px;
+	padding: 20px;
+	border-radius: 20px;
+}
+
+#nav-item-custom:hover {
+	background-color: #F5FFF7;
+}
+
+.nav-item-active {
+	background-color: #F5FFF7;
+}

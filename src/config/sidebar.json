@@ -1,0 +1,66 @@
+{
+	"Dashboard": [
+		{
+			"title": "Summary",
+			"to": "/projects"
+		}
+	],
+	"Projects": [
+		{
+			"title": "Apium - Client",
+			"to": "/project/apium-client"
+		},
+		{
+			"title": "Apium - Dev",
+			"to": "/project/apium-dev"
+		},
+		{
+			"title": "Craveable - Client",
+			"to": "/project/craveable-client"
+		},
+		{
+			"title": "Craveable - Dev",
+			"to": "/project/craveable-dev"
+		},
+		{
+			"title": "Dalos",
+			"to": "/project/dalos"
+		},
+		{
+			"title": "VawMe",
+			"to": "/project/vawme"
+		},
+		{
+			"title": "Visualize",
+			"to": "/project/visualize"
+		}
+	],
+	"Setting": [
+		{
+			"title": "Site",
+			"to": "/site-setting"
+		},
+		{
+			"title": "Account",
+			"to": "/account-setting"
+		},
+		{
+			"title": "Project",
+			"to": "/project-setting"
+		}
+	],
+	"Setting 2": [
+		{
+			"title": "Site",
+			"to": "/site-setting"
+		},
+		{
+			"title": "Account",
+			"to": "/account-setting"
+		},
+		{
+			"title": "Project",
+			"to": "/project-setting"
+		}
+	]
+}

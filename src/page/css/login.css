@@ -17,6 +17,7 @@
 .logo-text {
 	font-size: 24px;
 	font-weight: 700;
+	text-align: center;
 }
 
 .signup-button{
@@ -37,10 +38,11 @@
 	background-color: var(--darkgreen);
 	color: white;
 	padding : 10px;
-	font-size: 18px;
+	font-size: 16px;
 	font-weight: 600;
 	border-radius: 10px;
 	cursor: pointer;
+	margin-top: 17px;
 }
 
 .request-button:hover{
@@ -150,12 +152,8 @@
 		align-items: center;
 	}
 
-	.request-button{
-		margin-top: 15px;
-	}
-
 	.form{
-		margin: 0px 10px;
+		margin: 0px 30px;
 	}
 
 	.button-container{
@@ -167,6 +165,10 @@
 	.icon-button{
 		width: 70%;
 		margin: 5px;
+	}
+
+	.container{
+		background-color: white;
 	}
 }
 

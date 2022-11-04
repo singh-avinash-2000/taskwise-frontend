@@ -32,8 +32,7 @@ const Login = () =>
 		<div className="container">
 			<div className="nav-container">
 				<div className="logo-container">
-					<span className="logo-text">KHEERA</span>
-					<br />
+					<h3 className="logo-text">KHEERA</h3>
 					<hr />
 					<span className="email">CONNECT@KHEERA.CO</span>
 				</div>
@@ -61,7 +60,7 @@ const Login = () =>
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
 						allowClear
 					/>
-					<h3>Having trouble signing in?</h3>
+					<h3>Having trouble loging in?</h3>
 					<div style={{ width: "100%" }}>
 						<button className="signin-button">Login</button>
 					</div>

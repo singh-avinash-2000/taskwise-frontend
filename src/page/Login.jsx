@@ -43,9 +43,9 @@ const Login = () =>
 			</div>
 
 			<div className="login-container">
-				<h3 className="form-title">Sign In</h3>
+				<h3 className="form-title">Login</h3>
 				<div className="form">
-					<h5 className="supporting-text">Hey, Enter your details to sign in to your account</h5>
+					<h5 className="supporting-text">Hey, Enter your details to login to your account</h5>
 					<Input
 						className="custom-input"
 						placeholder="Enter Email / Phone No"
@@ -63,10 +63,10 @@ const Login = () =>
 					/>
 					<h3>Having trouble signing in?</h3>
 					<div style={{ width: "100%" }}>
-						<button className="signin-button">Sign In</button>
+						<button className="signin-button">Login</button>
 					</div>
 				</div>
-				<h3 className="extra-text"> &mdash; Or Sign In with &mdash;</h3>
+				<h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
 				<div className="button-container">
 					<Button type="secondary" className="icon-button" shape="round" icon={<GoogleOutlined />} size="large">
 						Google

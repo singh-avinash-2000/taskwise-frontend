@@ -37,16 +37,15 @@ const Login = () =>
 					<hr />
 					<span className="email">CONNECT@KHEERA.CO</span>
 				</div>
-				<div className="button-container">
-					<button className="signup-button">Sign Up</button>
-					<button className="request-button">Demo</button>
+				<div>
+					<button className="request-button">Create Account</button>
 				</div>
 			</div>
 
 			<div className="login-container">
 				<h3 className="form-title">Sign In</h3>
-				<h5 className="supporting-text">Hey, Enter your details to sign in to your account</h5>
 				<div className="form">
+					<h5 className="supporting-text">Hey, Enter your details to sign in to your account</h5>
 					<Input
 						className="custom-input"
 						placeholder="Enter Email / Phone No"

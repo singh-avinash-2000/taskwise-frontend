@@ -56,7 +56,7 @@
 .login-container{
 	background-color: white;
 	width: 500px;
-	height: 600px;
+	height: auto;
 	top: 0;
 	bottom: 0;
 	right: 0;
@@ -137,8 +137,21 @@
 	align-items: center;
 }
 
+.stepper{
+	width: 80%;
+	margin: auto;
+}
 
-@media only screen and (max-width: 450px) {
+.anticon {
+	color: var(--darkgreen) !important;
+}
+
+.ant-steps-item-title:after{
+	background-color: var(--darkgreen) !important;
+}
+
+@media only screen and (max-width: 450px) 
+{
 	.login-container {
 		width: 100%;
 		height: auto;

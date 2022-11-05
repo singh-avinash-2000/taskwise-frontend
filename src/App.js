@@ -51,9 +51,11 @@ const App = () =>
 					}
 
 					<div style={{ overflow: 'auto', width: '100%', position: position }}>
-						<div style={{ width: '100%', backgroundColor: '#F5FFF7', zIndex: -1, paddingTop: "25px" }}>
-							<Outlet />
-							<div style={{ backgroundColor: '#002414' }}>
+						<div style={{ width: '100%', backgroundColor: 'var(--lightgreen)', zIndex: -1, paddingTop: "25px" }}>
+							<div style={{ padding: "10px" }}>
+								<Outlet />
+							</div>
+							<div style={{ backgroundColor: 'var(--darkgreen)' }}>
 								<CustomFooter />
 							</div>
 						</div>

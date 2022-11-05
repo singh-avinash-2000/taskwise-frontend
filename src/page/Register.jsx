@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Input, Button } from 'antd';
-import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled } from '@ant-design/icons';
+import { Input, Button, Steps } from 'antd';
+import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, LockOutlined, UserOutlined } from '@ant-design/icons';
 
 import "./css/login.css";
 
-const Login = () =>
+const Register = () =>
 {
 	const [state, setState] = useState(true);
+
 	const handleBlur = (e) =>
 	{
 		if (validateEmail(e.target.value))
@@ -37,14 +38,23 @@ const Login = () =>
 					<span className="email">CONNECT@KHEERA.CO</span>
 				</div>
 				<div>
-					<button className="request-button">Create Account</button>
+					<button className="request-button">Login</button>
 				</div>
 			</div>
 
 			<div className="login-container">
-				<h3 className="form-title">Login</h3>
+				<h3 className="form-title">Get Started</h3>
 				<div className="form">
-					<h5 className="supporting-text">Hey, Enter your details to login to your account</h5>
+					<h5 className="supporting-text">Hey, Enter your details to create your account</h5>
+					<Input
+						className="custom-input"
+						placeholder="Display Name"
+						allowClear
+						type="email"
+						suffix={state ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
+						onBlur={handleBlur}
+						onClick={handleBlur}
+					/>
 					<Input
 						className="custom-input"
 						placeholder="Email Address"
@@ -60,9 +70,14 @@ const Login = () =>
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
 						allowClear
 					/>
-					<h3>Having trouble loging in?</h3>
+					<Input.Password
+						className="custom-input"
+						placeholder="Confirm Password"
+						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+						allowClear
+					/>
 					<div >
-						<button className="signin-button">Login</button>
+						<button className="signin-button">Register</button>
 					</div>
 				</div>
 				<h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
@@ -83,4 +98,4 @@ const Login = () =>
 	);
 };
 
-export default Login;
+export default Register;

@@ -33,9 +33,17 @@
 .image-container{
 	text-align: center;
 	object-fit: contain;
-	width: 95%;
-	max-width: 400px;
+	width: 98%;
 	margin: auto;
+	z-index: -1;
+}
+
+
+.pp-container{
+	height: 200px;
+	width: 200px;
+	z-index: 1;
+	position: absolute;
 }
 
 .upload-button{

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {Link} from "react-router-dom"
 import { Input, Button, Steps } from 'antd';
 import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, LockOutlined, UserOutlined } from '@ant-design/icons';
 
@@ -38,7 +39,7 @@ const Register = () =>
 					<span className="email">CONNECT@KHEERA.CO</span>
 				</div>
 				<div>
-					<button className="request-button">Login</button>
+					<Link to="/login"><button className="request-button">Login</button></Link>
 				</div>
 			</div>
 

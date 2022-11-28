@@ -24,7 +24,8 @@ const UserAccount = () =>
 		}
 	];
 
-	const pp = "https://images.unsplash.com/photo-1423479185712-25d4a4fe1006?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60";
+	const cp = "https://images.unsplash.com/photo-1423479185712-25d4a4fe1006?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60";
+	const pp = "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
 	return (
 		<Row gutter={[10, 15]}>
 			<Col xs={24} md={8} xl={8}>
@@ -34,7 +35,8 @@ const UserAccount = () =>
 					</div>
 					<Divider />
 					<div className="image-container">
-						<Image src={pp} alt="profile-picture" className="image" />
+						<Image src={cp} alt="profile-picture" className="image" />
+						{/* <Image src={pp} alt="profile-picture" className="image" /> */}
 					</div>
 					<Divider />
 					<div className="button-container">

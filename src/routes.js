@@ -34,7 +34,7 @@ const routes = createBrowserRouter([
 				element: <UserAccount />
 			}
 		],
-		errorElement: <h1>Error Occurred</h1>
+		errorElement: <h1>This page is not created</h1>
 	}
 ]);
 

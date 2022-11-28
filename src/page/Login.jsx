@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Input, Button } from 'antd';
 import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled } from '@ant-design/icons';
 
@@ -37,7 +38,7 @@ const Login = () =>
 					<span className="email">CONNECT@KHEERA.CO</span>
 				</div>
 				<div>
-					<button className="request-button">Create Account</button>
+					<Link to="/register"><button className="request-button">Create Account</button></Link>
 				</div>
 			</div>
 
@@ -62,7 +63,7 @@ const Login = () =>
 					/>
 					<h3>Having trouble loging in?</h3>
 					<div >
-						<button className="signin-button">Login</button>
+						<Link to="/user/account"><button className="signin-button">Login</button></Link>
 					</div>
 				</div>
 				<h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>

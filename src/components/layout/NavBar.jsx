@@ -34,9 +34,6 @@ const NavBar = () =>
 				<Popover placement="bottomRight" title={"Notification"} content={Notification} trigger="click">
 					<BellOutlined style={styles.icon} />
 				</Popover>
-				<Popover placement="bottomLeft" title={"Account"} content={Notification} trigger="click">
-					<UserOutlined style={styles.icon} />
-				</Popover>
 			</div>
 		</div>
 

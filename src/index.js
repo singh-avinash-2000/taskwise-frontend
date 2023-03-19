@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router-dom";
 
 import routes from "./routes";
 
-import 'antd/dist/antd.min.css';
+import 'antd/dist/reset.css';
 import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

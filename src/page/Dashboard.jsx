@@ -1,0 +1,92 @@
+import { AutoComplete, Row, Col, Input, Upload } from 'antd';
+import { useNavigate } from "react-router-dom";
+import { PlusOutlined } from "@ant-design/icons";
+import "./css/project.css";
+
+const Dashboard = () =>
+{
+	const navigate = useNavigate();
+
+	const options = [
+		{ value: 'Burns Bay Road' },
+		{ value: 'Downing Street' },
+		{ value: 'Wall Street' },
+	];
+
+	const dummy = [
+		{
+			name: "Bentley Systems",
+		},
+		{
+			name: "Vawsum Schools",
+		},
+		{
+			name: "Codelogicx",
+		},
+		{
+			name: "Utah Tech Labs",
+		},
+		{
+			name: "Dalos",
+		},
+		{
+			name: "VawMe",
+		}
+	];
+
+	const getInitals = (name) =>
+	{
+		const wordArr = name.split(" ");
+		let str = "";
+		wordArr.map(w =>
+		{
+			str += w[0].toUpperCase() + " ";
+		});
+
+		return str;
+	};
+
+	const colourArray = ["#abdbe3", "#eeeee4", "#ffffcc", "#eab676", "#ffccff", "#cce7e8", "#edb879", "#ccffcc"];
+
+	return (
+		<div className="project-container">
+			<AutoComplete
+				className="search-box"
+				options={options}
+				filterOption={(inputValue, option) =>
+					option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+				}
+			>
+				<Input.Search size="large" placeholder="Search project name..." />
+			</AutoComplete>
+
+			<Row justify="start" className="project-div">
+				<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4}>
+					<div onClick={() => navigate("/projects/new-project")}>
+						<div className="new-project-div">
+							<PlusOutlined className="new-project-icon" />
+						</div>
+						<h3 className="project-title">New Project</h3>
+					</div>
+				</Col>
+
+				{
+					dummy.map((d, id) =>
+					{
+						let idx = Math.floor(Math.random() * 7);
+						console.log(idx);
+						return (
+							<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4} key={id}>
+								<div className="new-project-div" style={{ backgroundColor: colourArray[idx] }}>
+									<span className="initials">{getInitals(d.name)}</span>
+								</div>
+								<h3 className="project-title">{d.name}</h3>
+							</Col>
+						);
+					})
+				}
+			</Row>
+		</div>
+	);
+};
+export default Dashboard;

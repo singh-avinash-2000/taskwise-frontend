@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --lightgreen: #ebfbee;
-  --darkgreen: #002414;
+  --lightgreen: #ffffff;
+  --darkblue: #1a0447;
+  --lightblue:#bbbefc;
 }
 
 body{
@@ -10,6 +11,10 @@ body{
     padding:0;
     font-family: "Open Sans", sans-serif;
 	color: #002414;
+}
+
+.ant-breadcrumb{
+	margin-bottom: 20px;
 }
 
 *{

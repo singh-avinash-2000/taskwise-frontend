@@ -1,22 +1,26 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Input, Button } from 'antd';
-import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled } from '@ant-design/icons';
-
+import { Link, useNavigate } from "react-router-dom";
+import { Input, Button, message } from 'antd';
+import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, HeatMapOutlined } from '@ant-design/icons';
 import "./css/login.css";
+import axios from "axios";
 
 const Login = () =>
 {
-	const [state, setState] = useState(true);
+	const [isValidEmail, setIsValidEmail] = useState(true);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const routes = useNavigate();
+
 	const handleBlur = (e) =>
 	{
 		if (validateEmail(e.target.value))
 		{
-			setState(false);
+			setIsValidEmail(false);
 		}
 		else
 		{
-			setState(true);
+			setIsValidEmail(true);
 		}
 	};
 
@@ -29,13 +33,44 @@ const Login = () =>
 			);
 	};
 
+	const handleLogin = async () =>
+	{
+		try
+		{
+			if (!email.trim() || !password.trim())
+			{
+				alert("invalid");
+			}
+			else
+			{
+				const data = {
+					email,
+					password
+				};
+
+				const response = await axios.post(process.env.REACT_APP_BASE_URL + "/auth/login", data);
+
+				message.success(response.data.message);
+
+				localStorage.setItem("token", response.data.result.token);
+
+				routes("/dashboard");
+			}
+		}
+		catch (error)
+		{
+			message.error(error.response.data.message);
+		}
+	};
+
 	return (
 		<div className="container">
 			<div className="nav-container">
 				<div className="logo-container">
-					<h3 className="logo-text">KHEERA</h3>
+					<HeatMapOutlined className="logo" />
+					<span className="logo-text">PING</span>
 					<hr />
-					<span className="email">CONNECT@KHEERA.CO</span>
+					<span className="email">CONNECT@PING.CO</span>
 				</div>
 				<div>
 					<Link to="/register"><button className="request-button">Create Account</button></Link>
@@ -51,35 +86,45 @@ const Login = () =>
 						placeholder="Email Address"
 						allowClear
 						type="email"
-						suffix={state ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
+						value={email}
+						onChange={(e) =>
+						{
+							setEmail(e.target.value);
+						}}
+						suffix={isValidEmail ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
 						onBlur={handleBlur}
 						onClick={handleBlur}
 					/>
 					<Input.Password
 						className="custom-input"
 						placeholder="Password"
+						value={password}
+						onChange={(e) =>
+						{
+							setPassword(e.target.value);
+						}}
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
 						allowClear
 					/>
 					<h3>Having trouble loging in?</h3>
 					<div >
-						<Link to="/user/account"><button className="signin-button">Login</button></Link>
+						<button className="signin-button" onClick={handleLogin}>Login</button>
 					</div>
 				</div>
 				<h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
 				<div className="button-container">
-					<Button type="secondary" className="icon-button" shape="round" icon={<GoogleOutlined />} size="large">
+					<Button type="secondary" className="icon-button" shape="round" icon={<GoogleOutlined />} size="large" >
 						Google
 					</Button>
-					<Button type="secondary" className="icon-button" shape="round" icon={<AppleFilled />} size="large">
+					{/* <Button type="secondary" className="icon-button" shape="round" icon={<AppleFilled />} size="large">
 						Apple
 					</Button>
 					<Button type="secondary" className="icon-button" shape="round" icon={<FacebookFilled />} size="large">
 						Facebook
-					</Button>
+					</Button> */}
 				</div>
 			</div>
-			<h4 className="cr-text">Copyright @ KHEERA 2022 | Privacy Policy</h4>
+			<h4 className="cr-text">Copyright @ PING 2022 | Privacy Policy</h4>
 		</div>
 	);
 };

@@ -1,23 +1,25 @@
 import { useState } from "react";
-import {Link} from "react-router-dom"
-import { Input, Button, Steps } from 'antd';
-import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from "react-router-dom";
+import { Input, Button, message } from 'antd';
+import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, LockOutlined, UserOutlined, HeatMapOutlined } from '@ant-design/icons';
 
 import "./css/login.css";
+import axios from "axios";
 
 const Register = () =>
 {
-	const [state, setState] = useState(true);
-
+	const [isValidEmail, setIsValidEmail] = useState(true);
+	const [formState, setFormState] = useState({});
+	let navigate = useNavigate();
 	const handleBlur = (e) =>
 	{
 		if (validateEmail(e.target.value))
 		{
-			setState(false);
+			setIsValidEmail(false);
 		}
 		else
 		{
-			setState(true);
+			setIsValidEmail(true);
 		}
 	};
 
@@ -30,13 +32,45 @@ const Register = () =>
 			);
 	};
 
+	const handleFormChange = (e) =>
+	{
+		formState[e.target.name] = e.target.value;
+		setFormState(formState);
+	};
+
+	const handleRegister = async () =>
+	{
+		try
+		{
+			if (formState.password.trim() !== formState.confirm_password.trim())
+			{
+				alert("passwords doesn't match");
+			}
+			else
+			{
+				const response = await axios.post(process.env.REACT_APP_BASE_URL + "/auth/register", formState);
+				localStorage.setItem("token", response.data.result.token);
+				navigate("/user/account");
+
+				message.success(response.data.message);
+			}
+		}
+		catch (error)
+		{
+			console.log(error);
+			message.error("Something went wrong!");
+		}
+
+	};
+
 	return (
 		<div className="container">
 			<div className="nav-container">
 				<div className="logo-container">
-					<h3 className="logo-text">KHEERA</h3>
+					<HeatMapOutlined className="logo" />
+					<span className="logo-text">PING</span>
 					<hr />
-					<span className="email">CONNECT@KHEERA.CO</span>
+					<span className="email">CONNECT@PING.CO</span>
 				</div>
 				<div>
 					<Link to="/login"><button className="request-button">Login</button></Link>
@@ -51,34 +85,43 @@ const Register = () =>
 						className="custom-input"
 						placeholder="Display Name"
 						allowClear
-						type="email"
-						suffix={state ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
-						onBlur={handleBlur}
-						onClick={handleBlur}
+						value={formState.display_name}
+						name="display_name"
+						onChange={handleFormChange}
+						type="text"
 					/>
 					<Input
 						className="custom-input"
 						placeholder="Email Address"
 						allowClear
 						type="email"
-						suffix={state ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
+						value={formState.email}
+						name="email"
+						onChange={handleFormChange}
+						suffix={isValidEmail ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
 						onBlur={handleBlur}
 						onClick={handleBlur}
 					/>
 					<Input.Password
 						className="custom-input"
 						placeholder="Password"
+						value={formState.password}
+						name="password"
+						onChange={handleFormChange}
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
 						allowClear
 					/>
 					<Input.Password
 						className="custom-input"
 						placeholder="Confirm Password"
+						value={formState.confirm_password}
+						name="confirm_password"
+						onChange={handleFormChange}
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
 						allowClear
 					/>
 					<div >
-						<button className="signin-button">Register</button>
+						<button className="signin-button" onClick={handleRegister} >Register</button>
 					</div>
 				</div>
 				<h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
@@ -86,15 +129,15 @@ const Register = () =>
 					<Button type="secondary" className="icon-button" shape="round" icon={<GoogleOutlined />} size="large">
 						Google
 					</Button>
-					<Button type="secondary" className="icon-button" shape="round" icon={<AppleFilled />} size="large">
+					{/* <Button type="secondary" className="icon-button" shape="round" icon={<AppleFilled />} size="large">
 						Apple
 					</Button>
 					<Button type="secondary" className="icon-button" shape="round" icon={<FacebookFilled />} size="large">
 						Facebook
-					</Button>
+					</Button> */}
 				</div>
 			</div>
-			<h4 className="cr-text">Copyright @ KHEERA 2022 | Privacy Policy</h4>
+			<h4 className="cr-text">Copyright @ PING 2022 | Privacy Policy</h4>
 		</div>
 	);
 };

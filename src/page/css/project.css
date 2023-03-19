@@ -1,0 +1,52 @@
+.search-box {
+	margin: 0px 10% 50px 10% !important;
+    width: 80% !important;
+}
+
+.search-input {
+	height: 50px;
+}
+
+.project-container{
+	width: 100%;
+}
+
+.project-logo {
+	font-size: 50px;
+}
+
+.new-project-div {
+	border: 2px dotted gray;
+	height: 80px;
+	width: 80px;
+	border-radius: 20px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	margin: auto;
+}
+
+.project-item {
+	text-align: center;
+	padding: 10px;
+}
+
+.project-title {
+	font-weight: 600;
+}
+
+.initials{
+	font-size: 22px;
+	font-weight: 700;
+	text-align: justify;
+}
+
+.new-project-icon {
+	font-size: 20px;
+}
+
+.project-div {
+	width: 90%;
+	margin: auto;
+}

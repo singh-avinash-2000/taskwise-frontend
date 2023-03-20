@@ -5,7 +5,6 @@ import Footer from "./components/layout/Footer";
 import Login from "./page/Login";
 import Dashboard from "./page/Dashboard";
 import { ContextProvider } from "./context/ThemeProvider";
-import Home from "./page/Home";
 import Register from "./page/Register";
 import NewProject from "./page/project/NewProject";
 import ProjectMembers from "./page/project/ProjectMembers";
@@ -14,6 +13,7 @@ import Redirect from "./components/ui/Redirect";
 import { mainSideBarData, projectSideBarData } from "./config/data";
 import NewTask from "./page/project/NewTask";
 import TaskInfo from "./page/project/TaskInfo";
+import TaskList from "./page/project/TaskList";
 
 const routes = createBrowserRouter([
 	{
@@ -25,27 +25,23 @@ const routes = createBrowserRouter([
 		element: <Redirect component={Register} />
 	},
 	{
-		path: "/projects",
+		path: "/project",
 		element: <ContextProvider><Layout sidebar={MainSidebar} sidebarData={projectSideBarData} footer={Footer} /></ContextProvider>,
 		children: [
 			{
-				path: "/projects/",
-				element: <Dashboard />
+				path: "/project/tasks",
+				element: <TaskList />
 			},
 			{
-				path: "/projects/new-project",
-				element: <NewProject />
-			},
-			{
-				path: "/projects/:project_id/members",
+				path: "/project/members",
 				element: <ProjectMembers />
 			},
 			{
-				path: "/projects/:project_id/create-task",
+				path: "/project/tasks/create-task",
 				element: <NewTask />
 			},
 			{
-				path: "/projects/:project_id/tasks/:task_id",
+				path: "/project/tasks/:task_id",
 				element: <TaskInfo />
 			},
 		],
@@ -55,20 +51,20 @@ const routes = createBrowserRouter([
 		element: <ContextProvider><Layout sidebar={MainSidebar} sidebarData={mainSideBarData} footer={Footer} /></ContextProvider>,
 		children: [
 			{
-				path: "/",
-				element: <Home />
-			},
-			{
-				path: "/dashboard",
-				element: <Dashboard />
+				path: "/insights",
+				element: <h1>Feeds</h1>
 			},
 			{
 				path: "user/account",
 				element: <UserAccount />
-			}
-		],
-		errorElement: <h1>This page is not created</h1>
-	}
+			},
+			{
+				path: "/",
+				element: <Dashboard />
+			},
+		]
+	},
+
 ]);
 
 export default routes;

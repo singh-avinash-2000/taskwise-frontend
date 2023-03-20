@@ -7,6 +7,11 @@ const Redirect = (props) =>
 
 	useEffect(() =>
 	{
+		if (props.restricted)
+		{
+			navigate(props.to);
+		}
+
 		const token = localStorage.getItem("token");
 
 		if (token)

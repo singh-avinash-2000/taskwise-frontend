@@ -27,7 +27,6 @@ const ProjectDataForm = () =>
 	const handleFormSubmit = async () =>
 	{
 		await form.validateFields();
-		navigate("/dashboard");
 	};
 
 	const handleDropDownChange = (value) =>

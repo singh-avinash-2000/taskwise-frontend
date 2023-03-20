@@ -28,7 +28,6 @@ const MainLayout = (props) =>
 				setCollapsed(false);
 			}
 
-			console.log(window.innerHeight);
 			setScreenHeight(window.innerHeight - 65);
 			setScreenWidth(window.innerWidth);
 

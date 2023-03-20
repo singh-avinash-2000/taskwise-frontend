@@ -143,10 +143,6 @@
 	margin: auto;
 }
 
-.anticon {
-	color: var(--darkblue) !important;
-}
-
 .ant-steps-item-title:after{
 	background-color: var(--darkblue) !important;
 }

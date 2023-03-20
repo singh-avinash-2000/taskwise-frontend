@@ -8,7 +8,7 @@ export const mainSideBarData = {
 	"Projects": [
 		{
 			"title": "Dashboard",
-			"to": "/dashboard"
+			"to": "/"
 		},
 		{
 			"title": "Open Tasks",
@@ -24,22 +24,22 @@ export const mainSideBarData = {
 export const projectSideBarData = {
 	"Bentley": [
 		{
-			"title": "Dashboard",
-			"to": "/dashboard"
+			"title": "Tasks",
+			"to": "/project/tasks"
 		}
 	],
 	"Interact": [
 		{
 			"title": "Members",
-			"to": "/members"
+			"to": "/project/members"
 		},
 		{
 			"title": "Chat",
-			"to": "/chat"
+			"to": "/project/chat"
 		},
 		{
 			"title": "Documents",
-			"to": "/documents"
+			"to": "/project/documents"
 		}
 	]
 }

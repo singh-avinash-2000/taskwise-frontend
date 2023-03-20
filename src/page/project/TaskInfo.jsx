@@ -1,10 +1,15 @@
 import React from 'react';
 import { Breadcrumb, Space, Button, Divider, Row, Col, Select, Avatar, Image, Tabs } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, ApartmentOutlined, LinkOutlined } from "@ant-design/icons";
 import TaskItem from "../../components/ui/TaskItem";
+import { useLocation } from "react-router-dom";
 
 const TaskInfo = () =>
 {
+	const location = useLocation();
+
+	console.log(location.state);
+
 	const onChange = (key) =>
 	{
 		console.log(key);
@@ -54,8 +59,8 @@ const TaskInfo = () =>
 					<h2 style={{ fontWeight: "600" }}>Implementation details of web sockets</h2>
 
 					<Space style={{ margin: "20px 0px" }}>
-						<Button type="primary">Attach</Button>
-						<Button type="primary">Add sub task</Button>
+						<Button type="primary"> <LinkOutlined />Attach</Button>
+						<Button type="primary"><ApartmentOutlined />Add sub task</Button>
 					</Space>
 
 					<h3>Description</h3>

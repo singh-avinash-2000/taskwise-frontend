@@ -1,11 +1,14 @@
-import { AutoComplete, Row, Col, Input, Upload } from 'antd';
+import { AutoComplete, Row, Col, Input, Modal } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import "./css/project.css";
+import { useState } from "react";
+import NewProject from "./project/NewProject";
 
 const Dashboard = () =>
 {
 	const navigate = useNavigate();
+	const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
 
 	const options = [
 		{ value: 'Burns Bay Road' },
@@ -62,22 +65,20 @@ const Dashboard = () =>
 
 			<Row justify="start" className="project-div">
 				<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4}>
-					<div onClick={() => navigate("/projects/new-project")}>
-						<div className="new-project-div">
+					<div>
+						<div className="new-project-div" onClick={() => { setNewProjectModalOpen(true); }}>
 							<PlusOutlined className="new-project-icon" />
 						</div>
 						<h3 className="project-title">New Project</h3>
 					</div>
 				</Col>
-
 				{
 					dummy.map((d, id) =>
 					{
 						let idx = Math.floor(Math.random() * 7);
-						console.log(idx);
 						return (
 							<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4} key={id}>
-								<div className="new-project-div" style={{ backgroundColor: colourArray[idx] }}>
+								<div className="new-project-div" style={{ backgroundColor: colourArray[idx] }} onClick={() => navigate("/project/tasks", { state: { project_id: Math.ceil(Math.random() * 9999) } })}>
 									<span className="initials">{getInitals(d.name)}</span>
 								</div>
 								<h3 className="project-title">{d.name}</h3>
@@ -86,6 +87,10 @@ const Dashboard = () =>
 					})
 				}
 			</Row>
+
+			<Modal title="Add Project" open={newProjectModalOpen} onCancel={() => { setNewProjectModalOpen(false); }} footer={null}>
+				<NewProject />
+			</Modal>
 		</div>
 	);
 };

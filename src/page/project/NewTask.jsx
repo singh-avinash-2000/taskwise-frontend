@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { useLocation } from "react-router-dom";
 import ProjectNewTaskForm from "../../components/ui/ProjectNewTaskForm";
+
 
 const NewTask = () =>
 {
+	const location = useLocation();
+	console.log(location.state);
 	const [formData, setFormData] = useState({});
 
 	return (

@@ -1,16 +1,15 @@
-import React from 'react';
-import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button } from "antd";
+import React, { useState } from 'react';
+import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button, Modal } from "antd";
 import { MinusSquareOutlined, MinusSquareTwoTone, PlusSquareOutlined, PlusSquareTwoTone } from "@ant-design/icons";
-// hello - bang bang
 import { useNavigate, useLocation } from "react-router-dom";
+import NewTask from "./NewTask";
 
 const { Text } = Typography;
 
 const TaskList = () =>
 {
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const navigate = useNavigate();
-	const location = useLocation();
-	console.log(location.state);
 
 	const generateIndex = (limit) =>
 	{
@@ -122,6 +121,11 @@ const TaskList = () =>
 		return formattedRandomDate;
 	}
 
+	const handleTaskCreation = () =>
+	{
+		setIsModalOpen(true);
+	};
+
 	for (let i = 0; i < 25; i++)
 	{
 		data.push(
@@ -157,10 +161,7 @@ const TaskList = () =>
 					}
 				]}
 			/>
-			<Button type="primary" style={{ float: "right", margin: "0px 0px 10px 0px" }} onClick={() =>
-			{
-				navigate("/project/tasks/create-task", { state: location.state });
-			}}>Create new task</Button>
+			<Button type="primary" style={{ float: "right", margin: "0px 0px 10px 0px" }} onClick={handleTaskCreation}>Create new task</Button>
 			<Table columns={columns} dataSource={data} scroll={{ x: true }} size="large" onRow={(record, rowIndex) =>
 			{
 				return {
@@ -170,6 +171,10 @@ const TaskList = () =>
 					},
 				};
 			}} />
+
+			<Modal title="Create Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null}>
+				<NewTask />
+			</Modal>
 		</div>
 	);
 };

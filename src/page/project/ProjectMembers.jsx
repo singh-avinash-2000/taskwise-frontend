@@ -1,4 +1,4 @@
-import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Input, Result, Spin, Tag } from 'antd';
+import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Input, Result, Spin, Tag, Breadcrumb } from 'antd';
 import { useEffect, useState } from 'react';
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 
@@ -139,6 +139,16 @@ const ProjectMembers = () =>
 
 	return (
 		<div>
+			<Breadcrumb
+				items={[
+					{
+						title: 'Bentley Systems',
+					},
+					{
+						title: "Members"
+					}
+				]}
+			/>
 			<Button type="primary" style={{ float: "right", margin: "0px 20px 20px 0px", backgroundColor: "var(--darkblue)", color: "white" }} onClick={showModal} >Invite User </Button>
 			<Divider />
 			<Table

@@ -3,28 +3,28 @@
 :root {
   --lightgreen: #ffffff;
   --darkblue: #1677ff;
-  --lightblue:#dbe7f8;
+  --lightblue: #dbe7f8;
 }
 
-body{
-    margin: 0;
-    padding:0;
-    font-family: "Open Sans", sans-serif;
-	color: #002414;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
+  color: #002414;
 }
 
-.ant-breadcrumb{
-	margin-bottom: 20px;
+.ant-breadcrumb {
+  margin-bottom: 20px;
 }
 
-*{
-  -ms-overflow-style:none;
+* {
+  -ms-overflow-style: none;
 }
 
 ::-webkit-scrollbar {
   display: none;
 }
 
-#logo{
-	height: 70px;
+#logo {
+  height: 70px;
 }

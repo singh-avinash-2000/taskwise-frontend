@@ -1,5 +1,4 @@
-import
-{
+import {
 	Tabs,
 	Button,
 	Cascader,
@@ -22,33 +21,31 @@ import { useNavigate } from "react-router-dom";
 import { convertFromRaw, convertToRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { InboxOutlined } from "@ant-design/icons";
+
+import './ProjectNewTaskForm.css'
+
 const { Dragger } = Upload;
 
-const ProjectNewTaskForm = () =>
-{
+const ProjectNewTaskForm = () => {
 	const [form] = Form.useForm();
 	const navigate = useNavigate();
 	const [prefix, setPrefix] = useState('@');
 	const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-	const onSearch = (_, newPrefix) =>
-	{
+	const onSearch = (_, newPrefix) => {
 		setPrefix(newPrefix);
 	};
 
-	const handleFormSubmit = async () =>
-	{
+	const handleFormSubmit = async () => {
 		await form.validateFields();
 		navigate("/dashboard");
 	};
 
-	const handleDropDownChange = (value) =>
-	{
+	const handleDropDownChange = (value) => {
 
 	};
 
-	const onEditorStateChange = (value) =>
-	{
+	const onEditorStateChange = (value) => {
 		setEditorState(value);
 	};
 
@@ -56,8 +53,7 @@ const ProjectNewTaskForm = () =>
 		'@': ['afc163', 'zombiej', 'yesmeck']
 	};
 
-	useEffect(() =>
-	{
+	useEffect(() => {
 		const contentState = convertFromRaw({
 			"blocks": [
 				{
@@ -90,23 +86,18 @@ const ProjectNewTaskForm = () =>
 		name: 'file',
 		multiple: true,
 		action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-		onChange(info)
-		{
+		onChange(info) {
 			const { status } = info.file;
-			if (status !== 'uploading')
-			{
+			if (status !== 'uploading') {
 				console.log(info.file, info.fileList);
 			}
-			if (status === 'done')
-			{
+			if (status === 'done') {
 				message.success(`${info.file.name} file uploaded successfully.`);
-			} else if (status === 'error')
-			{
+			} else if (status === 'error') {
 				message.error(`${info.file.name} file upload failed.`);
 			}
 		},
-		onDrop(e)
-		{
+		onDrop(e) {
 			console.log('Dropped files', e.dataTransfer.files);
 		},
 	};
@@ -114,11 +105,7 @@ const ProjectNewTaskForm = () =>
 	return (
 		<div>
 			<Card
-				style={{
-					maxWidth: 800,
-					margin: "auto"
-				}}
-			>
+				className="project-new-task-form-card">
 				<Form
 					labelCol={{
 						span: 6,
@@ -153,7 +140,7 @@ const ProjectNewTaskForm = () =>
 						]}
 					>
 						{/* <TextArea placeholder="Please input task description" /> */}
-						<div style={{ border: "1px solid lightgray", borderRadius: '10px', padding: '5px' }}>
+						<div className="new-task-description-wrapper">
 							<Editor
 								editorState={editorState}
 								toolbarClassName="toolbarClassName"
@@ -218,7 +205,7 @@ const ProjectNewTaskForm = () =>
 					<Form.Item
 						style={{ textAlign: "center" }}
 					>
-						<Button htmlType="submit" style={{ backgroundColor: "var(--darkblue)", color: "white" }} shape="round">Submit</Button>
+						<Button htmlType="submit" shape="round" className='add-project-task-btn'>Submit</Button>
 					</Form.Item>
 				</Form>
 			</Card >

@@ -1,0 +1,18 @@
+.project-data-form-card {
+    max-width: 800;
+    margin: auto
+}
+
+.project-data-form-submit-button {
+    text-align: center;
+}
+
+.add-project-submit-btn {
+    background-color: var(--darkblue);
+    color: white;
+}
+
+.add-project-submit-btn:hover {
+    background-color: var(--lightblue);
+    color: white;
+}

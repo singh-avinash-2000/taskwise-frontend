@@ -1,0 +1,14 @@
+.taskitem-wrapper {
+    padding: 10;
+    border: 1px solid lightgray;
+    border-radius: 5;
+    margin: 5;
+}
+
+.taskitem-row {
+    padding: 0px 10px;
+}
+
+.progess-select {
+    width: 120;
+}

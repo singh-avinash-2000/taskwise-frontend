@@ -1,9 +1,8 @@
 import { Card, Col, Row, Image, Divider, Tabs } from "antd";
-import { EllipsisOutlined, SettingOutlined, EditOutlined } from "@ant-design/icons";
+// import { EllipsisOutlined, SettingOutlined, EditOutlined } from "@ant-design/icons";
 import "../css/user-account.css";
 
-const UserAccount = () =>
-{
+const UserAccount = () => {
 
 	const { Meta } = Card;
 	const tabs = [
@@ -66,22 +65,19 @@ const UserAccount = () =>
 	);
 };
 
-const Details = () =>
-{
+const Details = () => {
 	return (
 		<h1>Details</h1>
 	);
 };
 
-const Security = () =>
-{
+const Security = () => {
 	return (
 		<h1>Security</h1>
 	);
 };
 
-const Social = () =>
-{
+const Social = () => {
 	return (
 		<h1>Social</h1>
 	);

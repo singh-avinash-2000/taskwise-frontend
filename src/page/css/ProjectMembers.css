@@ -1,0 +1,25 @@
+.project-members-deletefilled-icon {
+    font-size: 20;
+    margin: 0px 20px;
+}
+
+.invite-user-btn {
+    float: right;
+    margin: 0px 20px 20px 0px;
+    background-color: var(--darkblue);
+    color: white;
+}
+
+.invite-form {
+    text-align: center;
+}
+
+
+.project-member-space-compact {
+    width: 100%;
+}
+
+.invite-btn {
+    background-color: vat(--darkblue);
+    color: white;
+}

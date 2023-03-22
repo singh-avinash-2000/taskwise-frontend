@@ -4,15 +4,15 @@ import { MinusSquareOutlined, MinusSquareTwoTone, PlusSquareOutlined, PlusSquare
 import { useNavigate, useLocation } from "react-router-dom";
 import NewTask from "./NewTask";
 
+import "../css/TaskList.css";
+
 const { Text } = Typography;
 
-const TaskList = () =>
-{
+const TaskList = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const navigate = useNavigate();
 
-	const generateIndex = (limit) =>
-	{
+	const generateIndex = (limit) => {
 		return Math.floor(Math.random() * limit);
 	};
 
@@ -21,7 +21,7 @@ const TaskList = () =>
 			title: 'Type',
 			dataIndex: 'type',
 			key: 'type',
-			render: (type) => <Tooltip title={type == "sub_task" ? "Sub Task" : "Main Task"}>{type == "sub_task" ? <Tag color="red"><MinusSquareOutlined /></Tag> : <Tag color="green"><PlusSquareOutlined /></Tag>}</Tooltip>,
+			render: (type) => <Tooltip title={type === "sub_task" ? "Sub Task" : "Main Task"}>{type === "sub_task" ? <Tag color="red"><MinusSquareOutlined /></Tag> : <Tag color="green"><PlusSquareOutlined /></Tag>}</Tooltip>,
 		},
 		{
 			title: 'Key',
@@ -111,8 +111,7 @@ const TaskList = () =>
 
 	let data = [];
 
-	function getRandomDate()
-	{
+	function getRandomDate() {
 		const emptyDate = new Date();
 		const randomDate = new Date();
 		const dateFormatter = Intl.DateTimeFormat('sv-SE');
@@ -121,13 +120,11 @@ const TaskList = () =>
 		return formattedRandomDate;
 	}
 
-	const handleTaskCreation = () =>
-	{
+	const handleTaskCreation = () => {
 		setIsModalOpen(true);
 	};
 
-	for (let i = 0; i < 25; i++)
-	{
+	for (let i = 0; i < 25; i++) {
 		data.push(
 			{
 				type: typeArray[generateIndex(2)],
@@ -143,8 +140,7 @@ const TaskList = () =>
 		);
 	}
 
-	const handleRowClick = (event) =>
-	{
+	const handleRowClick = (event) => {
 		navigate(`/project/tasks/${event.key}`);
 		console.log(event);
 	};
@@ -161,16 +157,23 @@ const TaskList = () =>
 					}
 				]}
 			/>
-			<Button type="primary" style={{ float: "right", margin: "0px 0px 10px 0px" }} onClick={handleTaskCreation}>Create new task</Button>
-			<Table columns={columns} dataSource={data} scroll={{ x: true }} size="large" onRow={(record, rowIndex) =>
-			{
-				return {
-					onClick: (event) =>
-					{
-						handleRowClick(record);
-					},
-				};
-			}} />
+			<Button type="primary"
+				onClick={handleTaskCreation}
+				className="create-new-task-btn">
+				Create new task
+			</Button>
+			<Table
+				columns={columns}
+				dataSource={data}
+				scroll={{ x: true }}
+				size="large"
+				onRow={(record, rowIndex) => {
+					return {
+						onClick: (event) => {
+							handleRowClick(record);
+						},
+					};
+				}} />
 
 			<Modal title="Create Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null}>
 				<NewTask />

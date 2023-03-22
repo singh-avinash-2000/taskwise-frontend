@@ -1,0 +1,48 @@
+.project-task-info-wrapper {
+    margin-right: 50;
+    padding-right: 20;
+}
+
+.project-task-info-wrapper .space {
+    margin: 20px 0px;
+}
+
+.description-content {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.description-content-span {
+    font-size: 16px;
+}
+
+.attachments-wrapper {
+    display: flex;
+    overflow: scroll;
+    margin-block: 20px;
+    gap: 10px;
+}
+
+.attachment-image {
+    border-radius: 10px;
+}
+
+.to_do {
+    width: 200px;
+}
+
+.task-details {
+    margin: 20px 0px;
+}
+
+.task-table {
+    width: 100%;
+}
+
+.task-table-row {
+    height: 50px;
+}
+
+.task-table-data {
+    width: 100px;
+}

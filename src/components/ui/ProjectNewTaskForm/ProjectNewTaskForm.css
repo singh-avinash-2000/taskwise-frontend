@@ -1,0 +1,15 @@
+.project-new-task-form-card {
+    max-width: 800;
+    margin: auto;
+}
+
+.new-task-description-wrapper {
+    border: 1px solid var(--lightblue);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.add-project-task-btn {
+    background-color: var(--darkblue);
+    color: white;
+}

@@ -1,0 +1,20 @@
+.sidebar-layout {
+    display: flex;
+    margin-top: 2px;
+}
+
+.layout-outlet-wrapper {
+    overflow: auto;
+    width: 100%;
+}
+
+.layout-outlet-div {
+    width: 100%;
+    background-color: var(--lightgreen);
+    z-index: -1;
+    padding-top: 15px;
+}
+
+.layout-outlet-div {
+    padding: 0px 30px;
+}

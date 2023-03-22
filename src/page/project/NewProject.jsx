@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import ProjectDataForm from "../../components/ui/ProjectDataForm";
+import ProjectDataForm from "../../components/ui/ProjectDataForm/ProjectDataForm";
 
-const NewProject = () =>
-{
+const NewProject = () => {
 	const [formData, setFormData] = useState({});
 
 	return (

@@ -1,0 +1,26 @@
+.navbar-notification-main-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar-notification-wrapper {
+    margin-right: 25px;
+}
+
+.navbar-notification-content {
+    height: 50%;
+    width: 30%;
+}
+
+.navbar-belloutlined-icon {
+    font-size: 25px;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.navbar-menu-icon {
+    font-size: 25px;
+    padding: 20px;
+    cursor: pointer;
+    margin-left: 25px;
+}

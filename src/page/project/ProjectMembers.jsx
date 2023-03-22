@@ -2,14 +2,14 @@ import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Inpu
 import { useEffect, useState } from 'react';
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 
-const confirm = (e) =>
-{
+import '../css/ProjectMembers.css'
+
+const confirm = (e) => {
 	console.log(e);
 	message.success('Click on Yes');
 };
 
-const cancel = (e) =>
-{
+const cancel = (e) => {
 	console.log(e);
 	message.error('Click on No');
 };
@@ -28,8 +28,7 @@ const columns = [
 	{
 		title: 'Action',
 		dataIndex: 'name',
-		render: (data) =>
-		{
+		render: (data) => {
 			const joined = data == "N - A";
 
 			return (
@@ -63,7 +62,7 @@ const columns = [
 						okText="Yes"
 						cancelText="No"
 					>
-						<DeleteFilled style={{ fontSize: 20, margin: "0px 20px" }} />
+						<DeleteFilled className="project-members-deletefilled-icon" />
 					</Popconfirm>
 					{
 						joined &&
@@ -77,8 +76,7 @@ const columns = [
 	},
 ];
 
-const ProjectMembers = () =>
-{
+const ProjectMembers = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState([
 		{
@@ -116,22 +114,18 @@ const ProjectMembers = () =>
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [inviteSent, setInviteSent] = useState(false);
 
-	const showModal = () =>
-	{
+	const showModal = () => {
 		setIsModalOpen(true);
 	};
 
-	const closeModal = () =>
-	{
+	const closeModal = () => {
 		setIsModalOpen(false);
 		setInviteSent(false);
 	};
 
-	const handleSendInvite = () =>
-	{
+	const handleSendInvite = () => {
 		setIsLoading(true);
-		setTimeout(() =>
-		{
+		setTimeout(() => {
 			setInviteSent(true);
 			setIsLoading(false);
 		}, 2000);
@@ -149,7 +143,7 @@ const ProjectMembers = () =>
 					}
 				]}
 			/>
-			<Button type="primary" style={{ float: "right", margin: "0px 20px 20px 0px", backgroundColor: "var(--darkblue)", color: "white" }} onClick={showModal} >Invite User </Button>
+			<Button type="primary" onClick={showModal} className="invite-user-btn" >Invite User </Button>
 			<Divider />
 			<Table
 				scroll={{ x: true }}
@@ -161,12 +155,12 @@ const ProjectMembers = () =>
 				<Spin size="large" spinning={isLoading}>
 					{!inviteSent
 						?
-						<div style={{ textAlign: "center" }}>
-							<MailOutlined style={{ fontSize: 40, opacity: 0.5, margin: 20 }} />
+						<div className="invite-form">
+							<MailOutlined style={{ fontSize: 20, margin: 20, opacity: 0.5 }} className="invite-form-mailoutlined-icon" />
 							<h3>Invite user to bentley systems</h3>
-							<Space.Compact style={{ width: '100%' }}>
+							<Space.Compact style={{ width: '100%' }} >
 								<Input placeholder="Please input user display name" />
-								<Button type="primary" style={{ backgroundColor: "var(--darkblue)", color: "white" }} onClick={handleSendInvite}>Invite</Button>
+								<Button type="primary" onClick={handleSendInvite} className="invite-btn">Invite</Button>
 							</Space.Compact>
 						</div>
 						:

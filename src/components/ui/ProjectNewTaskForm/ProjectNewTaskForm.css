@@ -13,3 +13,7 @@
     background-color: var(--darkblue);
     color: white;
 }
+
+.task-key-autocomplete{
+	width: 100%;
+}

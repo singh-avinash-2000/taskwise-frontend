@@ -162,6 +162,7 @@ const ProjectNewTaskForm = () =>
 								{ value: "BYS-12" },
 								{ value: "BYS-1234" },
 								{ value: "BYS-134" }]}
+								className="task-key-autocomplete"
 								placeholder="input here"
 							/>
 						</Form.Item>

@@ -19,7 +19,7 @@
 	border: 2px dotted gray;
 	height: 80px;
 	width: 80px;
-	border-radius: 20px;
+	border-radius: 10px;
 	display: flex;
 	justify-content: center;
 	align-items: center;

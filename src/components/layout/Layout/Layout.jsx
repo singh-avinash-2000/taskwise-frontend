@@ -4,23 +4,28 @@ import { Outlet } from "react-router-dom";
 
 import NavBar from "../Navbar/NavBar";
 
-import './Layout.css'
+import './Layout.css';
 
 import { useThemeContext } from "../../../context/ThemeProvider";
 
 import initializeInterceptor from '../../../config/axios';
 
-const MainLayout = (props) => {
+const MainLayout = (props) =>
+{
 	const [position, setPosition] = useState('relative');
 	const { collapsed, screenHeight, setScreenHeight, setScreenWidth, setCollapsed } = useThemeContext();
 
-	useEffect(() => {
-		const handleResize = debounce(() => {
-			if (window.innerWidth <= 950) {
+	useEffect(() =>
+	{
+		const handleResize = debounce(() =>
+		{
+			if (window.innerWidth <= 950)
+			{
 				setPosition('absolute');
 				setCollapsed(true);
 			}
-			else {
+			else
+			{
 				setPosition('relative');
 				setCollapsed(false);
 			}

@@ -187,7 +187,7 @@ const TaskList = () =>
 					};
 				}} />
 
-			<Modal title="Create Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null}>
+			<Modal title="Create Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null} className="create-task-modal">
 				<NewTask />
 			</Modal>
 		</div>

@@ -5,3 +5,16 @@
 .task-status-select{
 	width: 120px;
 }
+
+.create-task-modal{
+	width: 70% !important;
+}
+
+@media only screen and (max-width: 500px) 
+{
+	.create-task-modal{
+		width: 100% !important;
+	}
+}
+
+

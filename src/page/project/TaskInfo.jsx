@@ -55,7 +55,7 @@ const TaskInfo = () => {
 			/>
 
 			<Row>
-				<Col xs={24} sm={24} md={24} lg={16} xl={20} className="project-task-info-wrapper">
+				<Col xs={24} sm={24} md={24} lg={16} xl={18} className="project-task-info-wrapper">
 					<h2 style={{ fontWeight: "600" }}>Implementation details of web sockets</h2>
 
 					<Space className="space">
@@ -145,7 +145,7 @@ const TaskInfo = () => {
 						</div>
 					</div>
 				</Col>
-				<Col xs={24} sm={24} md={24} lg={8} xl={8}>
+				<Col xs={24} sm={24} md={24} lg={8} xl={6}>
 					<Select
 						defaultValue="to_do"
 						className="to_do"
@@ -194,8 +194,6 @@ const TaskInfo = () => {
 						</table>
 					</div>
 				</Col>
-			</Row>
-			<Row>
 				<Col xs={24} sm={24} md={24} lg={16} xl={20}>
 					<Tabs defaultActiveKey="1" items={items} onChange={onChange} />
 				</Col>

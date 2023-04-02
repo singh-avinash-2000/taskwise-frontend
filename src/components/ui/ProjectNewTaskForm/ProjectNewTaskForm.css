@@ -4,13 +4,13 @@
 }
 
 .new-task-description-wrapper {
-    border: 1px solid var(--lightblue);
+    border: 1px solid var(--lightgreen);
     border-radius: 10px;
     padding: 5px;
 }
 
 .add-project-task-btn {
-    background-color: var(--darkblue);
+    background-color: var(--darkgreen);
     color: white;
 }
 

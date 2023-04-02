@@ -2,8 +2,9 @@ import { AutoComplete, Row, Col, Input, Modal } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import "./css/project.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewProject from "./project/NewProject";
+import axios from "axios"
 
 const Dashboard = () =>
 {
@@ -50,6 +51,10 @@ const Dashboard = () =>
 	};
 
 	const colourArray = ["#abdbe3", "#eeeee4", "#ffffcc", "#eab676", "#ffccff", "#cce7e8", "#edb879", "#ccffcc"];
+
+	useEffect(() => {
+		
+	}, [])
 
 	return (
 		<div className="project-container">

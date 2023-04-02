@@ -1,4 +1,5 @@
-import {
+import
+{
 	Tabs,
 	Button,
 	Cascader,
@@ -17,22 +18,27 @@ import TextArea from "antd/lib/input/TextArea";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import './ProjectDataForm.css'
+import './ProjectDataForm.css';
 
-const ProjectDataForm = () => {
+const ProjectDataForm = () =>
+{
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
 	const navigate = useNavigate();
 
-	const handleFormSubmit = async () => {
+	const handleFormSubmit = async () =>
+	{
 		await form.validateFields();
 	};
 
-	const handleDropDownChange = (value) => {
-		if (value == "shared") {
+	const handleDropDownChange = (value) =>
+	{
+		if (value == "shared")
+		{
 			setIsChatVisible(true);
 		}
-		else {
+		else
+		{
 			setIsChatVisible(false);
 		}
 	};
@@ -109,7 +115,7 @@ const ProjectDataForm = () => {
 					<Form.Item
 						className="project-data-form-submit-button"
 					>
-						<Button htmlType="submit" shape="round" className='add-project-submit-btn'>Submit</Button>
+						<Button htmlType="submit" className='add-project-submit-btn'>Submit</Button>
 					</Form.Item>
 				</Form>
 			</Card >

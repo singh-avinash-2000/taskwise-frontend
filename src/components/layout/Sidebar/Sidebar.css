@@ -34,7 +34,7 @@
 }
 
 #nav-item-custom:hover {
-	background-color: var(--lightblue);
+	background-color: var(--lightgreen);
 }
 
 .nav-item-custom-span {
@@ -44,7 +44,7 @@
 }
 
 .nav-item-active {
-	background-color: var(--lightblue);
+	background-color: var(--lightgreen);
 }
 
 .nav-item-fixed-style {

@@ -6,7 +6,7 @@
 .invite-user-btn {
     float: right;
     margin: 0px 20px 20px 0px;
-    background-color: var(--darkblue);
+    background-color: var(--darkgreen);
     color: white;
 }
 
@@ -20,6 +20,6 @@
 }
 
 .invite-btn {
-    background-color: vat(--darkblue);
+    background-color: vat(--darkgreen);
     color: white;
 }

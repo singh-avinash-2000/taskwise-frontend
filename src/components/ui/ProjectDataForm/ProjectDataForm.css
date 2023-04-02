@@ -8,11 +8,11 @@
 }
 
 .add-project-submit-btn {
-    background-color: var(--darkblue);
+    background-color: var(--darkgreen);
     color: white;
 }
 
 .add-project-submit-btn:hover {
-    background-color: var(--lightblue);
+    background-color: var(--lightgreen);
     color: white;
 }

@@ -1,7 +1,9 @@
 import { Card, Col, Row, Select } from "antd";
 import React from 'react';
+import "./TaskItem.css";
 
-const TaskItem = () => {
+const TaskItem = () =>
+{
 	return (
 		<div className="taskitem-wrapper">
 			<Row className="taskitem-row">

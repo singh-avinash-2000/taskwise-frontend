@@ -1,16 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --lightgreen: #ffffff;
-  --darkblue: #1677ff;
-  --lightblue: #dbe7f8;
+  --darkgreen: #074b59ed;
+  --lightgreen: #ddf3f8c3;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Open Sans", sans-serif;
-  color: #002414;
 }
 
 .ant-breadcrumb {
@@ -27,4 +25,14 @@ body {
 
 #logo {
   height: 70px;
+}
+
+button {
+	background-color: var(--darkgreen) !important;
+	color: white !important;
+}
+button:hover {
+	background-color: var(--darkgreen) !important;
+	transform: scale(1.05);
+	color: white !important;
 }

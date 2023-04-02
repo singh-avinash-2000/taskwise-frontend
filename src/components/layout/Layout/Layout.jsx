@@ -58,7 +58,7 @@ const MainLayout = (props) =>
 							<div className="layout-outlet-div">
 								<Outlet />
 							</div>
-							{/* <div style={{ backgroundColor: 'var(--darkblue)' }}>
+							{/* <div style={{ backgroundColor: 'var(--darkgreen)' }}>
 								<props.footer />
 							</div> */}
 						</div>

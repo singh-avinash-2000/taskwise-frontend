@@ -4,7 +4,7 @@
     position: absolute; 
     top: 0; 
     left: 0;
-	background-color: var(--lightblue);
+	background-color: var(--lightgreen);
 }
 
 .nav-container{
@@ -35,7 +35,7 @@
 
 .request-button{
 	border: none;
-	background-color: var(--darkblue);
+	background-color: var(--darkgreen);
 	color: white;
 	padding : 10px;
 	font-size: 16px;
@@ -95,7 +95,7 @@
 }
 
 .signin-button{
-	background-color: var(--darkblue);
+	background-color: var(--darkgreen);
 	color: white;
 	width: 80%;
 	padding : 10px;
@@ -116,7 +116,7 @@
 }
 
 .icon-button{
-	color: var(--darkblue);
+	color: var(--darkgreen);
 	border-radius: 10px !important;
 	width: 100%;
 }
@@ -144,7 +144,7 @@
 }
 
 .ant-steps-item-title:after{
-	background-color: var(--darkblue) !important;
+	background-color: var(--darkgreen) !important;
 }
 
 .logo {

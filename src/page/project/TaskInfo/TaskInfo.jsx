@@ -1,10 +1,10 @@
 import React from 'react';
 import { Breadcrumb, Space, Button, Divider, Row, Col, Select, Avatar, Image, Tabs } from "antd";
 import { UserOutlined, ApartmentOutlined, LinkOutlined } from "@ant-design/icons";
-import TaskItem from "../../components/ui/TaskItem/TaskItem";
+import TaskItem from "../../../components/ui/TaskItem/TaskItem";
 import { useLocation } from "react-router-dom";
 
-import '../css/TaskInfo.css'
+import './TaskInfo.css'
 
 const TaskInfo = () => {
 	const location = useLocation();

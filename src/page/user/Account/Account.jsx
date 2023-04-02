@@ -1,6 +1,6 @@
 import { Card, Col, Row, Image, Divider, Tabs } from "antd";
 // import { EllipsisOutlined, SettingOutlined, EditOutlined } from "@ant-design/icons";
-import "../css/user-account.css";
+import "./Account.css";
 
 const UserAccount = () => {
 

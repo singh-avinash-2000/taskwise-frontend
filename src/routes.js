@@ -2,19 +2,19 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/layout/Layout/Layout";
 import MainSidebar from "./components/layout/Sidebar/SideBar";
 import Footer from "./components/layout/Footer/Footer";
-import Login from "./page/Login";
-import Dashboard from "./page/Dashboard";
+import Login from "./page/Login/Login";
+import Dashboard from "./page/Dashboard/Dashboard";
 import { ContextProvider } from "./context/ThemeProvider";
-import Register from "./page/Register";
+import Register from "./page/Register/Register";
 // import NewProject from "./page/project/NewProject";
-import ProjectMembers from "./page/project/ProjectMembers";
-import UserAccount from "./page/user/Account";
+import ProjectMembers from "./page/project/ProjectMembers/ProjectMembers";
+import UserAccount from "./page/user/Account/Account";
 import Redirect from "./components/ui/Redirect/Redirect";
 import { mainSideBarData, projectSideBarData } from "./config/data";
-import NewTask from "./page/project/NewTask";
-import TaskInfo from "./page/project/TaskInfo";
-import TaskList from "./page/project/TaskList";
-import ChatProject from "./page/project/ChatProject";
+import NewTask from "./page/project/NewTask/NewTask";
+import TaskInfo from "./page/project/TaskInfo/TaskInfo";
+import TaskList from "./page/project/TaskList/TaskList";
+import ChatProject from "./page/project/ChatProject/ChatProject";
 
 const routes = createBrowserRouter([
 	{

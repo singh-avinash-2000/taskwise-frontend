@@ -2,30 +2,25 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Button, message } from 'antd';
 import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, HeatMapOutlined } from '@ant-design/icons';
-import "./css/login.css";
+import "./login.css";
 import axios from "axios";
 
-const Login = () =>
-{
+const Login = () => {
 	const [isValidEmail, setIsValidEmail] = useState(true);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const routes = useNavigate();
 
-	const handleBlur = (e) =>
-	{
-		if (validateEmail(e.target.value))
-		{
+	const handleBlur = (e) => {
+		if (validateEmail(e.target.value)) {
 			setIsValidEmail(false);
 		}
-		else
-		{
+		else {
 			setIsValidEmail(true);
 		}
 	};
 
-	const validateEmail = (email) =>
-	{
+	const validateEmail = (email) => {
 		return String(email)
 			.toLowerCase()
 			.match(
@@ -33,16 +28,12 @@ const Login = () =>
 			);
 	};
 
-	const handleLogin = async () =>
-	{
-		try
-		{
-			if (!email.trim() || !password.trim())
-			{
+	const handleLogin = async () => {
+		try {
+			if (!email.trim() || !password.trim()) {
 				alert("invalid");
 			}
-			else
-			{
+			else {
 				const data = {
 					email,
 					password
@@ -57,8 +48,7 @@ const Login = () =>
 				routes("/dashboard");
 			}
 		}
-		catch (error)
-		{
+		catch (error) {
 			message.error(error.response.data.message);
 		}
 	};
@@ -87,8 +77,7 @@ const Login = () =>
 						allowClear
 						type="email"
 						value={email}
-						onChange={(e) =>
-						{
+						onChange={(e) => {
 							setEmail(e.target.value);
 						}}
 						suffix={isValidEmail ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
@@ -99,8 +88,7 @@ const Login = () =>
 						className="custom-input"
 						placeholder="Password"
 						value={password}
-						onChange={(e) =>
-						{
+						onChange={(e) => {
 							setPassword(e.target.value);
 						}}
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}

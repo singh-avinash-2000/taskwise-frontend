@@ -1,13 +1,12 @@
 import { AutoComplete, Row, Col, Input, Modal } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
-import "./css/project.css";
+import "./Dashboard.css";
 import { useEffect, useState } from "react";
-import NewProject from "./project/NewProject";
+import NewProject from "../project/NewProject/NewProject";
 import axios from "axios"
 
-const Dashboard = () =>
-{
+const Dashboard = () => {
 	const navigate = useNavigate();
 	const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
 
@@ -38,12 +37,10 @@ const Dashboard = () =>
 		}
 	];
 
-	const getInitals = (name) =>
-	{
+	const getInitals = (name) => {
 		const wordArr = name.split(" ");
 		let str = "";
-		wordArr.map(w =>
-		{
+		wordArr.map(w => {
 			str += w[0].toUpperCase() + " ";
 		});
 
@@ -53,7 +50,7 @@ const Dashboard = () =>
 	const colourArray = ["#abdbe3", "#eeeee4", "#ffffcc", "#eab676", "#ffccff", "#cce7e8", "#edb879", "#ccffcc"];
 
 	useEffect(() => {
-		
+
 	}, [])
 
 	return (
@@ -78,8 +75,7 @@ const Dashboard = () =>
 					</div>
 				</Col>
 				{
-					dummy.map((d, id) =>
-					{
+					dummy.map((d, id) => {
 						let idx = Math.floor(Math.random() * 7);
 						return (
 							<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4} key={id}>

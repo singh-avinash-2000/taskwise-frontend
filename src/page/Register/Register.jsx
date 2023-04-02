@@ -3,28 +3,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input, Button, message } from 'antd';
 import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, LockOutlined, UserOutlined, HeatMapOutlined } from '@ant-design/icons';
 
-import "./css/login.css";
+import "../Login/login.css";
 import axios from "axios";
 
-const Register = () =>
-{
+const Register = () => {
 	const [isValidEmail, setIsValidEmail] = useState(true);
 	const [formState, setFormState] = useState({});
 	let navigate = useNavigate();
-	const handleBlur = (e) =>
-	{
-		if (validateEmail(e.target.value))
-		{
+	const handleBlur = (e) => {
+		if (validateEmail(e.target.value)) {
 			setIsValidEmail(false);
 		}
-		else
-		{
+		else {
 			setIsValidEmail(true);
 		}
 	};
 
-	const validateEmail = (email) =>
-	{
+	const validateEmail = (email) => {
 		return String(email)
 			.toLowerCase()
 			.match(
@@ -32,22 +27,17 @@ const Register = () =>
 			);
 	};
 
-	const handleFormChange = (e) =>
-	{
+	const handleFormChange = (e) => {
 		formState[e.target.name] = e.target.value;
 		setFormState(formState);
 	};
 
-	const handleRegister = async () =>
-	{
-		try
-		{
-			if (formState.password.trim() !== formState.confirm_password.trim())
-			{
+	const handleRegister = async () => {
+		try {
+			if (formState.password.trim() !== formState.confirm_password.trim()) {
 				alert("passwords doesn't match");
 			}
-			else
-			{
+			else {
 				const response = await axios.post(process.env.REACT_APP_BASE_URL + "/auth/register", formState);
 				localStorage.setItem("token", response.data.result.token);
 				navigate("/user/account");
@@ -55,8 +45,7 @@ const Register = () =>
 				message.success(response.data.message);
 			}
 		}
-		catch (error)
-		{
+		catch (error) {
 			console.log(error);
 			message.error("Something went wrong!");
 		}

@@ -1,4 +1,4 @@
-.card{
+.card {
 	width: 100%;
 	margin: auto;
 	padding: 25px;
@@ -12,15 +12,15 @@
 	text-align: center;
 }
 
-.ant-tabs-tab-btn{
+.ant-tabs-tab-btn {
 	color: var(--darkgreen) !important;
 }
 
-.ant-tabs-ink-bar{
-	background-color: var(--darkgreen)!important;
+.ant-tabs-ink-bar {
+	background-color: var(--darkgreen) !important;
 }
 
-.info-container{
+.info-container {
 	text-align: center;
 }
 
@@ -30,7 +30,7 @@
 	color: var(--darkgreen);
 }
 
-.image-container{
+.image-container {
 	text-align: center;
 	object-fit: contain;
 	width: 98%;
@@ -39,14 +39,14 @@
 }
 
 
-.pp-container{
+.pp-container {
 	height: 200px;
 	width: 200px;
 	z-index: 1;
 	position: absolute;
 }
 
-.upload-button{
+.upload-button {
 	width: 70%;
 	margin: 20px auto;
 	background-color: var(--darkgreen);

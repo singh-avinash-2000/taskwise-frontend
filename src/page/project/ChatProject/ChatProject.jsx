@@ -4,7 +4,7 @@ import { ImAttachment } from 'react-icons/im';
 import { GrEmoji } from 'react-icons/gr';
 import { IoSend } from 'react-icons/io5';
 import { AiFillFile, AiFillFilePdf } from 'react-icons/ai';
-import '../css/ChatProject.css';
+import './ChatProject.css';
 
 const { Content } = Layout;
 

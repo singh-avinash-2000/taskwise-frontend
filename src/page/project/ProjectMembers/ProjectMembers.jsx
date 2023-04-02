@@ -2,7 +2,7 @@ import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Inpu
 import { useEffect, useState } from 'react';
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 
-import '../css/ProjectMembers.css'
+import './ProjectMembers.css'
 
 const confirm = (e) => {
 	console.log(e);

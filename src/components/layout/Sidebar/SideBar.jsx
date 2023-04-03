@@ -6,18 +6,20 @@ import { useThemeContext } from "../../../context/ThemeProvider";
 import "./Sidebar.css";
 
 
-const SideBar = (props) => {
+const SideBar = (props) =>
+{
 	return (
 		<div id="sidebar" >
 			{
-				window.location.pathname != "/projects/new-project" && <div className="sidebar-wrapper">
+				window.location.pathname !== "/projects/new-project" && <div className="sidebar-wrapper">
 					<div className="sidebar-logo-wrapper">
 						<HeatMapOutlined className="logo" />
 						<span className="ping-typography">PING</span>
 					</div>
 					<div className="nav-entries">
 						{
-							Object.entries(props.data).map(([key, value]) => {
+							Object.entries(props.data).map(([key, value]) =>
+							{
 								return (
 									<NavHeader title={key} children={value} key={key} />
 								);
@@ -31,12 +33,14 @@ const SideBar = (props) => {
 	);
 };
 
-const NavHeader = ({ title, children }) => {
+const NavHeader = ({ title, children }) =>
+{
 	return (
 		<div className="nav-header-wrapper">
 			<span className="nav-header-title">{title}</span>
 			{
-				children.map((child) => {
+				children.map((child) =>
+				{
 					return (
 						<NavItem title={child.title} to={child.to} key={child.title} />
 					);
@@ -46,12 +50,15 @@ const NavHeader = ({ title, children }) => {
 	);
 };
 
-const NavItem = ({ title, to }) => {
+const NavItem = ({ title, to }) =>
+{
 
 	const { screenWidth, setCollapsed } = useThemeContext();
 
-	const handleClick = () => {
-		if (screenWidth < 950 || rdd.isMobile) {
+	const handleClick = () =>
+	{
+		if (screenWidth < 950 || rdd.isMobile)
+		{
 			setCollapsed(true);
 		}
 	};

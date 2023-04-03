@@ -3,7 +3,8 @@ import Layout from "../components/layout/Layout/Layout";
 import MainSidebar from "../components/layout/Sidebar/SideBar";
 import { ContextProvider } from "../context/ThemeProvider";
 import { mainSideBarData, projectSideBarData } from "../config/data";
-import Redirect from "../components/ui/Redirect/Redirect";
+import OnlyIfLoggedIn from "../components/ui/Auth/OnlyIfLoggedIn";
+import OnlyIfNotLoggedIn from "../components/ui/Auth/OnlyIfNotLoggedIn";
 import { Login, Register, Dashboard, ProjectMembers, UserAccount, NewTask, TaskInfo, TaskList, ChatProject } from "../page/index";
 
 // const routes = createBrowserRouter([
@@ -65,18 +66,20 @@ const RouterComponent = () =>
 {
 	return (
 		<Routes>
-			<Route element={<ContextProvider><Layout sidebarDisabled={true} navIconDisabled={true} /></ContextProvider>}>
-				<Route path='/' element={<Dashboard />} />
-			</Route>
-			<Route>
+			<Route element={<OnlyIfNotLoggedIn />}>
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 			</Route>
-			<Route element={<ContextProvider><Layout sidebar={MainSidebar} sidebarData={projectSideBarData} /></ContextProvider>}>
-				<Route path="/project/tasks" element={<TaskList />} />
-				<Route path="/project/members" element={<ProjectMembers />} />
-				<Route path="/project/tasks/:task_id" element={<TaskInfo />} />
-				<Route path="/project/chat" element={<ChatProject />} />
+			<Route element={<OnlyIfLoggedIn />}>
+				<Route element={<ContextProvider><Layout sidebarDisabled={true} navIconDisabled={true} /></ContextProvider>}>
+					<Route path='/' element={<Dashboard />} />
+				</Route>
+				<Route element={<ContextProvider><Layout sidebar={MainSidebar} sidebarData={projectSideBarData} /></ContextProvider>}>
+					<Route path="/project/tasks" element={<TaskList />} />
+					<Route path="/project/members" element={<ProjectMembers />} />
+					<Route path="/project/tasks/:task_id" element={<TaskInfo />} />
+					<Route path="/project/chat" element={<ChatProject />} />
+				</Route>
 			</Route>
 		</Routes>
 	);

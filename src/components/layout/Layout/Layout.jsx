@@ -13,7 +13,7 @@ import initializeInterceptor from '../../../config/axios';
 const MainLayout = (props) =>
 {
 	const [position, setPosition] = useState('relative');
-	const { collapsed, screenHeight, setScreenHeight, setScreenWidth, setCollapsed } = useThemeContext();
+	const { collapsed, setScreenHeight, setScreenWidth, setCollapsed } = useThemeContext();
 
 	useEffect(() =>
 	{

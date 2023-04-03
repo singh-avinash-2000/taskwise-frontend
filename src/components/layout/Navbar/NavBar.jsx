@@ -1,6 +1,6 @@
 import React from "react";
 import { Popover, Tooltip, message, Button } from "antd";
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, BellOutlined } from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined } from "@ant-design/icons";
 import { TbLogout } from "react-icons/tb";
 import { useThemeContext } from "../../../context/ThemeProvider";
 import axios from "axios";
@@ -31,7 +31,7 @@ const NavBar = (props) =>
 	{
 		try
 		{
-			const response = await axios.get(process.env.REACT_APP_BASE_URL + "/projects");
+			await axios.get(process.env.REACT_APP_BASE_URL + "/projects");
 
 		} catch (error)
 		{

@@ -1,22 +1,15 @@
 import
 {
-	Tabs,
 	Button,
-	Cascader,
-	DatePicker,
 	Form,
 	Input,
-	InputNumber,
-	Radio,
 	Select,
 	Switch,
-	TreeSelect,
 	Card,
 } from 'antd';
 
 import TextArea from "antd/lib/input/TextArea";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import './ProjectDataForm.css';
 
@@ -24,7 +17,6 @@ const ProjectDataForm = () =>
 {
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
-	const navigate = useNavigate();
 
 	const handleFormSubmit = async () =>
 	{
@@ -33,7 +25,7 @@ const ProjectDataForm = () =>
 
 	const handleDropDownChange = (value) =>
 	{
-		if (value == "shared")
+		if (value === "shared")
 		{
 			setIsChatVisible(true);
 		}
@@ -45,7 +37,6 @@ const ProjectDataForm = () =>
 
 	return (
 		<div>
-
 			<Card
 				style={{
 					maxWidth: 800,

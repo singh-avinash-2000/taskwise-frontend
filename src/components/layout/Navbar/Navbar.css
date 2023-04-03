@@ -4,7 +4,14 @@
 }
 
 .navbar-notification-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-right: 25px;
+}
+
+.logout-btn {
+    cursor: pointer;
 }
 
 .navbar-notification-content {

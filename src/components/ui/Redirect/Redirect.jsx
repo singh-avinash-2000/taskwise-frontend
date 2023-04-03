@@ -12,9 +12,9 @@ const Redirect = (props) =>
 			navigate(props.to);
 		}
 
-		const token = localStorage.getItem("token");
+		const accessToken = localStorage.getItem("accessToken");
 
-		if (token)
+		if (accessToken)
 		{
 			navigate(-1);
 		}

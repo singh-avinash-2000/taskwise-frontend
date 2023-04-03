@@ -106,25 +106,19 @@ const Login = () =>
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
 						allowClear
 					/>
-					<h3>Having trouble loging in?</h3>
+
 					<div >
 						<button className="signin-button" onClick={handleLogin}>Login</button>
 					</div>
 				</div>
-				<h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
+				{/* <h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
 				<div className="button-container">
 					<Button type="secondary" className="icon-button" shape="round" icon={<GoogleOutlined />} size="large" >
 						Google
 					</Button>
-					{/* <Button type="secondary" className="icon-button" shape="round" icon={<AppleFilled />} size="large">
-						Apple
-					</Button>
-					<Button type="secondary" className="icon-button" shape="round" icon={<FacebookFilled />} size="large">
-						Facebook
-					</Button> */}
-				</div>
+				</div> */}
 			</div>
-			<h4 className="cr-text">Copyright @ PING 2022 | Privacy Policy</h4>
+			<h4 className="cr-text">Copyright @ PING {new Date().getFullYear()} | Privacy Policy</h4>
 		</div>
 	);
 };

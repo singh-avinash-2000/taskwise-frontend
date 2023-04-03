@@ -1,13 +1,13 @@
 import React from "react";
-import { Popover, Tooltip, message } from "antd";
+import { Popover, Tooltip, message, Button } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, BellOutlined } from "@ant-design/icons";
-import { AiOutlineLogout } from "react-icons/ai";
+import { TbLogout } from "react-icons/tb";
 import { useThemeContext } from "../../../context/ThemeProvider";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
 
-const NavBar = () =>
+const NavBar = (props) =>
 {
 	const { collapsed, setCollapsed } = useThemeContext();
 	const routes = useNavigate();
@@ -25,8 +25,6 @@ const NavBar = () =>
 		{
 			message.error(error.response.data.message);
 		}
-
-
 	};
 
 	async function testRefresh()
@@ -44,13 +42,17 @@ const NavBar = () =>
 
 	return (
 		<div className="navbar-notification-main-wrapper">
-			<div onClick={() => setCollapsed(!collapsed)} >
-				{collapsed ? <MenuUnfoldOutlined className="navbar-menu-icon" /> : <MenuFoldOutlined className="navbar-menu-icon" />}
-			</div>
+			{
+				!props.navIconDisabled ? <div onClick={() => setCollapsed(!collapsed)} >
+					{collapsed ? <MenuUnfoldOutlined className="navbar-menu-icon" /> : <MenuFoldOutlined className="navbar-menu-icon" />}
+				</div>
+					:
+					<div></div>
+			}
 			<div className="navbar-notification-wrapper">
-				<button onClick={testRefresh}>Project data</button>
+				<Button onClick={testRefresh}>Project data</Button>
 				<Tooltip title="Logout" className="logout-btn">
-					<AiOutlineLogout size={30} onClick={handleLogout} />
+					<TbLogout size={30} onClick={handleLogout} />
 				</Tooltip>
 
 				<Popover placement="bottomRight" title={"Notification"} content={Notification} trigger="click">

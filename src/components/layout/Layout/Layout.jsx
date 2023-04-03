@@ -46,10 +46,10 @@ const MainLayout = (props) =>
 	return (
 		<>
 			<div>
-				<NavBar />
-				<div style={{ height: screenHeight }} className="sidebar-layout">
+				<NavBar navIconDisabled={props.navIconDisabled} />
+				<div className="sidebar-layout">
 					{
-						!collapsed &&
+						!collapsed && !props.sidebarDisabled &&
 						<props.sidebar data={props.sidebarData} />
 					}
 
@@ -58,9 +58,6 @@ const MainLayout = (props) =>
 							<div className="layout-outlet-div">
 								<Outlet />
 							</div>
-							{/* <div style={{ backgroundColor: 'var(--darkgreen)' }}>
-								<props.footer />
-							</div> */}
 						</div>
 					</div>
 				</div>

@@ -31,6 +31,7 @@ button {
 	background-color: var(--darkgreen) !important;
 	color: white !important;
 }
+
 button:hover {
 	background-color: var(--darkgreen) !important;
 	transform: scale(1.05);

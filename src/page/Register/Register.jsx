@@ -49,7 +49,7 @@ const Register = () =>
 			else
 			{
 				const response = await axios.post(process.env.REACT_APP_BASE_URL + "/auth/register", formState);
-				localStorage.setItem("token", response.data.result.accessToken);
+				localStorage.setItem("accessToken", response.data.result.accessToken);
 				navigate("/");
 				message.success(response.data.message);
 			}
@@ -123,20 +123,14 @@ const Register = () =>
 						<button className="signin-button" onClick={handleRegister} >Register</button>
 					</div>
 				</div>
-				<h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
+				{/* <h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
 				<div className="button-container">
 					<Button type="secondary" className="icon-button" shape="round" icon={<GoogleOutlined />} size="large">
 						Google
 					</Button>
-					{/* <Button type="secondary" className="icon-button" shape="round" icon={<AppleFilled />} size="large">
-						Apple
-					</Button>
-					<Button type="secondary" className="icon-button" shape="round" icon={<FacebookFilled />} size="large">
-						Facebook
-					</Button> */}
-				</div>
+				</div> */}
 			</div>
-			<h4 className="cr-text">Copyright @ PING 2022 | Privacy Policy</h4>
+			<h4 className="cr-text">Copyright @ PING {new Date().getFullYear()} | Privacy Policy</h4>
 		</div>
 	);
 };

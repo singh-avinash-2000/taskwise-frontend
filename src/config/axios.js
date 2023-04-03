@@ -25,7 +25,7 @@ function initializeInterceptor()
 	axios.interceptors.response.use(
 		(response) =>
 		{
-			if (response && response.data.result)
+			if (response && response.data)
 			{
 				return response;
 			}
@@ -34,21 +34,20 @@ function initializeInterceptor()
 		{
 			const originalRequest = error.config;
 			const statusCode = error.response.status;
-			const responseError = error.response.data.error;
+			const responseError = error.response.data;
 
 			//Refresh token and Access Token both expired
 			if (statusCode === 401 && originalRequest.url === `${process.env.REACT_APP_BASE_URL}/auth/refresh`) 
 			{
 				localStorage.removeItem("accessToken");
-				window.location.replace('/auth/login', '_self');
+				window.location.replace('/login', '_self');
 			}
 
 			//Only Access token expired
 			if (statusCode === 401 && responseError.message === "jwt expired")
 			{
-				const responseFromRefresh = await axios.create({
-					withCredentials: true
-				}).get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`);
+				console.log("reached");
+				const responseFromRefresh = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`);
 
 				if (responseFromRefresh.status === 200)
 				{

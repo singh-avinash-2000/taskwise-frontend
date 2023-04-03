@@ -7,17 +7,17 @@ const Redirect = (props) =>
 
 	useEffect(() =>
 	{
-		if (props.restricted)
-		{
-			navigate(props.to);
-		}
-
 		const accessToken = localStorage.getItem("accessToken");
 
-		if (accessToken)
+		if (props.restricted && !accessToken)
 		{
-			navigate(-1);
+			navigate(props.redirect);
 		}
+
+		// if (accessToken)
+		// {
+		// 	navigate(-1);
+		// }
 
 	}, []);
 

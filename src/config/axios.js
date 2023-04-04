@@ -1,69 +1,141 @@
 import axios from "axios";
 
-function initializeInterceptor()
+export const axiosClient = axios.create({
+	baseURL: process.env.REACT_APP_BASE_URL,
+	withCredentials: true,
+});
+
+
+
+
+axiosClient.interceptors.request.use((request) =>
 {
-	axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
-	axios.defaults.withCredentials = true;
-
-	axios.interceptors.request.use((request) =>
+	if (!request.headers["Content-Type"])
 	{
-		if (!request.headers["Content-Type"])
+		request.headers["Content-Type"] = "application/json";
+	}
+
+	const accessToken = localStorage.getItem("accessToken");
+
+	if (accessToken)
+	{
+		request.headers["Authorization"] = "Bearer " + accessToken;
+	}
+
+	return request;
+});
+
+axiosClient.interceptors.response.use(
+	(response) =>
+	{
+		if (response && response.data)
 		{
-			request.headers["Content-Type"] = "application/json";
+			return response;
+		}
+	},
+	async (error) =>
+	{
+		const originalRequest = error.config;
+		const statusCode = error.response.status;
+		const responseError = error.response.data;
+
+		//Refresh token and Access Token both expired
+		if (statusCode === 401 && originalRequest.url === '/auth/refresh') 
+		{
+			localStorage.removeItem("accessToken");
+			window.location.replace('/login', '_self');
 		}
 
-		const accessToken = localStorage.getItem("accessToken");
-
-		if (accessToken)
+		//Only Access token expired
+		if (statusCode === 401 && responseError.message === "jwt expired")
 		{
-			request.headers["Authorization"] = "Bearer " + accessToken;
-		}
+			const responseFromRefresh = await axios.create({
+				withCredentials: true
+			}).get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`);
 
-		return request;
-	});
-
-	axios.interceptors.response.use(
-		(response) =>
-		{
-			if (response && response.data)
+			if (responseFromRefresh.status === 200)
 			{
-				return response;
+				localStorage.setItem("accessToken", responseFromRefresh.data.result.accessToken);
+				originalRequest.headers['Authorization'] = `Bearer ${responseFromRefresh.data.result.accessToken}`;
+				// return axios(originalRequest);
+				return axiosClient(originalRequest);
 			}
-		},
-		async (error) =>
-		{
-			const originalRequest = error.config;
-			const statusCode = error.response.status;
-			const responseError = error.response.data;
-
-			//Refresh token and Access Token both expired
-			if (statusCode === 401 && originalRequest.url === `${process.env.REACT_APP_BASE_URL}/auth/refresh`) 
+			else
 			{
 				localStorage.removeItem("accessToken");
-				window.location.replace('/login', '_self');
+				window.location.replace('/auth/login', '_self');
+				return Promise.reject(responseError);
 			}
+		}
 
-			//Only Access token expired
-			if (statusCode === 401 && responseError.message === "jwt expired")
-			{
-				const responseFromRefresh = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`);
+		return Promise.reject(error);
+	});
 
-				if (responseFromRefresh.status === 200)
-				{
-					localStorage.setItem("accessToken", responseFromRefresh.data.result.accessToken);
-					originalRequest.headers['Authorization'] = `Bearer ${responseFromRefresh.data.result.accessToken}`;
-					return axios(originalRequest);
-				}
-				else
-				{
-					localStorage.removeItem("accessToken");
-					window.location.replace('/auth/login', '_self');
-					return Promise.reject(responseError);
-				}
-			}
+// function initializeInterceptor()
+// {
+// 	console.log("Initializing axios interceptor");
+// 	axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+// 	axios.defaults.withCredentials = true;
 
-			return Promise.reject(error);
-		});
-}
+// 	axios.interceptors.request.use((request) =>
+// 	{
+// 		if (!request.headers["Content-Type"])
+// 		{
+// 			request.headers["Content-Type"] = "application/json";
+// 		}
 
-export default initializeInterceptor;
+// 		const accessToken = localStorage.getItem("accessToken");
+
+// 		if (accessToken)
+// 		{
+// 			request.headers["Authorization"] = "Bearer " + accessToken;
+// 		}
+
+// 		return request;
+// 	});
+
+// 	axios.interceptors.response.use(
+// 		(response) =>
+// 		{
+// 			if (response && response.data)
+// 			{
+// 				return response;
+// 			}
+// 		},
+// 		async (error) =>
+// 		{
+// 			const originalRequest = error.config;
+// 			const statusCode = error.response.status;
+// 			const responseError = error.response.data;
+
+// 			//Refresh token and Access Token both expired
+// 			if (statusCode === 401 && originalRequest.url === `${process.env.REACT_APP_BASE_URL}/auth/refresh`)
+// 			{
+// 				localStorage.removeItem("accessToken");
+// 				window.location.replace('/login', '_self');
+// 			}
+
+// 			//Only Access token expired
+// 			if (statusCode === 401 && responseError.message === "jwt expired")
+// 			{
+// 				const responseFromRefresh = await axios.get('/auth/refresh');
+
+// 				if (responseFromRefresh.status === 200)
+// 				{
+// 					localStorage.setItem("accessToken", responseFromRefresh.data.result.accessToken);
+// 					originalRequest.headers['Authorization'] = `Bearer ${responseFromRefresh.data.result.accessToken}`;
+// 					return axios(originalRequest);
+// 				}
+// 				else
+// 				{
+// 					localStorage.removeItem("accessToken");
+// 					window.location.replace('/auth/login', '_self');
+// 					return Promise.reject(responseError);
+// 				}
+// 			}
+
+// 			return Promise.reject(error);
+// 		});
+// }
+
+// export default initializeInterceptor;

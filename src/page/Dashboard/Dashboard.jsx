@@ -2,39 +2,33 @@ import { AutoComplete, Row, Col, Input, Modal } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import "./Dashboard.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewProject from "../project/NewProject/NewProject";
-
+import { axiosClient } from "../../config/axios";
 const Dashboard = () =>
 {
 	const navigate = useNavigate();
 	const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
+	const [projects, setProjects] = useState([]);
 
+	async function fetchProjects()
+	{
+		const response = await axiosClient.get("/projects");
+		setProjects(response.data.result);
+	}
+
+	useEffect(() =>
+	{
+		fetchProjects();
+	}, []);
+
+
+
+	//Search Options
 	const options = [
 		{ value: 'Burns Bay Road' },
 		{ value: 'Downing Street' },
 		{ value: 'Wall Street' },
-	];
-
-	const dummy = [
-		{
-			name: "Bentley Systems",
-		},
-		{
-			name: "Vawsum Schools",
-		},
-		{
-			name: "Codelogicx",
-		},
-		{
-			name: "Utah Tech Labs",
-		},
-		{
-			name: "Dalos",
-		},
-		{
-			name: "VawMe",
-		}
 	];
 
 	const getInitals = (name) =>
@@ -73,12 +67,11 @@ const Dashboard = () =>
 					</div>
 				</Col>
 				{
-					dummy.map((d, id) =>
+					projects.map((d, id) =>
 					{
-						let idx = Math.floor(Math.random() * 7);
 						return (
 							<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4} key={id}>
-								<div className="new-project-div" style={{ backgroundColor: colourArray[idx] }} onClick={() => navigate("/project/tasks", { state: { project_id: Math.ceil(Math.random() * 9999) } })}>
+								<div className="new-project-div" style={{ backgroundColor: colourArray[id % 8] }} onClick={() => navigate("/project/tasks", { state: { project_id: d._id } })}>
 									<span className="initials">{getInitals(d.name)}</span>
 								</div>
 								<h3 className="project-title">{d.name}</h3>
@@ -89,7 +82,7 @@ const Dashboard = () =>
 			</Row>
 
 			<Modal title="Add Project" open={newProjectModalOpen} onCancel={() => { setNewProjectModalOpen(false); }} footer={null}>
-				<NewProject />
+				<NewProject setNewProjectModalOpen={setNewProjectModalOpen} />
 			</Modal>
 		</div>
 	);

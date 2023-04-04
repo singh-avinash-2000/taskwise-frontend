@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Button, message } from 'antd';
 import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, LockOutlined, UserOutlined, HeatMapOutlined } from '@ant-design/icons';
+// import axios from "axios";
+import { axiosClient } from "../../config/axios";
 
 import "../Login/login.css";
-import axios from "axios";
 
 const Register = () =>
 {
@@ -48,7 +49,7 @@ const Register = () =>
 			}
 			else
 			{
-				const response = await axios.post(process.env.REACT_APP_BASE_URL + "/auth/register", formState);
+				const response = await axiosClient.post("/auth/register", formState);
 				localStorage.setItem("accessToken", response.data.result.accessToken);
 				navigate("/");
 				message.success(response.data.message);

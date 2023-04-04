@@ -8,7 +8,7 @@ import './Layout.css';
 
 import { useThemeContext } from "../../../context/ThemeProvider";
 
-import initializeInterceptor from '../../../config/axios';
+// import initializeInterceptor from '../../../config/axios';
 
 const MainLayout = (props) =>
 {
@@ -36,7 +36,7 @@ const MainLayout = (props) =>
 		}, 500);
 
 		handleResize();
-		initializeInterceptor();
+		// initializeInterceptor();
 
 		window.addEventListener("resize", handleResize);
 

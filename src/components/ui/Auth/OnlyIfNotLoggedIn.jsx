@@ -6,30 +6,30 @@ const OnlyIfNotLoggedIn = () =>
 {
 	const navigate = useNavigate();
 
-	const fetchRefreshToken = async () =>
-	{
-		const response = await axios.create({
-			withCredentials: true
-		}).get(process.env.REACT_APP_BASE_URL + "/auth/refresh");
+	// const fetchRefreshToken = async () =>
+	// {
+	// 	const response = await axios.create({
+	// 		withCredentials: true
+	// 	}).get(process.env.REACT_APP_BASE_URL + "/auth/refresh");
 
-		let newToken = response.data.result.accessToken;
-		localStorage.setItem("accessToken", newToken);
+	// 	let newToken = response.data.result.accessToken;
+	// 	localStorage.setItem("accessToken", newToken);
 
-		navigate("/");
-	};
+	// 	navigate("/");
+	// };
 
 	useEffect(() =>
 	{
 		let token = localStorage.getItem("accessToken");
 
-		if (!token)
-		{
-			fetchRefreshToken();
-		}
-		else
+		if (token)
 		{
 			navigate("/");
 		}
+		// else
+		// {
+		// 	fetchRefreshToken();
+		// }
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (

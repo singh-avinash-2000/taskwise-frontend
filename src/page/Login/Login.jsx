@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input, message } from 'antd';
 import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, HeatMapOutlined } from '@ant-design/icons';
 import "./login.css";
-import axios from "axios";
+// import axios from "axios";
+import { axiosClient } from "../../config/axios";
 
 const Login = () =>
 {
@@ -48,7 +49,7 @@ const Login = () =>
 					password
 				};
 
-				const response = await axios.post(process.env.REACT_APP_BASE_URL + "/auth/login", data);
+				const response = await axiosClient.post("/auth/login", data);
 
 				message.success(response.data.message);
 

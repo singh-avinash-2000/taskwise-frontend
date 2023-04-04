@@ -3,42 +3,30 @@ import { Popover, Tooltip, message, Button } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined } from "@ant-design/icons";
 import { TbLogout } from "react-icons/tb";
 import { useThemeContext } from "../../../context/ThemeProvider";
-import axios from "axios";
+// import axios from "axios";
+import { axiosClient } from "../../../config/axios";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
 
 const NavBar = (props) =>
 {
 	const { collapsed, setCollapsed } = useThemeContext();
-	const routes = useNavigate();
+	const navigate = useNavigate();
 
 	const handleLogout = async () =>
 	{
 		try
 		{
-			const response = await axios.post(process.env.REACT_APP_BASE_URL + "/auth/logout");
+			const response = await axiosClient.post("/auth/logout");
 			localStorage.removeItem("accessToken");
 			message.success(response.data.message);
-			routes("/login");
+			navigate("/login");
 		}
 		catch (error)
 		{
 			message.error(error.response.data.message);
 		}
 	};
-
-	async function testRefresh()
-	{
-		try
-		{
-			await axios.get(process.env.REACT_APP_BASE_URL + "/projects");
-
-		} catch (error)
-		{
-			console.log("error: ", error);
-		}
-	}
-
 
 	return (
 		<div className="navbar-notification-main-wrapper">
@@ -50,7 +38,6 @@ const NavBar = (props) =>
 					<div></div>
 			}
 			<div className="navbar-notification-wrapper">
-				<Button onClick={testRefresh}>Project data</Button>
 				<Tooltip title="Logout" className="logout-btn">
 					<TbLogout size={30} onClick={handleLogout} />
 				</Tooltip>

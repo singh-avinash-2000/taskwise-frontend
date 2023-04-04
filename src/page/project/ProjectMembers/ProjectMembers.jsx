@@ -2,14 +2,16 @@ import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Inpu
 import { useEffect, useState } from 'react';
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 
-import './ProjectMembers.css'
+import './ProjectMembers.css';
 
-const confirm = (e) => {
+const confirm = (e) =>
+{
 	console.log(e);
 	message.success('Click on Yes');
 };
 
-const cancel = (e) => {
+const cancel = (e) =>
+{
 	console.log(e);
 	message.error('Click on No');
 };
@@ -28,7 +30,8 @@ const columns = [
 	{
 		title: 'Action',
 		dataIndex: 'name',
-		render: (data) => {
+		render: (data) =>
+		{
 			const joined = data == "N - A";
 
 			return (
@@ -76,7 +79,8 @@ const columns = [
 	},
 ];
 
-const ProjectMembers = () => {
+const ProjectMembers = () =>
+{
 	const [isLoading, setIsLoading] = useState(false);
 	const [data, setData] = useState([
 		{
@@ -114,18 +118,22 @@ const ProjectMembers = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [inviteSent, setInviteSent] = useState(false);
 
-	const showModal = () => {
+	const showModal = () =>
+	{
 		setIsModalOpen(true);
 	};
 
-	const closeModal = () => {
+	const closeModal = () =>
+	{
 		setIsModalOpen(false);
 		setInviteSent(false);
 	};
 
-	const handleSendInvite = () => {
+	const handleSendInvite = () =>
+	{
 		setIsLoading(true);
-		setTimeout(() => {
+		setTimeout(() =>
+		{
 			setInviteSent(true);
 			setIsLoading(false);
 		}, 2000);

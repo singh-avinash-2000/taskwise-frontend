@@ -4,14 +4,16 @@ import { UserOutlined, ApartmentOutlined, LinkOutlined } from "@ant-design/icons
 import TaskItem from "../../../components/ui/TaskItem/TaskItem";
 import { useLocation } from "react-router-dom";
 
-import './TaskInfo.css'
+import './TaskInfo.css';
 
-const TaskInfo = () => {
+const TaskInfo = () =>
+{
 	const location = useLocation();
 
 	console.log(location.state);
 
-	const onChange = (key) => {
+	const onChange = (key) =>
+	{
 		console.log(key);
 	};
 
@@ -145,7 +147,7 @@ const TaskInfo = () => {
 						</div>
 					</div>
 				</Col>
-				<Col xs={24} sm={24} md={24} lg={8} xl={6}>
+				<Col xs={24} sm={24} md={24} lg={8} xl={6} style={{ paddingLeft: 20 }}>
 					<Select
 						defaultValue="to_do"
 						className="to_do"

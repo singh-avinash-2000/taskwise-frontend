@@ -8,6 +8,7 @@
 
 .create-task-modal{
 	width: 70% !important;
+	height: 100%;
 }
 
 @media only screen and (max-width: 500px) 

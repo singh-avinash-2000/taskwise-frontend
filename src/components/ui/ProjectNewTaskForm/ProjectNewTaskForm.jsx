@@ -1,21 +1,12 @@
-import
-{
-	Button,
-	Form,
-	Input,
-	Select,
-	Card,
-	Mentions,
-	Upload,
-	message,
-	AutoComplete
-} from 'antd';
+import { Button, Form, Input, Select, Card, Mentions, Upload, message, AutoComplete } from 'antd';
 import { Editor } from "react-draft-wysiwyg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { convertFromRaw, EditorState } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import 'react-quill/dist/quill.snow.css';
 import { InboxOutlined } from "@ant-design/icons";
+import ReactQuill from 'react-quill';
 
 import './ProjectNewTaskForm.css';
 
@@ -26,6 +17,8 @@ const ProjectNewTaskForm = () =>
 	const [form] = Form.useForm();
 	const navigate = useNavigate();
 	const [prefix, setPrefix] = useState('@');
+	const [hideTaskKey, setHideTaskKey] = useState(false);
+	const [description, setDescription] = useState("");
 	const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
 	const onSearch = (_, newPrefix) =>
@@ -41,7 +34,14 @@ const ProjectNewTaskForm = () =>
 
 	const handleDropDownChange = (value) =>
 	{
-
+		if (value == "main_task")
+		{
+			setHideTaskKey(false);
+		}
+		else
+		{
+			setHideTaskKey(true);
+		}
 	};
 
 	const onEditorStateChange = (value) =>
@@ -108,6 +108,31 @@ const ProjectNewTaskForm = () =>
 		},
 	};
 
+	var toolbarOptions = [
+		['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+		['blockquote', 'code-block'],
+
+		[{ 'header': 1 }, { 'header': 2 }],               // custom button values
+		[{ 'list': 'ordered' }, { 'list': 'bullet' }],
+		[{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+		[{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+		[{ 'direction': 'rtl' }],                         // text direction
+
+		[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+		[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+		[{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+		[{ 'font': [] }],
+		[{ 'align': [] }],
+
+		['clean']                                         // remove formatting button
+	];
+
+	const handleTaskCreate = () =>
+	{
+
+	};
+
 	return (
 		<div>
 			<Card
@@ -140,7 +165,7 @@ const ProjectNewTaskForm = () =>
 						</Select>
 					</Form.Item>
 					{
-						true &&
+						hideTaskKey &&
 						<Form.Item label="Task Key"
 							name="task_key"
 							rules={[
@@ -183,13 +208,7 @@ const ProjectNewTaskForm = () =>
 					>
 						{/* <TextArea placeholder="Please input task description" /> */}
 						<div className="new-task-description-wrapper">
-							<Editor
-								editorState={editorState}
-								toolbarClassName="toolbarClassName"
-								wrapperClassName="wrapperClassName"
-								editorClassName="editorClassName"
-								onEditorStateChange={onEditorStateChange}
-							/>
+							<ReactQuill theme="snow" value={description} onChange={setDescription} modules={{ toolbar: toolbarOptions }} />
 						</div>
 					</Form.Item>
 					<Form.Item label="Priority"

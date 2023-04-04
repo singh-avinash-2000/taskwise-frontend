@@ -27,12 +27,12 @@ body {
   height: 70px;
 }
 
-button {
+.ant-btn {
 	background-color: var(--darkgreen) !important;
 	color: white !important;
 }
 
-button:hover {
+.ant-btn:hover {
 	background-color: var(--darkgreen) !important;
 	transform: scale(1.05);
 	color: white !important;

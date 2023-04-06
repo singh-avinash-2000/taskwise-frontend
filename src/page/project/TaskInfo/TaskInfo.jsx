@@ -10,8 +10,6 @@ const TaskInfo = () =>
 {
 	const location = useLocation();
 
-	console.log(location.state);
-
 	const onChange = (key) =>
 	{
 		console.log(key);
@@ -196,7 +194,7 @@ const TaskInfo = () =>
 						</table>
 					</div>
 				</Col>
-				<Col xs={24} sm={24} md={24} lg={16} xl={20}>
+				<Col xs={24} sm={24} md={24} lg={16} xl={18}>
 					<Tabs defaultActiveKey="1" items={items} onChange={onChange} />
 				</Col>
 			</Row>

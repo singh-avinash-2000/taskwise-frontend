@@ -1,5 +1,6 @@
 import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Input, Result, Spin, Tag, Breadcrumb } from 'antd';
 import { useEffect, useState } from 'react';
+import { useLocation } from "react-router-dom";
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 
 import './ProjectMembers.css';
@@ -82,6 +83,13 @@ const columns = [
 const ProjectMembers = () =>
 {
 	const [isLoading, setIsLoading] = useState(false);
+	const location = useLocation();
+
+	// you will get project id like this throught out project routes
+	// check console for exact value
+
+	console.log(location.state);
+
 	const [data, setData] = useState([
 		{
 			key: '1',

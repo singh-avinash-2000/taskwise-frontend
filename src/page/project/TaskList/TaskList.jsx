@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button, Modal } from "antd";
 import { MinusSquareOutlined, MinusSquareTwoTone, PlusSquareOutlined, PlusSquareTwoTone } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import NewTask from "../NewTask/NewTask";
 
 import "./TaskList.css";
@@ -12,6 +12,7 @@ const TaskList = () =>
 {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const generateIndex = (limit) =>
 	{
@@ -42,7 +43,7 @@ const TaskList = () =>
 			dataIndex: 'assignee',
 			render: (assignee) => (
 				<>
-					<Avatar src={`https://joesch.moe/api/v1/random?key=${Math.ceil(Math.random() * 99)}`} /> {assignee}
+					<Avatar src="https://picsum.photos/200/300" /> {assignee}
 				</>
 			),
 		},
@@ -52,7 +53,7 @@ const TaskList = () =>
 			dataIndex: 'reporter',
 			render: (reporter) => (
 				<>
-					<Avatar src={`https://joesch.moe/api/v1/random?key=${Math.ceil(Math.random() * 99)}`} /> {reporter}
+					<Avatar src="https://picsum.photos/200/300" /> {reporter}
 				</>
 			),
 		},
@@ -151,7 +152,7 @@ const TaskList = () =>
 	const handleRowClick = (event) =>
 	{
 		console.log(event.target.value);
-		navigate(`/project/tasks/${event.key}`);
+		navigate(`/project/tasks/${event.key}`, { state: location.state });
 		console.log(event);
 	};
 

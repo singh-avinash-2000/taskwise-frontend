@@ -22,8 +22,6 @@ const Dashboard = () =>
 		fetchProjects();
 	}, []);
 
-
-
 	//Search Options
 	const options = [
 		{ value: 'Burns Bay Road' },

@@ -14,8 +14,5 @@
     background-color: white;
     z-index: -1;
     padding-top: 15px;
-}
-
-.layout-outlet-div {
-    padding: 0px 1%;
+	padding: 0px 1%;
 }

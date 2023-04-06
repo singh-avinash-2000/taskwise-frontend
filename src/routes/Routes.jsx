@@ -1,66 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
-import Layout from "../components/layout/Layout/Layout";
-import MainSidebar from "../components/layout/Sidebar/SideBar";
-import { ContextProvider } from "../context/ThemeProvider";
-import { mainSideBarData, projectSideBarData } from "../config/data";
+import ProjectLayout from "../components/layout/Layout/ProjectLayout";
 import OnlyIfLoggedIn from "../components/ui/Auth/OnlyIfLoggedIn";
 import OnlyIfNotLoggedIn from "../components/ui/Auth/OnlyIfNotLoggedIn";
-import { Login, Register, Dashboard, ProjectMembers, UserAccount, NewTask, TaskInfo, TaskList, ChatProject } from "../page/index";
-
-// const routes = createBrowserRouter([
-// 	{
-// 		path: "/login",
-// 		element: <Redirect component={Login} />
-// 	},
-// 	{
-// 		path: "/register",
-// 		element: <Redirect component={Register} />
-// 	},
-// 	{
-// 		path: "/project",
-// 		element: <ContextProvider><Layout sidebar={MainSidebar} sidebarData={projectSideBarData} /></ContextProvider>,
-// 		children: [
-// 			{
-// 				path: "/project/tasks",
-// 				element: <TaskList />
-// 			},
-// 			{
-// 				path: "/project/members",
-// 				element: <ProjectMembers />
-// 			},
-// 			{
-// 				path: "/project/tasks/create-task",
-// 				element: <NewTask />
-// 			},
-// 			{
-// 				path: "/project/tasks/:task_id",
-// 				element: <TaskInfo />
-// 			},
-// 			{
-// 				path: "/project/chat",
-// 				element: <ChatProject />
-// 			}
-// 		],
-// 	},
-// 	{
-// 		path: "/",
-// 		element: <ContextProvider><Layout sidebarDisabled={true} /></ContextProvider>,
-// 		children: [
-// 			{
-// 				path: "/insights",
-// 				element: <h1>Feeds</h1>
-// 			},
-// 			{
-// 				path: "user/account",
-// 				element: <UserAccount />
-// 			},
-// 			{
-// 				path: "/",
-// 				element: <Dashboard />
-// 			},
-// 		]
-// 	},
-// ]);
+import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject } from "../page";
+import DashboardLayout from "../components/layout/Layout/DashboardLayout";
 
 const RouterComponent = () =>
 {
@@ -71,10 +14,10 @@ const RouterComponent = () =>
 				<Route path="/register" element={<Register />} />
 			</Route>
 			<Route element={<OnlyIfLoggedIn />}>
-				<Route element={<ContextProvider><Layout sidebarDisabled={true} navIconDisabled={true} /></ContextProvider>}>
+				<Route element={<DashboardLayout />}>
 					<Route path='/' element={<Dashboard />} />
 				</Route>
-				<Route element={<ContextProvider><Layout sidebar={MainSidebar} sidebarData={projectSideBarData} /></ContextProvider>}>
+				<Route element={<ProjectLayout />}>
 					<Route path="/project/tasks" element={<TaskList />} />
 					<Route path="/project/members" element={<ProjectMembers />} />
 					<Route path="/project/tasks/:task_id" element={<TaskInfo />} />

@@ -1,16 +1,14 @@
 import React from "react";
 import { Popover, Tooltip, message, Button } from "antd";
-import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined } from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, HeatMapOutlined } from "@ant-design/icons";
 import { TbLogout } from "react-icons/tb";
-import { useThemeContext } from "../../../context/ThemeProvider";
 // import axios from "axios";
 import { axiosClient } from "../../../config/axios";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
 
-const NavBar = (props) =>
+const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 {
-	const { collapsed, setCollapsed } = useThemeContext();
 	const navigate = useNavigate();
 
 	const handleLogout = async () =>
@@ -20,7 +18,9 @@ const NavBar = (props) =>
 			const response = await axiosClient.post("/auth/logout");
 			localStorage.removeItem("accessToken");
 			message.success(response.data.message);
-			navigate("/login");
+			navigate("/login", {
+				state: { loggedOut: true }
+			});
 		}
 		catch (error)
 		{
@@ -31,12 +31,16 @@ const NavBar = (props) =>
 	return (
 		<div className="navbar-notification-main-wrapper">
 			{
-				!props.navIconDisabled ? <div onClick={() => setCollapsed(!collapsed)} >
+				!navIconDisabled ? <div onClick={() => setCollapsed(!collapsed)} >
 					{collapsed ? <MenuUnfoldOutlined className="navbar-menu-icon" /> : <MenuFoldOutlined className="navbar-menu-icon" />}
 				</div>
 					:
-					<div></div>
+					<div className="logo-container">
+						<HeatMapOutlined className="logo" />
+						<span className="ping-typography">PING</span>
+					</div>
 			}
+
 			<div className="navbar-notification-wrapper">
 				<Tooltip title="Logout" className="logout-btn">
 					<TbLogout size={30} onClick={handleLogout} />
@@ -47,7 +51,6 @@ const NavBar = (props) =>
 				</Popover>
 			</div>
 		</div>
-
 	);
 };
 

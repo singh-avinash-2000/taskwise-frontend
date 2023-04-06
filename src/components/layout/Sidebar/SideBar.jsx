@@ -1,48 +1,74 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import * as rdd from 'react-device-detect';
-import { HeatMapOutlined } from '@ant-design/icons';
-import { useThemeContext } from "../../../context/ThemeProvider";
-
 import "./Sidebar.css";
+import projectSideBarData from "../../../config/projectSidebar.json";
+import { RiRoadMapLine } from "react-icons/ri";
+import { BsKanban, BsChatSquareText } from "react-icons/bs";
+import { FaTasks } from "react-icons/fa";
+import { TbReportAnalytics } from "react-icons/tb";
+import { GrPlan } from "react-icons/gr";
+import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText } from "react-icons/ai";
 
+function getIconComponent(iconName)
+{
+	switch (iconName)
+	{
+		case 'Roadmap':
+			return <RiRoadMapLine />;
+		case 'Kanban Board':
+			return <BsKanban />;
+		case 'Tasks':
+			return <FaTasks />;
+		case 'Reports':
+			return <TbReportAnalytics />;
+		case 'PLANNING':
+			return <GrPlan />;
+		case 'INTERACTION':
+			return <AiOutlineInteraction />;
+		case 'Members':
+			return <AiOutlineTeam />;
+		case 'Chat':
+			return <BsChatSquareText />;
+		case 'Documents':
+			return <AiOutlineFileText />;
+		default:
+			return null; // or an error message
+	}
+}
 
-const SideBar = (props) =>
+const SideBar = ({ setCollapsed }) =>
 {
 	return (
 		<div id="sidebar" >
-			{
-				window.location.pathname !== "/projects/new-project" && <div className="sidebar-wrapper">
-					<div className="sidebar-logo-wrapper">
-						<HeatMapOutlined className="logo" />
-						<span className="ping-typography">PING</span>
-					</div>
-					<div className="nav-entries">
-						{
-							Object.entries(props.data).map(([key, value]) =>
-							{
-								return (
-									<NavHeader title={key} children={value} key={key} />
-								);
-							})
-						}
-					</div>
+			<div className="sidebar-wrapper">
+				<div className="project-title-div">
+					<span className="project-title">Osborne Wisoky</span>
 				</div>
-			}
-
+				<div className="nav-entries">
+					{
+						Object.entries(projectSideBarData).map(([key, value]) =>
+						{
+							return (
+								<NavHeader title={key} children={value} key={key} setCollapsed={setCollapsed} />
+							);
+						})
+					}
+				</div>
+			</div>
 		</div >
 	);
 };
 
-const NavHeader = ({ title, children }) =>
+const NavHeader = ({ title, children, setCollapsed }) =>
 {
 	return (
 		<div className="nav-header-wrapper">
-			<span className="nav-header-title">{title}</span>
+			{getIconComponent(title)}<span className="nav-header-title">{title}</span>
 			{
 				children.map((child) =>
 				{
 					return (
-						<NavItem title={child.title} to={child.to} key={child.title} />
+						<NavItem title={child.title} to={child.to} key={child.title} setCollapsed={setCollapsed} />
 					);
 				})
 			}
@@ -50,29 +76,31 @@ const NavHeader = ({ title, children }) =>
 	);
 };
 
-const NavItem = ({ title, to }) =>
+const NavItem = ({ title, to, setCollapsed }) =>
 {
-
-	const { screenWidth, setCollapsed } = useThemeContext();
+	const location = useLocation();
+	const { project_id } = location.state;
 
 	const handleClick = () =>
 	{
-		if (screenWidth < 950 || rdd.isMobile)
+		if (window.innerWidth < 950 || rdd.isMobile)
 		{
 			setCollapsed(true);
 		}
 	};
 
-
 	return (
 
-		<NavLink to={to}
+		<NavLink
+			to={to}
+			// form an object and pass all necessary data here and pass it along
+			state={{ project_id }}
 			className={
 				({ isActive }) => isActive ? "nav-item-active nav-item-fixed-style" : "nav-item-fixed-style"
 			}
 			onClick={handleClick}>
 			<div id="nav-item-custom">
-				<span className="nav-item-custom-span">{title}</span>
+				{getIconComponent(title)}<span className="nav-item-custom-span">{title}</span>
 			</div>
 		</NavLink>
 	);

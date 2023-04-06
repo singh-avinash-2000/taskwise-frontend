@@ -147,11 +147,6 @@
 	background-color: var(--darkgreen) !important;
 }
 
-.logo {
-	font-size: 35px;
-	margin: 10px;
-}
-
 @media only screen and (max-width: 450px) 
 {
 	.login-container {

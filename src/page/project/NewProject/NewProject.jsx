@@ -7,7 +7,7 @@ const NewProject = ({ setNewProjectModalOpen }) =>
 
 	return (
 		<div className="main">
-			<ProjectDataForm formData={formData} setNewProjectModalOpen={setNewProjectModalOpen} />
+
 		</div>
 	);
 };

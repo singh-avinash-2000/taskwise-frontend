@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import ProjectLayout from "../components/layout/Layout/ProjectLayout";
 import OnlyIfLoggedIn from "../components/ui/Auth/OnlyIfLoggedIn";
 import OnlyIfNotLoggedIn from "../components/ui/Auth/OnlyIfNotLoggedIn";
-import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject } from "../page";
+import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject, DefaultPage } from "../page";
 import DashboardLayout from "../components/layout/Layout/DashboardLayout";
 
 const RouterComponent = () =>
@@ -24,6 +24,7 @@ const RouterComponent = () =>
 					<Route path="/project/chat" element={<ChatProject />} />
 				</Route>
 			</Route>
+			<Route path="*" element={<DefaultPage />} />
 		</Routes>
 	);
 };

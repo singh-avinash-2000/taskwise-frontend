@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
 import "./Dashboard.css";
 import { useEffect, useState } from "react";
-import NewProject from "../project/NewProject/NewProject";
+import ProjectDataForm from "../../components/ui/ProjectDataForm/ProjectDataForm";
 import { axiosClient } from "../../config/axios";
+
 const Dashboard = () =>
 {
 	const navigate = useNavigate();
@@ -80,7 +81,7 @@ const Dashboard = () =>
 			</Row>
 
 			<Modal title="Add Project" open={newProjectModalOpen} onCancel={() => { setNewProjectModalOpen(false); }} footer={null}>
-				<NewProject setNewProjectModalOpen={setNewProjectModalOpen} />
+				<ProjectDataForm setNewProjectModalOpen={setNewProjectModalOpen} fetchProjects={fetchProjects} method="Add" />
 			</Modal>
 		</div>
 	);

@@ -1,35 +1,37 @@
-import { Button, Form, Input, Select, Card, Mentions, Upload, message, AutoComplete } from 'antd';
-import { Editor } from "react-draft-wysiwyg";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { convertFromRaw, EditorState } from "draft-js";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Button, Form, Input, Select, Card, Upload, message, AutoComplete } from 'antd';
+import { useEffect, useRef, useState } from "react";
 import 'react-quill/dist/quill.snow.css';
 import { InboxOutlined } from "@ant-design/icons";
 import ReactQuill from 'react-quill';
-
 import './ProjectNewTaskForm.css';
+import { axiosClient } from "../../../config/axios";
 
 const { Dragger } = Upload;
 
-const ProjectNewTaskForm = () =>
+const ProjectNewTaskForm = ({ project_id }) =>
 {
 	const [form] = Form.useForm();
-	const navigate = useNavigate();
-	const [prefix, setPrefix] = useState('@');
 	const [hideTaskKey, setHideTaskKey] = useState(false);
-	const [description, setDescription] = useState("");
-	const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
-	const onSearch = (_, newPrefix) =>
-	{
-		setPrefix(newPrefix);
-	};
+	const quillRef = useRef(null);
 
 	const handleFormSubmit = async () =>
 	{
-		await form.validateFields();
-		navigate("/dashboard");
+		try
+		{
+			const valid = await form.validateFields();
+			if (valid)
+			{
+				const values = form.getFieldsValue();
+				console.log(values);
+				values.task_description_raw = quillRef.current.getEditor().getContents();
+
+				const response = await axiosClient.post(`/projects/${project_id}/tasks`, values);
+				console.log(response.data.result);
+			}
+		} catch (error)
+		{
+			console.log(error);
+		}
 	};
 
 	const handleDropDownChange = (value) =>
@@ -43,45 +45,6 @@ const ProjectNewTaskForm = () =>
 			setHideTaskKey(true);
 		}
 	};
-
-	const onEditorStateChange = (value) =>
-	{
-		setEditorState(value);
-	};
-
-	const MOCK_DATA = {
-		'@': ['afc163', 'zombiej', 'yesmeck']
-	};
-
-	useEffect(() =>
-	{
-		const contentState = convertFromRaw({
-			"blocks": [
-				{
-					"key": "7tue7",
-					"text": "Description",
-					"type": "unstyled",
-					"depth": 0,
-					"inlineStyleRanges": [
-						{
-							"offset": 0,
-							"length": 11,
-							"style": "BOLD"
-						},
-						{
-							"offset": 0,
-							"length": 11,
-							"style": "ITALIC"
-						}
-					],
-					"entityRanges": [],
-					"data": {}
-				}
-			],
-			"entityMap": {}
-		});
-		setEditorState(EditorState.createWithContent(contentState));
-	}, []);
 
 	const props = {
 		name: 'file',
@@ -128,10 +91,12 @@ const ProjectNewTaskForm = () =>
 		['clean']                                         // remove formatting button
 	];
 
-	const handleTaskCreate = () =>
-	{
-
-	};
+	const assigneeOptions = [
+		{ label: "Avinash Singh", value: "12" },
+		{ label: "Ritik Mishra", value: "23" },
+		{ label: "Aman Singh", value: "345" },
+		{ label: "Gaurav Singh", value: "4545" }
+	];
 
 	return (
 		<div>
@@ -148,7 +113,7 @@ const ProjectNewTaskForm = () =>
 					layout="horizontal"
 					size="large"
 					form={form}
-					onFinish={handleFormSubmit}
+					onSubmitCapture={handleFormSubmit}
 				>
 					<Form.Item label="Type"
 						name="task_type"
@@ -199,16 +164,12 @@ const ProjectNewTaskForm = () =>
 					</Form.Item>
 					<Form.Item label="Description"
 						name="task_description"
-						rules={[
-							{
-								required: true,
-								message: 'Please input task description',
-							},
-						]}
 					>
-						{/* <TextArea placeholder="Please input task description" /> */}
 						<div className="new-task-description-wrapper">
-							<ReactQuill theme="snow" value={description} onChange={setDescription} modules={{ toolbar: toolbarOptions }} />
+							<ReactQuill theme="snow" modules={{ toolbar: toolbarOptions }} ref={quillRef} onChange={(value) =>
+							{
+								form.setFieldValue("task_description", value);
+							}} />
 						</div>
 					</Form.Item>
 					<Form.Item label="Priority"
@@ -237,21 +198,17 @@ const ProjectNewTaskForm = () =>
 							}
 						]}
 					>
-						<Mentions
+						<Select
+							mode="multiple"
+							allowClear
 							style={{
 								width: '100%',
 							}}
-							placeholder="input @ to mention people"
-							prefix={['@']}
-							onSearch={onSearch}
-							options={(MOCK_DATA[prefix] || []).map((value) => ({
-								key: value,
-								value,
-								label: value,
-							}))}
+							placeholder="Please select assignees"
+							options={assigneeOptions}
 						/>
 					</Form.Item>
-					<Form.Item label="Documents" valuePropName="checked" name="document_checked">
+					<Form.Item label="Documents" valuePropName="files" name="document_files">
 						<Dragger {...props}>
 							<p className="ant-upload-drag-icon">
 								<InboxOutlined />

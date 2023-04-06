@@ -8,3 +8,4 @@ export { default as NewTask } from "./project/NewTask/NewTask";
 export { default as TaskInfo } from "./project/TaskInfo/TaskInfo";
 export { default as TaskList } from "./project/TaskList/TaskList";
 export { default as ChatProject } from "./project/ChatProject/ChatProject";
+export { default as DefaultPage } from "./Default/Default";

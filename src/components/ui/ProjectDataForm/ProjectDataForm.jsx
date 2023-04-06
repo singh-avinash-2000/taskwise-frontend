@@ -15,7 +15,7 @@ import { useState } from "react";
 import './ProjectDataForm.css';
 import { axiosClient } from "../../../config/axios";
 
-const ProjectDataForm = ({ setNewProjectModalOpen }) =>
+const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method }) =>
 {
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
@@ -30,6 +30,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen }) =>
 		try
 		{
 			await form.validateFields();
+
 			const data = {
 				name: projectName,
 				type: projectType.toUpperCase(),
@@ -37,8 +38,10 @@ const ProjectDataForm = ({ setNewProjectModalOpen }) =>
 				chat: chatStatus,
 				document: documentstatus
 			};
+
 			const response = await axiosClient.post("/projects", data);
 			message.success(response.data.message);
+
 			setProjectName("");
 			setProjectType("");
 			setProjectDesription("");
@@ -46,6 +49,11 @@ const ProjectDataForm = ({ setNewProjectModalOpen }) =>
 			setDocumentStatus(false);
 			form.resetFields(); // reset the form instance
 			setNewProjectModalOpen(false);
+
+			if (method === "Add")
+			{
+				fetchProjects();
+			}
 		} catch (error)
 		{
 			console.log(error);

@@ -5,9 +5,6 @@ import NavBar from "../Navbar/NavBar";
 import SideBar from "../Sidebar/SideBar";
 import './ProjectLayout.css';
 
-
-// import initializeInterceptor from '../../../config/axios';
-
 const MainLayout = ({ sidebarDisabled }) =>
 {
 	const [position, setPosition] = useState('relative');
@@ -35,7 +32,6 @@ const MainLayout = ({ sidebarDisabled }) =>
 		if (!sidebarDisabled)
 		{
 			handleResize();
-			// initializeInterceptor();
 
 			window.addEventListener("resize", handleResize);
 

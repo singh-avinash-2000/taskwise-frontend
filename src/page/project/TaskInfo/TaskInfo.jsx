@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Breadcrumb, Space, Button, Divider, Row, Col, Select, Avatar, Image, Tabs } from "antd";
 import { UserOutlined, ApartmentOutlined, LinkOutlined } from "@ant-design/icons";
 import TaskItem from "../../../components/ui/TaskItem/TaskItem";
 import { useLocation } from "react-router-dom";
 
 import './TaskInfo.css';
+import { axiosClient } from "../../../config/axios";
 
 const TaskInfo = () =>
 {
+	const [projectName, setProjectName] = React.useState("");
 	const location = useLocation();
+	const project_id = location.state.project_id;
+	useEffect(() =>
+	{
+		fetchProjectName();
+	}, []);
+
+	const fetchProjectName = async () =>
+	{
+		const response = await axiosClient.get(`/projects/${project_id}`);
+		setProjectName(response.data.result.name);
+	};
 
 	const onChange = (key) =>
 	{
@@ -43,7 +56,7 @@ const TaskInfo = () =>
 			<Breadcrumb
 				items={[
 					{
-						title: 'Bentley Systems',
+						title: projectName,
 					},
 					{
 						title: "Tasks"

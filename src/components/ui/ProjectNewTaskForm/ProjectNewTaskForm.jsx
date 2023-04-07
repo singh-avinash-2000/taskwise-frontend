@@ -1,11 +1,10 @@
 import { Button, Form, Input, Select, Card, Upload, message, AutoComplete } from 'antd';
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import 'react-quill/dist/quill.snow.css';
 import { InboxOutlined } from "@ant-design/icons";
 import ReactQuill from 'react-quill';
 import './ProjectNewTaskForm.css';
 import { axiosClient } from "../../../config/axios";
-
 const { Dragger } = Upload;
 
 const ProjectNewTaskForm = ({ project_id }) =>
@@ -13,6 +12,7 @@ const ProjectNewTaskForm = ({ project_id }) =>
 	const [form] = Form.useForm();
 	const [hideTaskKey, setHideTaskKey] = useState(false);
 	const quillRef = useRef(null);
+	const [defaultFileList, setDefaultFileList] = useState([]);
 
 	const handleFormSubmit = async () =>
 	{
@@ -24,7 +24,6 @@ const ProjectNewTaskForm = ({ project_id }) =>
 				const values = form.getFieldsValue();
 				console.log(values);
 				values.task_description_raw = quillRef.current.getEditor().getContents();
-
 				const response = await axiosClient.post(`/projects/${project_id}/tasks`, values);
 				console.log(response.data.result);
 			}
@@ -34,9 +33,29 @@ const ProjectNewTaskForm = ({ project_id }) =>
 		}
 	};
 
+	const handleFileUpload = async (options) =>
+	{
+		const { onSuccess, onError, file } = options;
+		const formData = new FormData();
+		formData.append('files', file);
+		try
+		{
+			const response = await axiosClient.post('/misc/upload-all', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				}
+			});
+			onSuccess(message.success(`${file.name} file uploaded successfully.`));
+		} catch (error)
+		{
+			console.log(error);
+			const err = new Error(error.message);
+			onError(err);
+		}
+	};
 	const handleDropDownChange = (value) =>
 	{
-		if (value == "main_task")
+		if (value === "main_task")
 		{
 			setHideTaskKey(false);
 		}
@@ -46,30 +65,44 @@ const ProjectNewTaskForm = ({ project_id }) =>
 		}
 	};
 
-	const props = {
-		name: 'file',
-		multiple: true,
-		action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-		onChange(info)
+	const handleFileRemove = async (file) =>
+	{
+		try
 		{
-			const { status } = info.file;
-			if (status !== 'uploading')
-			{
-				console.log(info.file, info.fileList);
-			}
-			if (status === 'done')
-			{
-				message.success(`${info.file.name} file uploaded successfully.`);
-			} else if (status === 'error')
-			{
-				message.error(`${info.file.name} file upload failed.`);
-			}
-		},
-		onDrop(e)
+			const fileName = file.name;
+			await axiosClient.delete(`/misc/delete/${fileName}`);
+			message.success(`${file.name} file removed successfully.`);
+		} catch (error)
 		{
-			console.log('Dropped files', e.dataTransfer.files);
-		},
+			console.log(error);
+			message.error(`${file.name} file removal failed.`);
+		}
 	};
+
+	// const props = {
+	// 	name: 'file',
+	// 	multiple: true,
+	// 	customRequest: { handleUploader },
+	// 	// onChange(info)
+	// 	// {
+	// 	// 	const { status } = info.file;
+	// 	// 	if (status !== 'uploading')
+	// 	// 	{
+	// 	// 		console.log(info.file, info.fileList);
+	// 	// 	}
+	// 	// 	if (status === 'done')
+	// 	// 	{
+	// 	// 		message.success(`${info.file.name} file uploaded successfully.`);
+	// 	// 	} else if (status === 'error')
+	// 	// 	{
+	// 	// 		message.error(`${info.file.name} file upload failed.`);
+	// 	// 	}
+	// 	// },
+	// 	// onDrop(e)
+	// 	// {
+	// 	// 	console.log('Dropped files', e.dataTransfer.files);
+	// 	// },
+	// };
 
 	var toolbarOptions = [
 		['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -209,7 +242,15 @@ const ProjectNewTaskForm = ({ project_id }) =>
 						/>
 					</Form.Item>
 					<Form.Item label="Documents" valuePropName="files" name="document_files">
-						<Dragger {...props}>
+						{/* <Dragger {...props}> */}
+						<Dragger
+							multiple={true}
+							customRequest={handleFileUpload}
+							defaultFileList={defaultFileList}
+							onChange={({ file, fileList }) => setDefaultFileList(fileList)}
+							onRemove={(file) => handleFileRemove(file)}
+
+						>
 							<p className="ant-upload-drag-icon">
 								<InboxOutlined />
 							</p>

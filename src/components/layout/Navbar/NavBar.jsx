@@ -2,20 +2,18 @@ import React from "react";
 import { Popover, Tooltip, message, Button } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, HeatMapOutlined } from "@ant-design/icons";
 import { TbLogout } from "react-icons/tb";
-// import axios from "axios";
-import { axiosClient } from "../../../config/axios";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
+import axios from "axios";
 
 const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 {
 	const navigate = useNavigate();
-
 	const handleLogout = async () =>
 	{
 		try
 		{
-			const response = await axiosClient.post("/auth/logout");
+			const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`);
 			localStorage.removeItem("accessToken");
 			message.success(response.data.message);
 			navigate("/login", {
@@ -45,7 +43,6 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 				<Tooltip title="Logout" className="logout-btn">
 					<TbLogout size={30} onClick={handleLogout} />
 				</Tooltip>
-
 				<Popover placement="bottomRight" title={"Notification"} content={Notification} trigger="click">
 					<BellOutlined className="navbar-belloutlined-icon" />
 				</Popover>

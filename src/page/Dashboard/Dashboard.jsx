@@ -1,6 +1,7 @@
 import { AutoComplete, Row, Col, Input, Modal } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { PlusOutlined } from "@ant-design/icons";
+import { debounce } from "lodash";
 import "./Dashboard.css";
 import { useEffect, useState } from "react";
 import ProjectDataForm from "../../components/ui/ProjectDataForm/ProjectDataForm";
@@ -11,24 +12,26 @@ const Dashboard = () =>
 	const navigate = useNavigate();
 	const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
 	const [projects, setProjects] = useState([]);
+	const [options, setOptions] = useState([]);
 
 	async function fetchProjects()
 	{
 		const response = await axiosClient.get("/projects");
 		setProjects(response.data.result);
+		setOptions(response.data.result.map(d => ({ value: d.name })));
 	}
+
+	const handleSearch = debounce(async (value) =>
+	{
+		const response = await axiosClient.get(`/projects/search/${value}`);
+		setProjects(response.data.result);
+		setOptions(response.data.result.map(d => ({ value: d.name })));
+	}, 500);
 
 	useEffect(() =>
 	{
 		fetchProjects();
 	}, []);
-
-	//Search Options
-	const options = [
-		{ value: 'Burns Bay Road' },
-		{ value: 'Downing Street' },
-		{ value: 'Wall Street' },
-	];
 
 	const getInitals = (name) =>
 	{
@@ -52,6 +55,8 @@ const Dashboard = () =>
 				filterOption={(inputValue, option) =>
 					option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 				}
+				notFoundContent="No Projects Found"
+				onSearch={handleSearch}
 			>
 				<Input.Search size="large" placeholder="Search project name..." />
 			</AutoComplete>

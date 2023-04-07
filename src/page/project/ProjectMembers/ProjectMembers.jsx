@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 
 import './ProjectMembers.css';
+import { axiosClient } from "../../../config/axios";
 
 const confirm = (e) =>
 {
@@ -87,41 +88,34 @@ const ProjectMembers = () =>
 
 	// you will get project id like this throught out project routes
 	// check console for exact value
+	// console.log(location.state.project_id);
 
-	console.log(location.state);
+	const project_id = location.state.project_id;
+	const [projectName, setProjectName] = useState("");
 
-	const [data, setData] = useState([
+	const [data, setData] = useState([]);
+
+	const fetchProjectMembers = async () => 
+	{
+		const response = await axiosClient.get(`/projects/${project_id}/members`);
+		setProjectName(response.data.result.name);
+		const memberDetails = response.data.result.members.map((member) =>
 		{
-			key: '1',
-			name: 'Avinash Singh',
-			display_name: "avinash_2000",
-			id: 200
-		},
-		{
-			key: '2',
-			name: 'Rajen Roy',
-			display_name: "Rajen_3245",
-			id: 201
-		},
-		{
-			key: '3',
-			name: 'Pratyayee Bhatacharjee',
-			display_name: "Pratyayee_3465",
-			id: 203,
-		},
-		{
-			key: '4',
-			name: 'Tanmay Roy',
-			display_name: "Tanmay_2348",
-			id: 302
-		},
-		{
-			key: '5',
-			name: "N - A",
-			display_name: "avinash@2000",
-			id: 304
-		}
-	]);
+			return {
+				key: member.user.id,
+				name: member.user.first_name + " " + member.user.last_name,
+				display_name: member.user.display_name,
+				id: member.user.id
+			};
+		});
+		setData(memberDetails);
+	};
+
+
+	useEffect(() =>
+	{
+		fetchProjectMembers();
+	}, []);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [inviteSent, setInviteSent] = useState(false);
@@ -152,7 +146,7 @@ const ProjectMembers = () =>
 			<Breadcrumb
 				items={[
 					{
-						title: 'Bentley Systems',
+						title: projectName,
 					},
 					{
 						title: "Members"
@@ -173,7 +167,7 @@ const ProjectMembers = () =>
 						?
 						<div className="invite-form">
 							<MailOutlined style={{ fontSize: 20, margin: 20, opacity: 0.5 }} className="invite-form-mailoutlined-icon" />
-							<h3>Invite user to bentley systems</h3>
+							<h3>Invite user to {projectName}</h3>
 							<Space.Compact style={{ width: '100%' }} >
 								<Input placeholder="Please input user display name" />
 								<Button type="primary" onClick={handleSendInvite} className="invite-btn">Invite</Button>
@@ -183,7 +177,7 @@ const ProjectMembers = () =>
 						<Result
 							status="success"
 							title="Successfully sent invite!"
-							subTitle="User Avinash@2000 has been invited to Bentley Systems"
+							subTitle={`User Avinash@2000 has been invited to ${projectName}`}
 						/>
 					}
 				</Spin>

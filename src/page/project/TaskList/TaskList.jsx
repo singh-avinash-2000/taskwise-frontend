@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button, Modal } from "antd";
 import { MinusSquareOutlined, MinusSquareTwoTone, PlusSquareOutlined, PlusSquareTwoTone } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import NewTask from "../NewTask/NewTask";
 
 import "./TaskList.css";
+import { axiosClient } from "../../../config/axios";
 
 const { Text } = Typography;
 
@@ -13,12 +14,23 @@ const TaskList = () =>
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const navigate = useNavigate();
 	const location = useLocation();
-
+	const project_id = location.state.project_id;
 	const generateIndex = (limit) =>
 	{
 		return Math.floor(Math.random() * limit);
 	};
+	const [projectName, setProjectName] = useState([]);
 
+	useEffect(() =>
+	{
+		fetchProjectName();
+	}, []);
+
+	const fetchProjectName = async () =>
+	{
+		const response = await axiosClient.get(`/projects/${project_id}`);
+		setProjectName(response.data.result.name);
+	};
 	const columns = [
 		{
 			title: 'Type',
@@ -161,7 +173,7 @@ const TaskList = () =>
 			<Breadcrumb
 				items={[
 					{
-						title: 'Bentley Systems',
+						title: projectName,
 					},
 					{
 						title: "Tasks"

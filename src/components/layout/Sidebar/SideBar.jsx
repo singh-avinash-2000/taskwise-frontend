@@ -8,6 +8,8 @@ import { FaTasks } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 import { GrPlan } from "react-icons/gr";
 import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText } from "react-icons/ai";
+import { useEffect, useState } from "react";
+import { axiosClient } from "../../../config/axios";
 
 function getIconComponent(iconName)
 {
@@ -38,11 +40,26 @@ function getIconComponent(iconName)
 
 const SideBar = ({ setCollapsed }) =>
 {
+	const location = useLocation();
+	const { project_id } = location.state;
+	const [projectName, setProjectName] = useState("");
+
+	const fetchProjectName = async () =>
+	{
+		const response = await axiosClient.get(`/projects/${project_id}`);
+		setProjectName(response.data.result.name);
+	};
+
+
+	useEffect(() =>
+	{
+		fetchProjectName();
+	}, []);
 	return (
 		<div id="sidebar" >
 			<div className="sidebar-wrapper">
 				<div className="project-title-div">
-					<span className="project-title">Osborne Wisoky</span>
+					<span className="project-title">{projectName}</span>
 				</div>
 				<div className="nav-entries">
 					{

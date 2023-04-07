@@ -9,7 +9,7 @@ const NewTask = () =>
 	const [formData, setFormData] = useState({});
 
 	return (
-		<ProjectNewTaskForm formData={formData} projectId={location.state?.project_id} />
+		<></>
 	);
 };
 

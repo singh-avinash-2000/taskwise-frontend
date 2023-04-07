@@ -75,7 +75,7 @@ const Dashboard = () =>
 					{
 						return (
 							<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4} key={id}>
-								<div className="new-project-div" style={{ backgroundColor: colourArray[id % 8] }} onClick={() => navigate("/project/tasks", { state: { project_id: d._id } })}>
+								<div className="new-project-div" style={{ backgroundColor: colourArray[id % 8] }} onClick={() => navigate(`/project/${d._id}/tasks`)}>
 									<span className="initials">{getInitals(d.name)}</span>
 								</div>
 								<h3 className="project-title">{d.name}</h3>

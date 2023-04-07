@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button, Modal } from "antd";
-import { MinusSquareOutlined, MinusSquareTwoTone, PlusSquareOutlined, PlusSquareTwoTone } from "@ant-design/icons";
-import { useNavigate, useLocation } from "react-router-dom";
-import NewTask from "../NewTask/NewTask";
+import { ClockCircleOutlined, MinusSquareOutlined, PlusSquareOutlined, CheckCircleOutlined, CheckOutlined, LineChartOutlined } from "@ant-design/icons";
+import { useNavigate, useParams } from "react-router-dom";
+import { axiosClient } from "../../../config/axios";
+import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
 
 import "./TaskList.css";
 import { axiosClient } from "../../../config/axios";
 
-const { Text } = Typography;
-
 const TaskList = () =>
 {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [assigneeMembers, setAssigneeMembers] = useState([]);
+	const [projectMembers, setProjectMembers] = useState([]);
+	const [projectTasks, setProjectTasks] = useState([]);
 	const navigate = useNavigate();
-	const location = useLocation();
-	const project_id = location.state.project_id;
-	const generateIndex = (limit) =>
-	{
-		return Math.floor(Math.random() * limit);
-	};
-	const [projectName, setProjectName] = useState([]);
+	const { project_id } = useParams();
 
 	useEffect(() =>
 	{
@@ -31,31 +27,33 @@ const TaskList = () =>
 		const response = await axiosClient.get(`/projects/${project_id}`);
 		setProjectName(response.data.result.name);
 	};
+
 	const columns = [
 		{
 			title: 'Type',
 			dataIndex: 'type',
 			key: 'type',
-			render: (type) => <Tooltip title={type === "sub_task" ? "Sub Task" : "Main Task"}>{type === "sub_task" ? <Tag color="red"><MinusSquareOutlined /></Tag> : <Tag color="green"><PlusSquareOutlined /></Tag>}</Tooltip>,
+			render: (type) => <Tooltip title={type === "SUB_TASK" ? "Sub Task" : "Main Task"}>{type === "SUB_TASK" ? <Tag color="red"><MinusSquareOutlined /></Tag> : <Tag color="green"><PlusSquareOutlined /></Tag>}</Tooltip>,
 		},
 		{
-			title: 'Key',
-			dataIndex: 'key',
+			title: 'Task Key',
+			dataIndex: 'task_key',
 			key: 'key',
 		},
 		{
 			title: 'Summary',
 			dataIndex: 'summary',
 			key: 'summary',
-			ellipsis: true,
+			width: 300,
+			render: (summary) => <div style={{ width: '100%', textOverflow: 'ellipsis', overflow: 'hidden' }}>{summary}</div>
 		},
 		{
 			title: 'Assignee',
-			key: 'assignee',
+			key: "assignee",
 			dataIndex: 'assignee',
 			render: (assignee) => (
 				<>
-					<Avatar src="https://picsum.photos/200/300" /> {assignee}
+					<Avatar src="https://picsum.photos/200/300" /> {projectMembers[assignee]}
 				</>
 			),
 		},
@@ -65,7 +63,7 @@ const TaskList = () =>
 			dataIndex: 'reporter',
 			render: (reporter) => (
 				<>
-					<Avatar src="https://picsum.photos/200/300" /> {reporter}
+					<Avatar src="https://picsum.photos/200/300" /> {projectMembers[reporter]}
 				</>
 			),
 		},
@@ -78,95 +76,99 @@ const TaskList = () =>
 			title: 'Status',
 			dataIndex: "status",
 			key: 'status',
-			render: (status) => (
-				<>
-					<Select value={status} onClick={(e) =>
-					{
-						e.stopPropagation();
-					}} className="task-status-select">
-						<Select.Option value="to_do">To-do</Select.Option>
-						<Select.Option value="in_progress">In progress</Select.Option>
-						<Select.Option value="completed">Completed</Select.Option>
-						<Select.Option value="closed">Closed</Select.Option>
-					</Select >
-				</>
-			)
-		},
-		{
-			title: 'Created date',
-			dataIndex: "created_date",
-			key: 'created_date',
-		},
-		{
-			title: 'Updated date',
-			dataIndex: "updated_date",
-			key: 'updated_date'
-		},
+			render: (status) =>
+			{
+				// <>
+				// 	<Select value={status} onClick={(e) =>
+				// 	{
+				// 		e.stopPropagation();
+				// 	}} onChange={(e) =>
+				// 	{
+				// 	}}
+				// 		className="task-status-select">
+				// 		<Select.Option value="TO_DO">To-do</Select.Option>
+				// 		<Select.Option value="IN_PROGRESS">In progress</Select.Option>
+				// 		<Select.Option value="COMPLETED">Completed</Select.Option>
+				// 		<Select.Option value="CLOSED">Closed</Select.Option>
+				// 	</Select >
+				// </>
+				switch (status)
+				{
+					case "TO_DO":
+						return <Tag icon={<ClockCircleOutlined />} className="status-tag" color="cyan">
+							To Do
+						</Tag>;
+					case "IN_PROGRESS":
+						return <Tag icon={<LineChartOutlined />} color="orange">
+							In Progress
+						</Tag>;
+					case "COMPLETED":
+						return <Tag icon={<CheckOutlined />} color="green">
+							Completed
+						</Tag>;
+					case "CLOSED":
+						return <Tag icon={<CheckCircleOutlined />} color="magenta">
+							Closed
+						</Tag>;
+				}
+
+			}
+		}
 	];
-
-	const typeArray = ["sub_task", "main_task"];
-	const sentences = [
-		'not even Dora can explore her',
-		' I swerved to miss her and ran out of gas',
-		'smelly she put on Right Guard and it went left',
-		'she hasn’t got cellulite, she’s got celluheavy',
-		'she don’t need no internet – she’s already world wide',
-		'hair her look like Don King in a headlock',
-		'classless she could be a Marxist utopia',
-		'she can hear bacon cooking in Canada',
-		'she won “The Bachelor” because she all those other bitches',
-		'stupid she believes everything that Brian Williams says',
-		'she scared off Flavor Flav',
-		'like Domino’s Pizza, one call does it all',
-		'twice the man you are',
-		'like Bazooka Joe, 5 cents a blow',
-		'like an ATM, open 24/7',
-		'like a championship ring, everybody puts a finger in her'
-	];
-	const nameArray = ["Avinash", "Rajen", "Pratyayee", "Tanmoy"];
-	const priorityArray = ["High", "Low", "Medium", "Urgent"];
-	const statusArray = ["in_progress", "to_do", "completed", "closed"];
-
-	let data = [];
-
-	function getRandomDate()
-	{
-		const emptyDate = new Date();
-		const randomDate = new Date();
-		const dateFormatter = Intl.DateTimeFormat('sv-SE');
-		const formattedRandomDate = dateFormatter.format(emptyDate.setDate(randomDate.getDate() - Math.floor(Math.random() * 1000)));
-
-		return formattedRandomDate;
-	}
 
 	const handleTaskCreation = () =>
 	{
 		setIsModalOpen(true);
 	};
 
-	for (let i = 0; i < 25; i++)
+	const handleRowClick = (row) =>
 	{
-		data.push(
-			{
-				type: typeArray[generateIndex(2)],
-				key: `BYS-${generateIndex(99999)}`,
-				summary: sentences[generateIndex(16)],
-				assignee: nameArray[generateIndex(4)],
-				reporter: nameArray[generateIndex(4)],
-				priority: priorityArray[generateIndex(4)],
-				status: statusArray[generateIndex(4)],
-				created_date: getRandomDate(),
-				updated_date: getRandomDate(),
-			}
-		);
-	}
-
-	const handleRowClick = (event) =>
-	{
-		console.log(event.target.value);
-		navigate(`/project/tasks/${event.key}`, { state: location.state });
-		console.log(event);
+		navigate(`/project/${project_id}/tasks/${row.task_key}`);
 	};
+
+	const fetchProjectMembers = async () =>
+	{
+		try
+		{
+			const response = await axiosClient.get(`/projects/${project_id}/members`);
+			const membersList = {};
+			const members = response.data?.result?.map(r =>
+			{
+				membersList[r.user._id] = r.user.first_name + " " + r.user.last_name;
+				return {
+					label: r.user.first_name + " " + r.user.last_name,
+					value: r.user._id
+				};
+			});
+
+			setAssigneeMembers(members);
+			setProjectMembers(membersList);
+		} catch (error)
+		{
+			console.log(error);
+		}
+
+	};
+
+	const fetchTaskList = async () =>
+	{
+		try
+		{
+			const response = await axiosClient.get(`/projects/${project_id}/tasks`);
+			const tasks = response.data?.result;
+
+			setProjectTasks(tasks);
+		} catch (error)
+		{
+			console.log(error);
+		}
+	};
+
+	useEffect(() =>
+	{
+		fetchProjectMembers();
+		fetchTaskList();
+	}, []);
 
 	return (
 		<div>
@@ -187,7 +189,8 @@ const TaskList = () =>
 			</Button>
 			<Table
 				columns={columns}
-				dataSource={data}
+				dataSource={projectTasks}
+				ellipsis={{ showTitle: true }}
 				scroll={{ x: true }}
 				size="large"
 				onRow={(record, rowIndex) =>
@@ -195,13 +198,14 @@ const TaskList = () =>
 					return {
 						onClick: (event) =>
 						{
-							handleRowClick(event);
+							handleRowClick(record);
 						},
 					};
-				}} />
+				}}
+			/>
 
-			<Modal title="Create Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null} className="create-task-modal">
-				<NewTask />
+			<Modal title="Add Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null} className="create-task-modal">
+				<ProjectNewTaskForm assigneeMembers={assigneeMembers} method="add" taskDetails={{}} />
 			</Modal>
 		</div>
 	);

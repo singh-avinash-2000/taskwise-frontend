@@ -11,6 +11,18 @@
 	height: 100%;
 }
 
+.status-tag{
+	font-size: 14px !important;
+	margin: 2px;
+	justify-content: space-between;
+}
+
+.ellipsis-cell{
+	  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media only screen and (max-width: 500px) 
 {
 	.create-task-modal{

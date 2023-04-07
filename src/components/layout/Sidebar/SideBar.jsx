@@ -1,7 +1,7 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import * as rdd from 'react-device-detect';
 import "./Sidebar.css";
-import projectSideBarData from "../../../config/projectSidebar.json";
+import projectSideBarData from "../../../config/projectSidebar";
 import { RiRoadMapLine } from "react-icons/ri";
 import { BsKanban, BsChatSquareText } from "react-icons/bs";
 import { FaTasks } from "react-icons/fa";
@@ -40,8 +40,7 @@ function getIconComponent(iconName)
 
 const SideBar = ({ setCollapsed }) =>
 {
-	const location = useLocation();
-	const { project_id } = location.state;
+	const { project_id } = useParams();
 	const [projectName, setProjectName] = useState("");
 
 	const fetchProjectName = async () =>
@@ -63,7 +62,7 @@ const SideBar = ({ setCollapsed }) =>
 				</div>
 				<div className="nav-entries">
 					{
-						Object.entries(projectSideBarData).map(([key, value]) =>
+						Object.entries(projectSideBarData(project_id)).map(([key, value]) =>
 						{
 							return (
 								<NavHeader title={key} children={value} key={key} setCollapsed={setCollapsed} />
@@ -95,9 +94,6 @@ const NavHeader = ({ title, children, setCollapsed }) =>
 
 const NavItem = ({ title, to, setCollapsed }) =>
 {
-	const location = useLocation();
-	const { project_id } = location.state;
-
 	const handleClick = () =>
 	{
 		if (window.innerWidth < 950 || rdd.isMobile)
@@ -110,8 +106,6 @@ const NavItem = ({ title, to, setCollapsed }) =>
 
 		<NavLink
 			to={to}
-			// form an object and pass all necessary data here and pass it along
-			state={{ project_id }}
 			className={
 				({ isActive }) => isActive ? "nav-item-active nav-item-fixed-style" : "nav-item-fixed-style"
 			}

@@ -18,10 +18,10 @@ const RouterComponent = () =>
 					<Route path='/' element={<Dashboard />} />
 				</Route>
 				<Route element={<ProjectLayout />}>
-					<Route path="/project/tasks" element={<TaskList />} />
-					<Route path="/project/members" element={<ProjectMembers />} />
-					<Route path="/project/tasks/:task_id" element={<TaskInfo />} />
-					<Route path="/project/chat" element={<ChatProject />} />
+					<Route path="/project/:project_id/tasks" element={<TaskList />} />
+					<Route path="/project/:project_id/members" element={<ProjectMembers />} />
+					<Route path="/project/:project_id/tasks/:task_key" element={<TaskInfo />} />
+					<Route path="/project/:project_id/chat" element={<ChatProject />} />
 				</Route>
 			</Route>
 			<Route path="*" element={<DefaultPage />} />

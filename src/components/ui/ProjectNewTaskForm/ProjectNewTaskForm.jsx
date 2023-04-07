@@ -5,13 +5,18 @@ import { InboxOutlined } from "@ant-design/icons";
 import ReactQuill from 'react-quill';
 import './ProjectNewTaskForm.css';
 import { axiosClient } from "../../../config/axios";
+import { useParams } from "react-router-dom";
+
 const { Dragger } = Upload;
 
-const ProjectNewTaskForm = ({ project_id }) =>
+const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 {
 	const [form] = Form.useForm();
 	const [hideTaskKey, setHideTaskKey] = useState(false);
+	const [isRequired, setIsRequired] = useState(false);
 	const quillRef = useRef(null);
+	const [description, setDescription] = useState(taskDetails.description);
+	const { project_id, task_key } = useParams();
 	const [defaultFileList, setDefaultFileList] = useState([]);
 
 	const handleFormSubmit = async () =>
@@ -24,6 +29,7 @@ const ProjectNewTaskForm = ({ project_id }) =>
 				const values = form.getFieldsValue();
 				console.log(values);
 				values.task_description_raw = quillRef.current.getEditor().getContents();
+
 				const response = await axiosClient.post(`/projects/${project_id}/tasks`, values);
 				console.log(response.data.result);
 			}
@@ -45,6 +51,7 @@ const ProjectNewTaskForm = ({ project_id }) =>
 					'Content-Type': 'multipart/form-data',
 				}
 			});
+
 			onSuccess(message.success(`${file.name} file uploaded successfully.`));
 		} catch (error)
 		{
@@ -55,13 +62,15 @@ const ProjectNewTaskForm = ({ project_id }) =>
 	};
 	const handleDropDownChange = (value) =>
 	{
-		if (value === "main_task")
+		if (value == "main_task")
 		{
 			setHideTaskKey(false);
+			setIsRequired(false);
 		}
 		else
 		{
 			setHideTaskKey(true);
+			setIsRequired(true);
 		}
 	};
 
@@ -79,57 +88,33 @@ const ProjectNewTaskForm = ({ project_id }) =>
 		}
 	};
 
-	// const props = {
-	// 	name: 'file',
-	// 	multiple: true,
-	// 	customRequest: { handleUploader },
-	// 	// onChange(info)
-	// 	// {
-	// 	// 	const { status } = info.file;
-	// 	// 	if (status !== 'uploading')
-	// 	// 	{
-	// 	// 		console.log(info.file, info.fileList);
-	// 	// 	}
-	// 	// 	if (status === 'done')
-	// 	// 	{
-	// 	// 		message.success(`${info.file.name} file uploaded successfully.`);
-	// 	// 	} else if (status === 'error')
-	// 	// 	{
-	// 	// 		message.error(`${info.file.name} file upload failed.`);
-	// 	// 	}
-	// 	// },
-	// 	// onDrop(e)
-	// 	// {
-	// 	// 	console.log('Dropped files', e.dataTransfer.files);
-	// 	// },
-	// };
-
-	var toolbarOptions = [
-		['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+	const toolbarOptions = [
+		['bold', 'italic', 'underline', 'strike'],
 		['blockquote', 'code-block'],
 
-		[{ 'header': 1 }, { 'header': 2 }],               // custom button values
+		[{ 'header': 1 }, { 'header': 2 }],
 		[{ 'list': 'ordered' }, { 'list': 'bullet' }],
-		[{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-		[{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-		[{ 'direction': 'rtl' }],                         // text direction
+		[{ 'script': 'sub' }, { 'script': 'super' }],
+		[{ 'indent': '-1' }, { 'indent': '+1' }],
+		[{ 'direction': 'rtl' }],
 
-		[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+		[{ 'size': ['small', false, 'large', 'huge'] }],
 		[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-		[{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+		[{ 'color': [] }, { 'background': [] }],
 		[{ 'font': [] }],
 		[{ 'align': [] }],
 
-		['clean']                                         // remove formatting button
+		['clean']
 	];
 
-	const assigneeOptions = [
-		{ label: "Avinash Singh", value: "12" },
-		{ label: "Ritik Mishra", value: "23" },
-		{ label: "Aman Singh", value: "345" },
-		{ label: "Gaurav Singh", value: "4545" }
-	];
+	useEffect(() =>
+	{
+		if (method == "update")
+		{
+			form.setFieldsValue(taskDetails);
+		}
+	}, []);
 
 	return (
 		<div>
@@ -149,7 +134,7 @@ const ProjectNewTaskForm = ({ project_id }) =>
 					onSubmitCapture={handleFormSubmit}
 				>
 					<Form.Item label="Type"
-						name="task_type"
+						name="type"
 						rules={[
 							{
 								required: true,
@@ -158,8 +143,8 @@ const ProjectNewTaskForm = ({ project_id }) =>
 						]}
 					>
 						<Select placeholder="Select One" onChange={handleDropDownChange}>
-							<Select.Option value="main_task">Main Task</Select.Option>
-							<Select.Option value="sub_task">Sub Task</Select.Option>
+							<Select.Option value="MAIN_TASK">Main Task</Select.Option>
+							<Select.Option value="SUB_TASK">Sub Task</Select.Option>
 						</Select>
 					</Form.Item>
 					{
@@ -168,7 +153,7 @@ const ProjectNewTaskForm = ({ project_id }) =>
 							name="task_key"
 							rules={[
 								{
-									required: true,
+									required: isRequired,
 									message: 'Please input task key',
 								},
 							]}
@@ -185,7 +170,7 @@ const ProjectNewTaskForm = ({ project_id }) =>
 
 					}
 					<Form.Item label="Summary"
-						name="task_summary"
+						name="summary"
 						rules={[
 							{
 								required: true,
@@ -196,17 +181,17 @@ const ProjectNewTaskForm = ({ project_id }) =>
 						<Input type="text" placeholder="Task Summary" />
 					</Form.Item>
 					<Form.Item label="Description"
-						name="task_description"
+						name="description"
 					>
 						<div className="new-task-description-wrapper">
-							<ReactQuill theme="snow" modules={{ toolbar: toolbarOptions }} ref={quillRef} onChange={(value) =>
+							<ReactQuill theme="snow" modules={{ toolbar: toolbarOptions }} ref={quillRef} value={description} onChange={(value) =>
 							{
-								form.setFieldValue("task_description", value);
+								form.setFieldValue("description", value);
 							}} />
 						</div>
 					</Form.Item>
 					<Form.Item label="Priority"
-						name="task_priority"
+						name="priority"
 						rules={[
 							{
 								required: true,
@@ -214,16 +199,16 @@ const ProjectNewTaskForm = ({ project_id }) =>
 							},
 						]}
 					>
-						<Select placeholder="Select One" onChange={handleDropDownChange}>
-							<Select.Option value="low">Low</Select.Option>
-							<Select.Option value="medium">Medium</Select.Option>
-							<Select.Option value="high">High</Select.Option>
-							<Select.Option value="urgent">Urgent</Select.Option>
+						<Select placeholder="Select One">
+							<Select.Option value="LOW">Low</Select.Option>
+							<Select.Option value="MEDIUM">Medium</Select.Option>
+							<Select.Option value="HIGH">High</Select.Option>
+							<Select.Option value="URGENT">Urgent</Select.Option>
 						</Select>
 					</Form.Item>
 					<Form.Item
 						label="Assignee"
-						name="task_assignee"
+						name="assignee"
 						rules={[
 							{
 								required: true,
@@ -238,11 +223,11 @@ const ProjectNewTaskForm = ({ project_id }) =>
 								width: '100%',
 							}}
 							placeholder="Please select assignees"
-							options={assigneeOptions}
+							options={assigneeMembers}
 						/>
 					</Form.Item>
-					<Form.Item label="Documents" valuePropName="files" name="document_files">
-						{/* <Dragger {...props}> */}
+					{method !== "update" && <Form.Item label="Documents" valuePropName="files" name="documents">
+
 						<Dragger
 							multiple={true}
 							customRequest={handleFileUpload}
@@ -260,7 +245,7 @@ const ProjectNewTaskForm = ({ project_id }) =>
 								banned files.
 							</p>
 						</Dragger>
-					</Form.Item>
+					</Form.Item>}
 					<Form.Item
 						style={{ textAlign: "center" }}
 					>

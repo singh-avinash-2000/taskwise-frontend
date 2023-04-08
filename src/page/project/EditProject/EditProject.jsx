@@ -7,6 +7,7 @@ function EditProject()
 	const [newProjectModalOpen, setNewProjectModalOpen] = useState(true);
 	const { project_id } = useParams();
 	const navigate = useNavigate();
+
 	return (
 		<Modal title="Edit Project" open={newProjectModalOpen} onCancel={() => { setNewProjectModalOpen(false); navigate(-1); }} footer={null}>
 			<ProjectDataForm setNewProjectModalOpen={setNewProjectModalOpen} method="Edit" project_id={project_id} />

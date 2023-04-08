@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from "react-router-dom";
+import Socket from "../../../config/socket";
 
 const OnlyIfLoggedIn = () =>
 {
@@ -7,11 +8,19 @@ const OnlyIfLoggedIn = () =>
 	useEffect(() =>
 	{
 		const token = localStorage.getItem("accessToken");
-
 		if (!token)
 		{
 			navigate("/login");
 		}
+		else
+		{
+			Socket.connect();
+		}
+
+		return () =>
+		{
+			Socket.disconnect();
+		};
 	}, []);
 
 	return (

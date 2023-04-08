@@ -14,7 +14,6 @@ const TaskList = () =>
 	const [projectMembers, setProjectMembers] = useState([]);
 	const [projectTasks, setProjectTasks] = useState([]);
 	const [projectName, setProjectName] = useState("");
-
 	const navigate = useNavigate();
 	const { project_id } = useParams();
 
@@ -133,7 +132,7 @@ const TaskList = () =>
 		{
 			const response = await axiosClient.get(`/projects/${project_id}/members`);
 			const membersList = {};
-			const members = response.data?.result?.map(r =>
+			const members = response.data.result?.members?.map(r =>
 			{
 				membersList[r.user._id] = r.user.first_name + " " + r.user.last_name;
 				return {
@@ -156,7 +155,14 @@ const TaskList = () =>
 		try
 		{
 			const response = await axiosClient.get(`/projects/${project_id}/tasks`);
-			const tasks = response.data?.result;
+			let tasks = response.data?.result;
+			tasks = tasks.map(t =>
+			{
+				return {
+					...t,
+					key: t._id
+				};
+			});
 
 			setProjectTasks(tasks);
 		} catch (error)

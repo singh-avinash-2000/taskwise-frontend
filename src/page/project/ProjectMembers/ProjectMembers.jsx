@@ -93,7 +93,7 @@ const ProjectMembers = () =>
 	{
 		const response = await axiosClient.get(`/projects/${project_id}/members`);
 		setProjectName(response.data.result.name);
-		const memberDetails = response.data.result.members.map((member) =>
+		const memberDetails = response.data?.result?.members.map((member) =>
 		{
 			return {
 				key: member.user._id,

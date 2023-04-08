@@ -5,7 +5,7 @@ const getSideBarData = (project_id) =>
 		"PLANNING": [
 			{
 				"title": "Tasks",
-				"to": `/project/tasks`
+				"to": `/project/${project_id}/tasks`
 			},
 			{
 				"title": "Kanban Board",

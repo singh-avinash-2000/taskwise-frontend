@@ -18,12 +18,12 @@ const Dashboard = () =>
 	{
 		const response = await axiosClient.get("/projects");
 		setProjects(response.data.result);
-		setOptions(response.data.result.map(d => ({ value: d.name })));
+		// setOptions(response.data.result.map(d => ({ value: d.name })));
 	}
 
 	const handleSearch = debounce(async (value) =>
 	{
-		const response = await axiosClient.get(`/projects/search/${value}`);
+		const response = await axiosClient.get(`/projects?searchQuery=${value}`);
 		setProjects(response.data.result);
 		setOptions(response.data.result.map(d => ({ value: d.name })));
 	}, 500);
@@ -55,7 +55,6 @@ const Dashboard = () =>
 				filterOption={(inputValue, option) =>
 					option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 				}
-				notFoundContent="No Projects Found"
 				onSearch={handleSearch}
 			>
 				<Input.Search size="large" placeholder="Search project name..." />

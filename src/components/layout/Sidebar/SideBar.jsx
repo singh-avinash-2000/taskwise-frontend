@@ -6,6 +6,7 @@ import { RiRoadMapLine } from "react-icons/ri";
 import { BsKanban, BsChatSquareText } from "react-icons/bs";
 import { FaTasks } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
+import { FiEdit } from "react-icons/fi";
 import { GrPlan } from "react-icons/gr";
 import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -33,6 +34,8 @@ function getIconComponent(iconName)
 			return <BsChatSquareText />;
 		case 'Documents':
 			return <AiOutlineFileText />;
+		case 'Edit Project':
+			return <FiEdit />;
 		default:
 			return null; // or an error message
 	}

@@ -9,3 +9,6 @@ export { default as TaskInfo } from "./project/TaskInfo/TaskInfo";
 export { default as TaskList } from "./project/TaskList/TaskList";
 export { default as ChatProject } from "./project/ChatProject/ChatProject";
 export { default as DefaultPage } from "./Default/Default";
+export { default as EditProject } from "./project/EditProject/EditProject";
+export { default as ForgotPassword } from "./ForgotPassword/ForgotPassword";
+export { default as ResetPassword } from "./ResetPassword/ResetPassword";

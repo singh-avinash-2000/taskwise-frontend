@@ -32,6 +32,10 @@ const getSideBarData = (project_id) =>
 			{
 				"title": "Documents",
 				"to": `/project/${project_id}/documents`
+			},
+			{
+				"title": "Edit Project",
+				"to": `/project/${project_id}/edit`
 			}
 		]
 	};

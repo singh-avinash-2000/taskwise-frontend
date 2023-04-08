@@ -10,12 +10,12 @@ import
 } from 'antd';
 
 import TextArea from "antd/lib/input/TextArea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import './ProjectDataForm.css';
 import { axiosClient } from "../../../config/axios";
 
-const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method }) =>
+const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method, project_id }) =>
 {
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
@@ -35,12 +35,20 @@ const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method }) =>
 				name: projectName,
 				type: projectType.toUpperCase(),
 				description: projectDescription,
-				chat: chatStatus,
+				chat_enabled: chatStatus,
 				document: documentstatus
 			};
 
-			const response = await axiosClient.post("/projects", data);
-			message.success(response.data.message);
+			if (method === "Add")
+			{
+				const response = await axiosClient.post("/projects", data);
+				message.success(response.data.message);
+			}
+			else
+			{
+				const response = await axiosClient.patch(`/projects/${project_id}`, data);
+				message.success(response.data.message);
+			}
 
 			setProjectName("");
 			setProjectType("");
@@ -76,6 +84,41 @@ const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method }) =>
 		}
 	};
 
+	const fetchProjectData = async () =>
+	{
+		try
+		{
+			const response = await axiosClient.get(`/projects/${project_id}`);
+			const { name, type, description, chat_enabled, document } = response.data.result;
+			console.log("name:", name);
+			console.log("type:", type);
+			console.log("description:", description);
+			console.log("chat_enabled:", chat_enabled);
+			console.log("document:", document);
+			setProjectName(name);
+			setProjectType(type);
+			setProjectDesription(description);
+			setChatStatus(chat_enabled);
+			setDocumentStatus(document);
+		}
+		catch (error)
+		{
+			console.log(error);
+			message.error(error.message);
+			setNewProjectModalOpen(false);
+		}
+	};
+
+
+	useEffect(() =>
+	{
+		if (method === "Edit")
+		{
+			fetchProjectData();
+		}
+	}, []);
+
+
 	return (
 		<div>
 			<Card
@@ -107,6 +150,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method }) =>
 								message: 'Please input project name',
 							},
 						]}
+						initialValue={projectName}
 					>
 						<Input type="text" placeholder="Project Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
 					</Form.Item>
@@ -118,6 +162,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method }) =>
 								message: 'Please select project type',
 							},
 						]}
+						initialValue={projectType.toLowerCase()}
 					>
 						<Select placeholder="Select One" onChange={handleDropDownChange} >
 							<Select.Option value="personal">Personal</Select.Option>
@@ -132,17 +177,18 @@ const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method }) =>
 								message: 'Please input project description',
 							},
 						]}
+						initialValue={projectDescription}
 					>
 						<TextArea placeholder="Please input project description" value={projectDescription} onChange={(e) => setProjectDesription(e.target.value)} />
 					</Form.Item>
 					{
 						isChatVisible && <Form.Item label="Chat" valuePropName="checked" name="chat_checked">
-							<Switch onChange={(status) => setChatStatus(status)} />
+							<Switch onChange={(status) => setChatStatus(status)} defaultChecked={chatStatus} />
 						</Form.Item>
 					}
 
-					<Form.Item label="Document" valuePropName="checked" name="document_checked">
-						<Switch onChange={(status) => setDocumentStatus(status)} />
+					<Form.Item label="Document" valuePropName="checked" name="document_checked" initialValue={documentstatus}>
+						<Switch onChange={(status) => setDocumentStatus(status)} defaultChecked={documentstatus} />
 					</Form.Item>
 					<Form.Item
 						className="project-data-form-submit-button"

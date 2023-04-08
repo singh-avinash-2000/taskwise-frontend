@@ -60,9 +60,10 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 			onError(err);
 		}
 	};
+
 	const handleDropDownChange = (value) =>
 	{
-		if (value == "main_task")
+		if (value == "MAIN_KEY")
 		{
 			setHideTaskKey(false);
 			setIsRequired(false);
@@ -143,7 +144,7 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 						]}
 					>
 						<Select placeholder="Select One" onChange={handleDropDownChange}>
-							<Select.Option value="MAIN_TASK">Main Task</Select.Option>
+							<Select.Option value="MAIN_KEY">Main Task</Select.Option>
 							<Select.Option value="SUB_TASK">Sub Task</Select.Option>
 						</Select>
 					</Form.Item>

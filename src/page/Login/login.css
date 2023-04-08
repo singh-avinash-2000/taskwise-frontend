@@ -94,6 +94,11 @@
 	box-shadow: none !important;
 }
 
+.forgot-password {
+	color: #1a73e8;
+	text-decoration: none;
+}
+
 .signin-button{
 	background-color: var(--darkgreen);
 	color: white;

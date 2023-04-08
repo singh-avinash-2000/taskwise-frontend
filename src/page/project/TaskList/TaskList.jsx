@@ -6,7 +6,6 @@ import { axiosClient } from "../../../config/axios";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
 
 import "./TaskList.css";
-import { axiosClient } from "../../../config/axios";
 
 const TaskList = () =>
 {
@@ -14,6 +13,8 @@ const TaskList = () =>
 	const [assigneeMembers, setAssigneeMembers] = useState([]);
 	const [projectMembers, setProjectMembers] = useState([]);
 	const [projectTasks, setProjectTasks] = useState([]);
+	const [projectName, setProjectName] = useState("");
+
 	const navigate = useNavigate();
 	const { project_id } = useParams();
 

@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, message } from 'antd';
-import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, HeatMapOutlined } from '@ant-design/icons';
+import { CheckCircleTwoTone, SyncOutlined, HeatMapOutlined } from '@ant-design/icons';
 import { axiosClient } from "../../config/axios";
 
-import "./login.css";
-const Login = () =>
+function ForgotPassword()
 {
+
 	const [isValidEmail, setIsValidEmail] = useState(true);
 	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 
 	const handleBlur = (e) =>
@@ -33,36 +32,19 @@ const Login = () =>
 			);
 	};
 
-	const handleLogin = async () =>
+	const handleResetLink = async (e) =>
 	{
+		e.preventDefault();
 		try
 		{
-			if (!email.trim() || !password.trim())
-			{
-				alert("invalid");
-			}
-			else
-			{
-				const data = {
-					email,
-					password
-				};
 
-				const response = await axiosClient.post("/auth/login", data);
-
-				message.success(response.data.message);
-
-				localStorage.setItem("accessToken", response.data.result.accessToken);
-
-				navigate("/");
-			}
-		}
-		catch (error)
+		} catch (error)
 		{
-			message.error(error.response.data.message);
+			message.error("Can't send link.Try again later");
 		}
-	};
 
+
+	};
 	return (
 		<div className="container">
 			<div className="nav-container">
@@ -72,15 +54,12 @@ const Login = () =>
 					<hr />
 					<span className="email">CONNECT@PING.CO</span>
 				</div>
-				<div>
-					<Link to="/register"><button className="request-button">Create Account</button></Link>
-				</div>
 			</div>
 
 			<div className="login-container">
-				<h3 className="form-title">Login</h3>
+				<h3 className="form-title">Forgot Password</h3>
 				<div className="form">
-					<h5 className="supporting-text">Hey, Enter your details to login to your account</h5>
+					<h5 className="supporting-text">Enter your registered email</h5>
 					<Input
 						className="custom-input"
 						placeholder="Email Address"
@@ -95,20 +74,8 @@ const Login = () =>
 						onBlur={handleBlur}
 						onClick={handleBlur}
 					/>
-					<Input.Password
-						className="custom-input"
-						placeholder="Password"
-						value={password}
-						onChange={(e) =>
-						{
-							setPassword(e.target.value);
-						}}
-						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-						allowClear
-					/>
-					<Link to="/forgotPassword" className="forgot-password"><p>Forgot Password?</p></Link>
 					<div >
-						<button className="signin-button" onClick={handleLogin}>Login</button>
+						<button className="signin-button" onClick={handleResetLink}>Send Reset Link</button>
 					</div>
 				</div>
 				{/* <h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
@@ -123,4 +90,4 @@ const Login = () =>
 	);
 };
 
-export default Login;
+export default ForgotPassword;

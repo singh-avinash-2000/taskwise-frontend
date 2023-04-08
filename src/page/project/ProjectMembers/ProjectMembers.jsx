@@ -1,6 +1,6 @@
 import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Input, Result, Spin, Tag, Breadcrumb } from 'antd';
 import { useEffect, useState } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 
 import './ProjectMembers.css';
@@ -84,13 +84,7 @@ const columns = [
 const ProjectMembers = () =>
 {
 	const [isLoading, setIsLoading] = useState(false);
-	const location = useLocation();
-
-	// you will get project id like this throught out project routes
-	// check console for exact value
-	// console.log(location.state.project_id);
-
-	const project_id = location.state.project_id;
+	const { project_id } = useParams();
 	const [projectName, setProjectName] = useState("");
 
 	const [data, setData] = useState([]);
@@ -102,10 +96,10 @@ const ProjectMembers = () =>
 		const memberDetails = response.data.result.members.map((member) =>
 		{
 			return {
-				key: member.user.id,
+				key: member.user._id,
 				name: member.user.first_name + " " + member.user.last_name,
 				display_name: member.user.display_name,
-				id: member.user.id
+				id: member.user._id
 			};
 		});
 		setData(memberDetails);

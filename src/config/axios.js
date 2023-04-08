@@ -49,9 +49,11 @@ axiosClient.interceptors.response.use(
 		//Only Access token expired
 		if (statusCode === 401 && responseError.message === "jwt expired")
 		{
-			const responseFromRefresh = await axios.create({
-				withCredentials: true
-			}).get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`);
+			// const responseFromRefresh = await axios.create({
+			// 	withCredentials: true
+			// }).get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`);
+
+			const responseFromRefresh = await axiosClient.get('/auth/refresh');
 
 			if (responseFromRefresh.status === 200)
 			{

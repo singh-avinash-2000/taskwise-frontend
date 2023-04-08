@@ -5,6 +5,7 @@ import OnlyIfNotLoggedIn from "../components/ui/Auth/OnlyIfNotLoggedIn";
 import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject, DefaultPage } from "../page";
 import ForgetPassword from "../page/ForgotPassword/ForgotPassword";
 import DashboardLayout from "../components/layout/Layout/DashboardLayout";
+import ResetPassword from "../page/ResetPassword/ResetPassword";
 
 const RouterComponent = () =>
 {
@@ -14,7 +15,7 @@ const RouterComponent = () =>
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/forgotPassword" element={<ForgetPassword />} />
-
+				<Route path="/resetPassword/:userId/:resetToken" element={<ResetPassword />} />
 			</Route>
 			<Route element={<OnlyIfLoggedIn />}>
 				<Route element={<DashboardLayout />}>

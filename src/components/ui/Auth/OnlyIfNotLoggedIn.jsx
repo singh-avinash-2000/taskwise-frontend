@@ -28,13 +28,13 @@ const OnlyIfNotLoggedIn = () =>
 		{
 			navigate("/");
 		}
-		else
-		{
-			if (!loggedOut)
-			{
-				fetchRefreshToken();
-			}
-		}
+		// else
+		// {
+		// 	if (!loggedOut)
+		// 	{
+		// 		fetchRefreshToken();
+		// 	}
+		// }
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (

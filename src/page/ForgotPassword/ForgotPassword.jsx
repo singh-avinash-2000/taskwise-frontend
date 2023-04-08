@@ -37,13 +37,16 @@ function ForgotPassword()
 		e.preventDefault();
 		try
 		{
-
+			const response = await axiosClient.post("/auth/forgotPassword", { email });
+			if (response.status === 200)
+			{
+				message.success("Reset link sent to your email");
+				navigate("/login");
+			}
 		} catch (error)
 		{
-			message.error("Can't send link.Try again later");
+			message.error(error.response.data.message);
 		}
-
-
 	};
 	return (
 		<div className="container">
@@ -54,6 +57,7 @@ function ForgotPassword()
 					<hr />
 					<span className="email">CONNECT@PING.CO</span>
 				</div>
+
 			</div>
 
 			<div className="login-container">

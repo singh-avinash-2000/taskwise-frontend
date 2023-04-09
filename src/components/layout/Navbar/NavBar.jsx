@@ -33,9 +33,9 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 					{collapsed ? <MenuUnfoldOutlined className="navbar-menu-icon" /> : <MenuFoldOutlined className="navbar-menu-icon" />}
 				</div>
 					:
-					<div className="logo-container">
-						<HeatMapOutlined className="logo" />
-						<span className="ping-typography">PING</span>
+					<div className="logo-container" >
+						<HeatMapOutlined className="logo" onClick={() => navigate("/")} />
+						<span className="ping-typography" onClick={() => navigate("/")}>PING</span>
 					</div>
 			}
 

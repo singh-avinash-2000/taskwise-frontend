@@ -6,6 +6,7 @@ import "./Dashboard.css";
 import { useEffect, useState } from "react";
 import ProjectDataForm from "../../components/ui/ProjectDataForm/ProjectDataForm";
 import { axiosClient } from "../../config/axios";
+// import Socket from "../../config/socket";
 
 const Dashboard = () =>
 {
@@ -18,7 +19,6 @@ const Dashboard = () =>
 	{
 		const response = await axiosClient.get("/projects");
 		setProjects(response.data.result);
-		// setOptions(response.data.result.map(d => ({ value: d.name })));
 	}
 
 	const handleSearch = debounce(async (value) =>
@@ -30,6 +30,7 @@ const Dashboard = () =>
 
 	useEffect(() =>
 	{
+		// Socket.emit("user-connected", Math.ceil(Math.random() * 1000));
 		fetchProjects();
 	}, []);
 

@@ -5,38 +5,34 @@ import NavBar from "../Navbar/NavBar";
 import SideBar from "../Sidebar/SideBar";
 import './ProjectLayout.css';
 
-const MainLayout = ({ sidebarDisabled }) =>
+const MainLayout = () =>
 {
 	const [position, setPosition] = useState('relative');
 	const [screenHeight, setScreenHeight] = useState(700);
 	const [collapsed, setCollapsed] = useState(false);
 
+	const handleResize = debounce(() =>
+	{
+		if (window.innerWidth <= 950)
+		{
+			setPosition('absolute');
+			setCollapsed(true);
+		}
+		else
+		{
+			setPosition('relative');
+			setCollapsed(false);
+		}
+
+		setScreenHeight(window.innerHeight - 70);
+	}, 500);
+
 	useEffect(() =>
 	{
-		const handleResize = debounce(() =>
-		{
-			if (window.innerWidth <= 950)
-			{
-				setPosition('absolute');
-				setCollapsed(true);
-			}
-			else
-			{
-				setPosition('relative');
-				setCollapsed(false);
-			}
+		handleResize();
+		window.addEventListener("resize", handleResize);
 
-			setScreenHeight(window.innerHeight - 70);
-		}, 500);
-
-		if (!sidebarDisabled)
-		{
-			handleResize();
-
-			window.addEventListener("resize", handleResize);
-
-			return () => window.removeEventListener("resize", handleResize);
-		}
+		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
 	return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button, Modal } from "antd";
+import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button, Modal, message } from "antd";
 import { ClockCircleOutlined, MinusSquareOutlined, PlusSquareOutlined, CheckCircleOutlined, CheckOutlined, LineChartOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
@@ -26,6 +26,27 @@ const TaskList = () =>
 	{
 		const response = await axiosClient.get(`/projects/${project_id}`);
 		setProjectName(response.data.result.name);
+	};
+
+	const handleStatusChange = async (value, record) =>
+	{
+		try
+		{
+			console.log(record);
+			const project_id = record.project;
+			const task_key = record.task_key;
+			await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, { status: value.toUpperCase() });
+			message.success(`Successfully updated ${record.summary}'s status`);
+		}
+		catch (error)
+		{
+			message.error(error.message);
+		}
+	};
+
+	const handleStatusClick = (e) =>
+	{
+		e.stopPropagation();
 	};
 
 	const columns = [
@@ -76,42 +97,32 @@ const TaskList = () =>
 			title: 'Status',
 			dataIndex: "status",
 			key: 'status',
-			render: (status) =>
+			render: (status, record) =>
 			{
-				// <>
-				// 	<Select value={status} onClick={(e) =>
-				// 	{
-				// 		e.stopPropagation();
-				// 	}} onChange={(e) =>
-				// 	{
-				// 	}}
-				// 		className="task-status-select">
-				// 		<Select.Option value="TO_DO">To-do</Select.Option>
-				// 		<Select.Option value="IN_PROGRESS">In progress</Select.Option>
-				// 		<Select.Option value="COMPLETED">Completed</Select.Option>
-				// 		<Select.Option value="CLOSED">Closed</Select.Option>
-				// 	</Select >
-				// </>
-				switch (status)
-				{
-					case "TO_DO":
-						return <Tag icon={<ClockCircleOutlined />} className="status-tag" color="cyan">
-							To Do
-						</Tag>;
-					case "IN_PROGRESS":
-						return <Tag icon={<LineChartOutlined />} color="orange">
-							In Progress
-						</Tag>;
-					case "COMPLETED":
-						return <Tag icon={<CheckOutlined />} color="green">
-							Completed
-						</Tag>;
-					case "CLOSED":
-						return <Tag icon={<CheckCircleOutlined />} color="magenta">
-							Closed
-						</Tag>;
-				}
-
+				return (<Select
+					defaultValue={status}
+					onClick={handleStatusClick}
+					onChange={(value) => handleStatusChange(value, record)}
+					className="task-status-select"
+					options={[
+						{
+							value: 'TO_DO',
+							label: 'To do',
+						},
+						{
+							value: 'IN_PROGRESS',
+							label: 'In Progress',
+						},
+						{
+							value: 'COMPLETED',
+							label: 'Completed',
+						},
+						{
+							value: 'CLOSED',
+							label: 'Closed',
+						}
+					]}
+				/>);
 			}
 		}
 	];

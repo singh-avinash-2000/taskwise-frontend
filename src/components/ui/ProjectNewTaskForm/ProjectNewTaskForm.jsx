@@ -15,7 +15,7 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 	const [hideTaskKey, setHideTaskKey] = useState(false);
 	const [isRequired, setIsRequired] = useState(false);
 	const quillRef = useRef(null);
-	const [description, setDescription] = useState(taskDetails.description);
+	const [description, setDescription] = useState(taskDetails.description_raw);
 	const { project_id, task_key } = useParams();
 	const [defaultFileList, setDefaultFileList] = useState([]);
 
@@ -33,7 +33,8 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 				const response = await axiosClient.post(`/projects/${project_id}/tasks`, values);
 				console.log(response.data.result);
 			}
-		} catch (error)
+		}
+		catch (error)
 		{
 			console.log(error);
 		}
@@ -63,7 +64,7 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 
 	const handleDropDownChange = (value) =>
 	{
-		if (value == "MAIN_KEY")
+		if (value == "MAIN_TASK")
 		{
 			setHideTaskKey(false);
 			setIsRequired(false);
@@ -82,7 +83,8 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 			const fileName = file.name;
 			await axiosClient.delete(`/misc/delete/${fileName}`);
 			message.success(`${file.name} file removed successfully.`);
-		} catch (error)
+		}
+		catch (error)
 		{
 			console.log(error);
 			message.error(`${file.name} file removal failed.`);
@@ -109,11 +111,16 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 		['clean']
 	];
 
+
 	useEffect(() =>
 	{
 		if (method == "update")
 		{
 			form.setFieldsValue(taskDetails);
+		}
+		else 
+		{
+			form.resetFields();
 		}
 	}, []);
 
@@ -144,7 +151,7 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 						]}
 					>
 						<Select placeholder="Select One" onChange={handleDropDownChange}>
-							<Select.Option value="MAIN_KEY">Main Task</Select.Option>
+							<Select.Option value="MAIN_TASK">Main Task</Select.Option>
 							<Select.Option value="SUB_TASK">Sub Task</Select.Option>
 						</Select>
 					</Form.Item>

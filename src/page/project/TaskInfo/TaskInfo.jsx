@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Space, Button, Divider, Row, Col, Select, Avatar, Image, Tabs, Modal } from "antd";
+import { Breadcrumb, Space, Button, Divider, Row, Col, Select, Avatar, Image, Tabs, Modal, message } from "antd";
 import { UserOutlined, ApartmentOutlined, LinkOutlined, EditOutlined } from "@ant-design/icons";
 import TaskItem from "../../../components/ui/TaskItem/TaskItem";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
@@ -20,16 +20,6 @@ const TaskInfo = () =>
 	const [modalHeader, setModalHeader] = useState("");
 	const [projectName, setProjectName] = useState("");
 
-	useEffect(() =>
-	{
-		fetchProjectName();
-	}, []);
-
-	const fetchProjectName = async () =>
-	{
-		const response = await axiosClient.get(`/projects/${project_id}`);
-		setProjectName(response.data.result.name);
-	};
 
 	const onChange = (key) =>
 	{
@@ -42,8 +32,8 @@ const TaskInfo = () =>
 		{
 			const response = await axiosClient.get(`/projects/${project_id}/members`);
 			let temp = {};
-
-			const members = response.data?.result?.map(r =>
+			setProjectName(response?.data?.result?.name);
+			const members = response?.data?.result?.members?.map(r =>
 			{
 				temp[r.user._id] = r.user.first_name + " " + r.user.last_name;
 				return {
@@ -91,14 +81,30 @@ const TaskInfo = () =>
 	const fetchTaskDetails = async () =>
 	{
 		const response = await axiosClient.get(`/projects/${project_id}/tasks/${task_key}`);
-		let temp = response.data.result;
-		setTaskDetails(temp);
+		setTaskDetails(response?.data?.result);
 	};
 
-	const getMemberName = (member_id) =>
+	const handleStatusChange = async (value) =>
 	{
-		return membersList[member_id];
+		try
+		{
+			const project_id = taskDetails.project;
+			const task_key = taskDetails.task_key;
+			const response = await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, { status: value.toUpperCase() });
+			setTaskDetails(response?.data?.result);
+			message.success("Task status updated successfully");
+		}
+		catch (error)
+		{
+			message.error("Something went wrong");
+		}
 	};
+
+
+	// const getMemberName = (member_id) =>
+	// {
+	// 	return membersList[member_id];
+	// };
 
 	useEffect(() =>
 	{
@@ -134,7 +140,7 @@ const TaskInfo = () =>
 					<h3>Description</h3>
 
 					<div className="description-content">
-						<span className="description-content-span" dangerouslySetInnerHTML={{ __html: taskDetails.description }}></span>
+						<span className="description-content-span" dangerouslySetInnerHTML={{ __html: taskDetails.description_raw }}></span>
 					</div>
 
 					<h3>Attachments</h3>
@@ -218,6 +224,7 @@ const TaskInfo = () =>
 						defaultValue="TO_DO"
 						value={taskDetails.status}
 						className="to_do"
+						onChange={(value) => { handleStatusChange(value); }}
 					>
 						<Select.Option value="IN_PROGRESS">In-progress</Select.Option>
 						<Select.Option value="TO_DO">To-do</Select.Option>
@@ -229,10 +236,10 @@ const TaskInfo = () =>
 							<tbody>
 								<tr className="task-table-row">
 									<td className="task-table-data">
-										<h3 >Assignee </h3>
+										<h3>Assignee</h3>
 									</td>
 									<td>
-										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{getMemberName(taskDetails.assignee)}</span>
+										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{taskDetails?.assignee ? membersList[taskDetails?.assignee[0]._id] : ''}</span>
 									</td>
 								</tr>
 								<tr className="task-table-row">
@@ -240,7 +247,7 @@ const TaskInfo = () =>
 										<h3 >Reporter </h3>
 									</td>
 									<td>
-										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{getMemberName(taskDetails.reporter)}</span>
+										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{taskDetails?.reporter ? membersList[taskDetails?.reporter?._id] : ''}</span>
 									</td>
 								</tr>
 								<tr className="task-table-row">
@@ -248,7 +255,7 @@ const TaskInfo = () =>
 										<h3 >Created </h3>
 									</td>
 									<td>
-										<h3 style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>22-03-2023</h3>
+										<h3 style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>{taskDetails?.created_at}</h3>
 									</td>
 								</tr>
 								<tr className="task-table-row">
@@ -256,7 +263,7 @@ const TaskInfo = () =>
 										<h3 >Updated </h3>
 									</td>
 									<td>
-										<h3 style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>22-03-2023 03:14:07</h3>
+										<h3 style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>{taskDetails?.updated_at}</h3>
 									</td>
 								</tr>
 							</tbody>

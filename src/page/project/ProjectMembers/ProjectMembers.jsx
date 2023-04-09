@@ -1,108 +1,143 @@
 import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Input, Result, Spin, Tag, Breadcrumb } from 'antd';
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
-
-import './ProjectMembers.css';
 import { axiosClient } from "../../../config/axios";
 
-const confirm = (e) =>
-{
-	console.log(e);
-	message.success('Click on Yes');
-};
-
-const cancel = (e) =>
-{
-	console.log(e);
-	message.error('Click on No');
-};
-
-const columns = [
-	{
-		title: 'Name',
-		dataIndex: 'name',
-		ellipsis: true
-	},
-	{
-		title: 'Display Name',
-		dataIndex: 'display_name',
-		ellipsis: true
-	},
-	{
-		title: 'Action',
-		dataIndex: 'name',
-		render: (data) =>
-		{
-			const joined = data == "N - A";
-
-			return (
-				<div>
-					<Space size="middle">
-						<Select
-							defaultValue={joined ? "read" : "admin"}
-							style={{ width: "100px" }}
-							placeholder="Select One"
-							options={[
-								{
-									value: 'admin',
-									label: 'Admin',
-								},
-								{
-									value: 'write',
-									label: 'Write',
-								},
-								{
-									value: 'read',
-									label: 'Read',
-								},
-							]}
-						/>
-					</Space>
-					<Popconfirm
-						title="Remove user"
-						description="Are you sure to remove this user?"
-						onConfirm={confirm}
-						onCancel={cancel}
-						okText="Yes"
-						cancelText="No"
-					>
-						<DeleteFilled className="project-members-deletefilled-icon" />
-					</Popconfirm>
-					{
-						joined &&
-						<Tag color="orange">Pending</Tag>
-					}
-
-				</div>
-			);
-		},
-		ellipsis: true
-	},
-];
+import './ProjectMembers.css';
 
 const ProjectMembers = () =>
 {
 	const [isLoading, setIsLoading] = useState(false);
 	const { project_id } = useParams();
 	const [projectName, setProjectName] = useState("");
-
 	const [data, setData] = useState([]);
+
+	const confirm = async (_, record) =>
+	{
+		try
+		{
+			await axiosClient.delete(`/projects/${record.project_id}/members/${record.id}`);
+			message.success(`Successfully removed ${record.name} from the project`);
+			fetchProjectMembers();
+		} catch (error)
+		{
+			message.error(error.message);
+		}
+	};
+
+	const cancel = (e) =>
+	{
+		message.error('Cancelled');
+	};
+
+	const handleActionChange = async (value, record) =>
+	{
+		try
+		{
+			await axiosClient.patch(`/projects/${record.project_id}/members/${record.id}`, { role: value.toUpperCase() });
+			message.success(`Successfully updated ${record.name}'s role`);
+		} catch (error)
+		{
+			message.error(error.message);
+		}
+	};
+
+	const columns = [
+		{
+			title: 'Name',
+			dataIndex: 'name',
+			ellipsis: true
+		},
+		{
+			title: 'Display Name',
+			dataIndex: 'display_name',
+			ellipsis: true
+		},
+		{
+			title: 'Action',
+			dataIndex: 'role',
+			render: (data, record) =>
+			{
+				return (
+					<div>
+						<Space size="middle">
+							<Select
+								defaultValue={data}
+								style={{ width: "100px" }}
+								placeholder="Select One"
+								options={[
+									{
+										value: 'admin',
+										label: 'Admin',
+									},
+									{
+										value: 'write',
+										label: 'Write',
+									},
+									{
+										value: 'read',
+										label: 'Read',
+									},
+									{
+										value: 'owner',
+										label: 'Owner',
+										disabled: true,
+									}
+								]}
+								disabled={data === 'OWNER'}
+								onChange={(value) => handleActionChange(value, record)}
+							/>
+						</Space>
+						{
+							data !== 'OWNER'
+							&&
+							<Popconfirm
+								title="Remove user"
+								description="Are you sure to remove this user?"
+								onConfirm={(event) => confirm(event, record)}
+								onCancel={cancel}
+								okText="Yes"
+								cancelText="No"
+							>
+								<DeleteFilled className="project-members-deletefilled-icon" />
+							</Popconfirm>
+						}
+						{
+							record.status === 'PENDING' &&
+							<Tag color="orange">Pending</Tag>
+						}
+					</div>
+				);
+			},
+			ellipsis: true
+		},
+	];
 
 	const fetchProjectMembers = async () => 
 	{
-		const response = await axiosClient.get(`/projects/${project_id}/members`);
-		setProjectName(response.data.result.name);
-		const memberDetails = response.data?.result?.members.map((member) =>
+		try
 		{
-			return {
-				key: member.user._id,
-				name: member.user.first_name + " " + member.user.last_name,
-				display_name: member.user.display_name,
-				id: member.user._id
-			};
-		});
-		setData(memberDetails);
+
+			const response = await axiosClient.get(`/projects/${project_id}/members`);
+			setProjectName(response.data.result.name);
+			const memberDetails = response.data?.result?.members.map((member) =>
+			{
+				return {
+					key: member.user._id,
+					name: member.user.first_name + " " + member.user.last_name,
+					display_name: member.user.display_name,
+					id: member.user._id,
+					role: member.role,
+					status: member.status,
+					project_id: project_id
+				};
+			});
+			setData(memberDetails);
+		} catch (error)
+		{
+			message.error("Something went wrong");
+		}
 	};
 
 

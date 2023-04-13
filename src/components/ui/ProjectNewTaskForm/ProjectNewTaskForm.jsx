@@ -18,9 +18,11 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 	const [description, setDescription] = useState(taskDetails.description_raw);
 	const { project_id, task_key } = useParams();
 	const [defaultFileList, setDefaultFileList] = useState([]);
+	const [fileWithURL, setFileWithURL] = useState([]);
 
 	const handleFormSubmit = async () =>
 	{
+		console.log("fileList: ", fileWithURL);
 		try
 		{
 			const valid = await form.validateFields();
@@ -54,6 +56,8 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 			});
 
 			onSuccess(message.success(`${file.name} file uploaded successfully.`));
+			const newFileListWithURL = [...fileWithURL, { name: response?.data?.result?.filename, url: response?.data?.result?.url }];
+			setFileWithURL(newFileListWithURL);
 		} catch (error)
 		{
 			console.log(error);
@@ -83,6 +87,8 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 			const fileName = file.name;
 			await axiosClient.delete(`/misc/delete/${fileName}`);
 			message.success(`${file.name} file removed successfully.`);
+			const newFileList = fileWithURL.filter((item) => item.name !== fileName);
+			setFileWithURL(newFileList);
 		}
 		catch (error)
 		{

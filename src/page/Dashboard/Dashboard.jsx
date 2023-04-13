@@ -6,7 +6,7 @@ import "./Dashboard.css";
 import { useEffect, useState } from "react";
 import ProjectDataForm from "../../components/ui/ProjectDataForm/ProjectDataForm";
 import { axiosClient } from "../../config/axios";
-// import Socket from "../../config/socket";
+import Socket from "../../config/socket";
 
 const Dashboard = () =>
 {
@@ -30,7 +30,6 @@ const Dashboard = () =>
 
 	useEffect(() =>
 	{
-		// Socket.emit("user-connected", Math.ceil(Math.random() * 1000));
 		fetchProjects();
 	}, []);
 

@@ -5,6 +5,9 @@ import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 import { axiosClient } from "../../../config/axios";
 
 import './ProjectMembers.css';
+import socket from "../../../config/socket";
+
+const { Option } = Select;
 
 const ProjectMembers = () =>
 {
@@ -140,14 +143,10 @@ const ProjectMembers = () =>
 		}
 	};
 
-
-	useEffect(() =>
-	{
-		fetchProjectMembers();
-	}, []);
-
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [inviteSent, setInviteSent] = useState(false);
+	const [selectedPermission, setSelectedPermission] = useState("");
+	const [userEmail, setUserEmail] = useState("");
 
 	const showModal = () =>
 	{
@@ -160,15 +159,30 @@ const ProjectMembers = () =>
 		setInviteSent(false);
 	};
 
-	const handleSendInvite = () =>
+	const handleSendInvite = async () =>
 	{
 		setIsLoading(true);
-		setTimeout(() =>
-		{
-			setInviteSent(true);
-			setIsLoading(false);
-		}, 2000);
+		socket.emit("invite-sent", {
+			email: userEmail,
+			role: selectedPermission
+		});
+
+		const response = await axiosClient.post(`/projects/${project_id}/members`, {
+			email: userEmail,
+			role: selectedPermission
+		});
+
+
+
+		console.log(response.data);
+		setIsLoading(false);
+		setInviteSent(false);
 	};
+
+	useEffect(() =>
+	{
+		fetchProjectMembers();
+	}, []);
 
 	return (
 		<div>
@@ -198,9 +212,16 @@ const ProjectMembers = () =>
 							<MailOutlined style={{ fontSize: 20, margin: 20, opacity: 0.5 }} className="invite-form-mailoutlined-icon" />
 							<h3>Invite user to {projectName}</h3>
 							<Space.Compact style={{ width: '100%' }} >
-								<Input placeholder="Please input user display name" />
-								<Button type="primary" onClick={handleSendInvite} className="invite-btn">Invite</Button>
+								<Input placeholder="Please input user email to send invite" value={userEmail} onChange={(e) => { setUserEmail(e.target.value); }} />
+								<Select style={{ width: 100 }} value={selectedPermission} onChange={(value) => { setSelectedPermission(value); }}>
+									<Option value="READ">Read</Option>
+									<Option value="WRITE">Write</Option>
+									<Option value="ADMIN">Admin</Option>
+								</Select>
 							</Space.Compact>
+							<br />
+							<br />
+							<Button type="primary" onClick={handleSendInvite} className="invite-btn">Invite</Button>
 						</div>
 						:
 						<Result

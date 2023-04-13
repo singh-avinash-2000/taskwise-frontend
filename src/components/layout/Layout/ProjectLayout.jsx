@@ -5,7 +5,7 @@ import NavBar from "../Navbar/NavBar";
 import SideBar from "../Sidebar/SideBar";
 import './ProjectLayout.css';
 
-const MainLayout = () =>
+const MainLayout = ({ onDashboard }) =>
 {
 	const [position, setPosition] = useState('relative');
 	const [screenHeight, setScreenHeight] = useState(700);
@@ -38,10 +38,10 @@ const MainLayout = () =>
 	return (
 		<>
 			<div>
-				<NavBar navIconDisabled={false} setCollapsed={setCollapsed} collapsed={collapsed} />
+				<NavBar navIconDisabled={onDashboard} setCollapsed={setCollapsed} collapsed={collapsed} />
 				<div className="sidebar-layout" style={{ height: screenHeight }}>
 					{
-						!collapsed &&
+						!collapsed && !onDashboard &&
 						<SideBar setCollapsed={setCollapsed} />
 					}
 

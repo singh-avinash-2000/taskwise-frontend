@@ -14,10 +14,6 @@
     cursor: pointer;
 }
 
-.navbar-notification-content {
-    height: 50%;
-    width: 30%;
-}
 
 .navbar-belloutlined-icon {
     font-size: 25px;
@@ -55,4 +51,9 @@
 		padding: 20px;
 		margin-left: 0px;
 	}
+
+	.navbar-notification-content {
+    height: 70vh;
+    width: 70vw;
+}
 }

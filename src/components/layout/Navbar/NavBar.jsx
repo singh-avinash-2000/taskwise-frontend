@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Popover, Tooltip, message, Badge } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Popover, Tooltip, message, Badge, notification } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, HeatMapOutlined } from "@ant-design/icons";
 import { TbLogout } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
 import axios from "axios";
+import Notification from "../../ui/Notification/Notification";
 import Socket from "../../../config/socket";
 
 const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 {
 	const navigate = useNavigate();
 	const [notificationCount, setNotificationCount] = useState(0);
+	const [popOverOpen, setPopOverOpen] = useState(false);
+	const popOverRef = useRef(null);
 
 	const handleLogout = async () =>
 	{
@@ -30,20 +33,25 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		}
 	};
 
-	const handleAddToProject = data =>
-	{
-		setNotificationCount(data.count);
-	};
-
 	useEffect(() =>
 	{
-		Socket.on("add-to-project", handleAddToProject);
+		Socket.on("collaboration-invite", (data) =>
+		{
+			console.log(data);
+			message.info({ content: "You are invited to collaborate", icon: <BellOutlined /> });
+		});
+
+		Socket.on("reached-here", (data) =>
+		{
+			console.log(data);
+			message.info({ content: "Your code reached there", icon: <BellOutlined /> });
+		});
 
 		return () =>
 		{
-			Socket.off("add-to-project", handleAddToProject);
+			Socket.off();
 		};
-	});
+	}, []);
 
 	return (
 		<div className="navbar-notification-main-wrapper">
@@ -62,20 +70,12 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 				<Tooltip title="Logout" className="logout-btn">
 					<TbLogout size={30} onClick={handleLogout} />
 				</Tooltip>
-				<Popover placement="bottomRight" title={"Notification"} content={Notification} trigger="click">
+				<Popover placement="bottomRight" content={Notification} trigger="click" popupVisible={popOverOpen}>
 					<Badge count={notificationCount} className="navbar-belloutlined-icon">
-						<BellOutlined />
+						<BellOutlined ref={popOverRef} />
 					</Badge>
 				</Popover>
 			</div>
-		</div>
-	);
-};
-
-const Notification = () =>
-{
-	return (
-		<div className="navbar-notification-content">
 		</div>
 	);
 };

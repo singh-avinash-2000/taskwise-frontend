@@ -5,9 +5,6 @@ export const axiosClient = axios.create({
 	withCredentials: true,
 });
 
-
-
-
 axiosClient.interceptors.request.use((request) =>
 {
 	if (!request.headers["Content-Type"])
@@ -49,17 +46,13 @@ axiosClient.interceptors.response.use(
 		//Only Access token expired
 		if (statusCode === 401 && responseError.message === "jwt expired")
 		{
-			// const responseFromRefresh = await axios.create({
-			// 	withCredentials: true
-			// }).get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`);
-
 			const responseFromRefresh = await axiosClient.get('/auth/refresh');
 
 			if (responseFromRefresh.status === 200)
 			{
 				localStorage.setItem("accessToken", responseFromRefresh.data.result.accessToken);
 				originalRequest.headers['Authorization'] = `Bearer ${responseFromRefresh.data.result.accessToken}`;
-				// return axios(originalRequest);
+
 				return axiosClient(originalRequest);
 			}
 			else
@@ -71,7 +64,8 @@ axiosClient.interceptors.response.use(
 		}
 
 		return Promise.reject(error);
-	});
+	}
+);
 
 // function initializeInterceptor()
 // {

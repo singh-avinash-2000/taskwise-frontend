@@ -4,7 +4,6 @@ import { ClockCircleOutlined, MinusSquareOutlined, PlusSquareOutlined, CheckCirc
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
-
 import "./TaskList.css";
 
 const TaskList = () =>
@@ -32,11 +31,10 @@ const TaskList = () =>
 	{
 		try
 		{
-			console.log(record);
 			const project_id = record.project;
 			const task_key = record.task_key;
 			await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, { status: value.toUpperCase() });
-			message.success(`Successfully updated ${record.summary}'s status`);
+			message.success(`Successfully updated ${record.task_key}'s status`);
 		}
 		catch (error)
 		{

@@ -111,6 +111,10 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 		['clean']
 	];
 
+	const handleSelect = (value, option) =>
+	{
+		form.setFieldsValue({ "parent_task_id": option.label });
+	};
 
 	useEffect(() =>
 	{
@@ -157,20 +161,24 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 					</Form.Item>
 					{
 						hideTaskKey &&
-						<Form.Item label="Task Key"
-							name="task_key"
+						<Form.Item label="Parent Task Key"
+							name="parent_task_id"
 							rules={[
 								{
 									required: isRequired,
-									message: 'Please input task key',
+									message: 'Please select task key',
 								},
 							]}
 						>
 							<AutoComplete
-								options={[{ value: "BYS-162" },
-								{ value: "BYS-12" },
-								{ value: "BYS-1234" },
-								{ value: "BYS-134" }]}
+								onSelect={handleSelect}
+								options={[
+									{ value: "142354", label: "EOE-1" },
+									{ value: "142354asdf", label: "EOE-3" },
+									{ value: "142354wetr", label: "EOE-23" },
+									{ value: "142354qwe", label: "EOE-34" },
+									{ value: "142354rtyuD", label: "EOE-121" },
+								]}
 								className="task-key-autocomplete"
 								placeholder="input here"
 							/>

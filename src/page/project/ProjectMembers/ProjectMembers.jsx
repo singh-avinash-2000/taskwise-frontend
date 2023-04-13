@@ -145,7 +145,7 @@ const ProjectMembers = () =>
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [inviteSent, setInviteSent] = useState(false);
-	const [selectedPermission, setSelectedPermission] = useState("");
+	const [selectedPermission, setSelectedPermission] = useState("READ");
 	const [userEmail, setUserEmail] = useState("");
 
 	const showModal = () =>
@@ -176,7 +176,7 @@ const ProjectMembers = () =>
 
 		console.log(response.data);
 		setIsLoading(false);
-		setInviteSent(false);
+		closeModal();
 	};
 
 	useEffect(() =>

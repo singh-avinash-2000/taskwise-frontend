@@ -20,9 +20,7 @@ const OnlyIfLoggedIn = () =>
 		{
 			if (!loading)
 			{
-				console.log(userDetails);
 				Socket.connect();
-				Socket.emit("user-connected", userDetails._id);
 			}
 		}
 

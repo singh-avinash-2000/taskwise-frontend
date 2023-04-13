@@ -10,15 +10,17 @@ export const ContextProvider = ({ children }) =>
 	const [projectMembers, setProjectMembers] = useState({});
 	const [loading, setLoading] = useState(true);
 
-	useEffect(() =>
+	const fetchUserData = async () =>
 	{
 		setLoading(true);
-		axiosClient.get("/user").then(response =>
-		{
-			setUserDetails(response.data.result);
-			setLoading(false);
-		});
+		const response = await axiosClient.get("/user");
+		setUserDetails(response.data.result);
+		setLoading(false);
+	};
 
+	useEffect(() =>
+	{
+		fetchUserData();
 	}, []);
 
 	return (

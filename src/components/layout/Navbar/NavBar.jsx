@@ -35,10 +35,13 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 
 	useEffect(() =>
 	{
-		Socket.on("collaboration-invite", (data) =>
+		Socket.on("collaboration-invite", (data, callback) =>
 		{
+
 			console.log(data);
 			message.info({ content: "You are invited to collaborate", icon: <BellOutlined /> });
+			setNotificationCount(notificationCount + 1);
+			callback("success");
 		});
 
 		Socket.on("reached-here", (data) =>
@@ -51,7 +54,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		{
 			Socket.off();
 		};
-	}, []);
+	}, [Socket]);
 
 	return (
 		<div className="navbar-notification-main-wrapper">

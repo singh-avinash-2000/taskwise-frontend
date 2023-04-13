@@ -1,14 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./Notification.css";
 import { Avatar, Button } from "antd";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import Socket from "../../../config/socket";
 
 const Notification = () =>
 {
+	const [notification, setNotification] = useState([]);
 	useEffect(() =>
 	{
-		console.log("Called");
-	}, []);
+		Socket.on("collaboration-invite", (data, callback) =>
+		{
+			console.log(data);
+			setNotification([...notification, data]);
+			callback("success");
+		});
+	}, [Socket]);
 	return (
 		<div className="navbar-notification-content">
 			<div className="notification-header">

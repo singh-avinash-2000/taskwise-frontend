@@ -1,15 +1,15 @@
 1) CHECK FOR ALREADY EXISTING MEMBERS WHEN ADD NEW MEMBERS - DONE
 2) FETCH PROJECTS WITH JOINED/ACCEPTED STATUS - DONE
 3) USER PROFILE DETAILS UPDATE - DONE
-4) IN COUNTER SCHEMA ID SHOULD BE PROJECT ID AND NOT TASKS - PENDING
+4) IN COUNTER SCHEMA ID SHOULD BE PROJECT ID AND NOT TASKS - DONE
 5) CHECK FOR REDIRECT ROUTE STATE, IF EXISTS REDIRECT THE USER POST LOGIN. - DONE
 6) USE ALREADY CONFIGURED CONTEXT API FOR PROJECT, PROJECT MEMBERS, USER DETAILS - WHEREVER USED. - DONE
 7) MODIFY FETCH PROJECT LIST API, MAP OVER PROJECT LIST AND MAKE THE USER JOIN THOSE SOCKET ROOM (ROOM ID WILL BE PROJECT ID). - PENDING
 8) ADD A TAG FOR PRIORITY -> RED - URGENT, BLUE - LOW, GREEN - MEDIUM, YELLOW - HIGH, ALSO CHANGE PRIORITY TO WORD CASE I.E. URGENT -> rgent. - PENDING
-9) when an admin or an owner changes member permission. test this and make appropriate changes. - PENDING
-10) display attached file list in task details - PENDING
-11) add sub task -> modal should be opened with task type and task_key already selected and disabled - PENDING
-12) attach new file or remove a file from a task
+9) when an admin or an owner changes member permission. test this and make appropriate changes. - DONE
+10) display attached file list in task details - DONE
+11) add sub task -> modal should be opened with task type and task_key already selected and disabled - DONE WITH A DIFFERENT WAY
+12) attach new file or remove a file from a task - DONE
 13) history for a task details
 14) subtasks for a task detail - PENDING
 15) show only date in created and updated - DONE
@@ -36,4 +36,6 @@ new-task-assigned => when a new task is assgined to you (member)
 
 your-task-updated => when someone updates your task same for edit task (member)
 
-
+******************
+IF I UPLOAD TWO FILES WITH SAME NAME WILL IT BE REPLACED IN S3
+******************

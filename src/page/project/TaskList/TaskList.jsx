@@ -145,11 +145,8 @@ const TaskList = ({ project_name }) =>
 
 	useEffect(() =>
 	{
-		if (!loading)
-		{
-			fetchProjectData();
-		}
-	}, [loading]);
+		fetchProjectData();
+	}, [isModalOpen]);
 
 
 	return (
@@ -187,7 +184,7 @@ const TaskList = ({ project_name }) =>
 			/>
 
 			<Modal title="Add Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null} className="create-task-modal">
-				<ProjectNewTaskForm method="add" taskDetails={{}} />
+				<ProjectNewTaskForm method="add" taskDetails={{}} closeModal={() => { setIsModalOpen(); }} task_type="MAIN_TASK" />
 			</Modal>
 		</div>
 	);

@@ -14,7 +14,7 @@ const ProjectMembers = () =>
 	const [isLoading, setIsLoading] = useState(false);
 	const { project_id } = useParams();
 	const [data, setData] = useState([]);
-	const { activeProjectName } = useStateContext();
+	const { activeProjectName, userDetails } = useStateContext();
 
 	const confirm = async (_, record) =>
 	{
@@ -58,7 +58,7 @@ const ProjectMembers = () =>
 			ellipsis: true
 		},
 		{
-			title: 'Action',
+			title: 'Permission',
 			dataIndex: 'role',
 			render: (data, record) =>
 			{
@@ -67,6 +67,7 @@ const ProjectMembers = () =>
 						<Space size="middle">
 							<Select
 								defaultValue={data}
+								disabled={record.id == userDetails._id}
 								style={{ width: "100px" }}
 								placeholder="Select One"
 								options={[

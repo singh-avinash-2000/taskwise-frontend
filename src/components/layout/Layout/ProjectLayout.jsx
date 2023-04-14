@@ -46,12 +46,11 @@ const MainLayout = ({ onDashboard }) =>
 		{
 			projectMembersMap[m.user._id] = m.user;
 			return {
-				label: m.display_name,
-				value: m._id
+				label: m.user.display_name,
+				value: m.user._id
 			};
 		});
 
-		console.log(projectMembersMap, 56);
 		setLabelMembers(selectLabelMembers);
 		setProjectMembersMap(projectMembersMap);
 		setLoading(false);

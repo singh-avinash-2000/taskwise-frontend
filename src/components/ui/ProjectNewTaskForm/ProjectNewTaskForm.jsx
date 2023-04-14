@@ -10,13 +10,11 @@ import { useStateContext } from "../../../context/ContextProvider";
 
 const { Dragger } = Upload;
 
-const ProjectNewTaskForm = ({ method, taskDetails }) =>
+const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 {
 	const [form] = Form.useForm();
-	const [hideTaskKey, setHideTaskKey] = useState(false);
-	const [isRequired, setIsRequired] = useState(false);
 	const quillRef = useRef(null);
-	const [description, setDescription] = useState(taskDetails.description_raw);
+	const [description, setDescription] = useState(taskDetails.description);
 	const { project_id, task_key } = useParams();
 	const [defaultFileList, setDefaultFileList] = useState([]);
 	const [fileWithURL, setFileWithURL] = useState([]);
@@ -31,11 +29,23 @@ const ProjectNewTaskForm = ({ method, taskDetails }) =>
 			if (valid)
 			{
 				const values = form.getFieldsValue();
-				console.log(values);
 				values.task_description_raw = quillRef.current.getEditor().getContents();
+				values.type = task_type;
+				values.documents = fileWithURL;
 
-				const response = await axiosClient.post(`/projects/${project_id}/tasks`, values);
-				console.log(response.data.result);
+				let response = {};
+				if (method != "update")
+				{
+					response = await axiosClient.post(`/projects/${project_id}/tasks`, values);
+				}
+				else
+				{
+					values.parent_task_key = task_key;
+					response = await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, values);
+				}
+
+				message.success(response.data.message);
+				closeModal();
 			}
 		}
 		catch (error)
@@ -65,20 +75,6 @@ const ProjectNewTaskForm = ({ method, taskDetails }) =>
 			console.log(error);
 			const err = new Error(error.message);
 			onError(err);
-		}
-	};
-
-	const handleDropDownChange = (value) =>
-	{
-		if (value == "MAIN_TASK")
-		{
-			setHideTaskKey(false);
-			setIsRequired(false);
-		}
-		else
-		{
-			setHideTaskKey(true);
-			setIsRequired(true);
 		}
 	};
 
@@ -119,11 +115,6 @@ const ProjectNewTaskForm = ({ method, taskDetails }) =>
 		['clean']
 	];
 
-	const handleSelect = (value, option) =>
-	{
-		form.setFieldsValue({ "parent_task_id": option.label });
-	};
-
 	useEffect(() =>
 	{
 		if (method == "update")
@@ -153,46 +144,14 @@ const ProjectNewTaskForm = ({ method, taskDetails }) =>
 					form={form}
 					onSubmitCapture={handleFormSubmit}
 				>
-					<Form.Item label="Type"
-						name="type"
-						rules={[
-							{
-								required: true,
-								message: 'Please select task type',
-							},
-						]}
+					<Form.Item
+						label="Task Type"
 					>
-						<Select placeholder="Select One" onChange={handleDropDownChange}>
+						<Select placeholder="Select One" value={task_type} disabled={true}>
 							<Select.Option value="MAIN_TASK">Main Task</Select.Option>
 							<Select.Option value="SUB_TASK">Sub Task</Select.Option>
 						</Select>
 					</Form.Item>
-					{
-						hideTaskKey &&
-						<Form.Item label="Parent Task Key"
-							name="parent_task_id"
-							rules={[
-								{
-									required: isRequired,
-									message: 'Please select task key',
-								},
-							]}
-						>
-							<AutoComplete
-								onSelect={handleSelect}
-								options={[
-									{ value: "142354", label: "EOE-1" },
-									{ value: "142354asdf", label: "EOE-3" },
-									{ value: "142354wetr", label: "EOE-23" },
-									{ value: "142354qwe", label: "EOE-34" },
-									{ value: "142354rtyuD", label: "EOE-121" },
-								]}
-								className="task-key-autocomplete"
-								placeholder="input here"
-							/>
-						</Form.Item>
-
-					}
 					<Form.Item label="Summary"
 						name="summary"
 						rules={[
@@ -210,6 +169,7 @@ const ProjectNewTaskForm = ({ method, taskDetails }) =>
 						<div className="new-task-description-wrapper">
 							<ReactQuill theme="snow" modules={{ toolbar: toolbarOptions }} ref={quillRef} value={description} onChange={(value) =>
 							{
+								setDescription(value);
 								form.setFieldValue("description", value);
 							}} />
 						</div>
@@ -256,7 +216,7 @@ const ProjectNewTaskForm = ({ method, taskDetails }) =>
 							multiple={true}
 							customRequest={handleFileUpload}
 							defaultFileList={defaultFileList}
-							onChange={({ file, fileList }) => setDefaultFileList(fileList)}
+							onChange={({ file, fileList }) => { console.log(fileList); setDefaultFileList(fileList); }}
 							onRemove={(file) => handleFileRemove(file)}
 						>
 							<p className="ant-upload-drag-icon">
@@ -272,7 +232,7 @@ const ProjectNewTaskForm = ({ method, taskDetails }) =>
 					<Form.Item
 						style={{ textAlign: "center" }}
 					>
-						<Button htmlType="submit" shape="round" className='add-project-task-btn'>Submit</Button>
+						<Button htmlType="submit" shape="round" className='add-project-task-btn'>{method == "update" ? "Update" : "Submit"}</Button>
 					</Form.Item>
 				</Form>
 			</Card >

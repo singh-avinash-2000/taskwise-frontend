@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Space, Button, Divider, Row, Col, Select, Avatar, Image, Tabs, Modal, message } from "antd";
-import { UserOutlined, ApartmentOutlined, LinkOutlined, EditOutlined } from "@ant-design/icons";
+import { Breadcrumb, Space, Button, Upload, Row, Col, Select, Avatar, Image, Tabs, Modal, message } from "antd";
+import { UserOutlined, ApartmentOutlined, LinkOutlined, EditOutlined, InboxOutlined } from "@ant-design/icons";
 import TaskItem from "../../../components/ui/TaskItem/TaskItem";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
 import { useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
-
 import './TaskInfo.css';
-import { useForm } from "antd/lib/form/Form";
+import { FileIcon, defaultStyles } from "react-file-icon";
 import { useStateContext } from "../../../context/ContextProvider";
-
+const { Dragger } = Upload;
 const TaskInfo = () =>
 {
 	const [modalOpen, setModalOpen] = useState(false);
-	const [formData] = useForm();
+	const [attachmentModalOpen, setAttachmentModal] = useState(false);
 	const [taskDetails, setTaskDetails] = useState({});
 	const { project_id, task_key } = useParams();
 	const [modalHeader, setModalHeader] = useState("");
+	const [fileWithURL, setFileWithURL] = useState([]);
+	const [defaultFileList, setDefaultFileList] = useState([]);
 	const { activeProjectName, projectMembersMap } = useStateContext();
-
 
 	const onChange = (key) =>
 	{
@@ -40,11 +40,6 @@ const TaskInfo = () =>
 				<TaskItem />
 				<TaskItem />
 			</>,
-		},
-		{
-			key: '2',
-			label: `History`,
-			children: `Content of Tab Pane 2`,
 		}
 	];
 
@@ -57,7 +52,8 @@ const TaskInfo = () =>
 	const fetchTaskDetails = async () =>
 	{
 		const response = await axiosClient.get(`/projects/${project_id}/tasks/${task_key}`);
-		setTaskDetails(response?.data?.result);
+		setTaskDetails(response.data?.result);
+		setDefaultFileList(response.data?.result?.documents);
 	};
 
 	const handleStatusChange = async (value) =>
@@ -83,10 +79,57 @@ const TaskInfo = () =>
 		return date.toLocaleDateString('en-US', options);
 	};
 
+	const handleFileUpload = async (options) =>
+	{
+		const { onSuccess, onError, file } = options;
+		const formData = new FormData();
+		formData.append('files', file);
+		try
+		{
+			const response = await axiosClient.post('/misc/upload-all', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				}
+			});
+
+			onSuccess(message.success(`${file.name} file uploaded successfully.`));
+			const newDefaultFileList = [...defaultFileList, { name: response?.data?.result?.filename, url: response?.data?.result?.url }];
+			setDefaultFileList(newDefaultFileList);
+		} catch (error)
+		{
+			console.log(error);
+			const err = new Error(error.message);
+			onError(err);
+		}
+	};
+
+	const handleFileRemove = async (file) =>
+	{
+		try
+		{
+			const fileName = file.name;
+			await axiosClient.delete(`/misc/delete/${fileName}`);
+			message.success(`${file.name} file removed successfully.`);
+			const newFileList = fileWithURL.filter((item) => item.name !== fileName);
+			setFileWithURL(newFileList);
+		}
+		catch (error)
+		{
+			console.log(error);
+			message.error(`${file.name} file removal failed.`);
+		}
+	};
+
+	const handleTaskUpdate = async () =>
+	{
+		console.log(defaultFileList);
+	};
+
+
 	useEffect(() =>
 	{
 		fetchTaskDetails();
-	}, []);
+	}, [modalOpen]);
 
 	return (
 		<div>
@@ -108,92 +151,39 @@ const TaskInfo = () =>
 					<h2 style={{ fontWeight: "600" }}>{taskDetails.summary}</h2>
 
 					<Space className="space">
-						<Button type="primary"> <LinkOutlined />Attach</Button>
+						<Button type="primary" onClick={() => { setAttachmentModal(true); }}> <LinkOutlined />Attachments</Button>
 						<Button type="primary" onClick={() => { handleModalState("Sub"); }}><ApartmentOutlined />Add sub task</Button>
 						<Button type="primary" onClick={() => { handleModalState("Update"); }}><EditOutlined />Update task</Button>
 					</Space>
 
-					<h3>Description</h3>
+					{taskDetails.description && <>
+						<h3>Description</h3>
 
-					<div className="description-content">
-						<span className="description-content-span" dangerouslySetInnerHTML={{ __html: taskDetails.description_raw }}></span>
-					</div>
+						<div className="description-content">
+							<span className="description-content-span" dangerouslySetInnerHTML={{ __html: taskDetails.description }}></span>
+						</div>
+					</>}
 
-					<h3>Attachments</h3>
-					<div className="attachments-wrapper">
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-						<div>
-							<Image
-								width={160}
-								height={120}
-								src="https://project-management.com/wp-content/uploads/2019/12/pros-and-cons-of-jira-screenshot-06-2021-1.png"
-								className="attachment-image"
-							/>
-						</div>
-					</div>
+					{taskDetails.documents?.length ? <><h3>Attachments</h3>
+						<div className="attachments-wrapper">
+							{
+								taskDetails.documents?.map(docs =>
+								{
+									const icon = docs.name.split(".").pop();
+									return (
+										<>
+											<div style={{ width: 80, height: "auto" }}>
+												<a href={docs.url} download={true}>
+													<FileIcon extension={icon} {...defaultStyles[icon]} />
+													<span style={{ fontWeight: "bold" }}>{docs.name}</span>
+												</a>
+											</div>
+										</>
+
+									);
+								})
+							}
+						</div></> : <></>}
 				</Col>
 				<Col xs={24} sm={24} md={24} lg={8} xl={6} style={{ paddingLeft: 20 }}>
 					<Select
@@ -252,7 +242,24 @@ const TaskInfo = () =>
 				</Col>
 			</Row>
 			<Modal title={`${modalHeader} Task`} open={modalOpen} onCancel={() => { setModalOpen(false); }} footer={null} className="create-task-modal">
-				<ProjectNewTaskForm formData={formData} method={modalHeader.toLowerCase()} taskDetails={taskDetails} />
+				<ProjectNewTaskForm method={modalHeader.toLowerCase()} taskDetails={taskDetails} closeModal={() => setModalOpen(false)} task_type={modalHeader == "Sub" ? "SUB_TASK" : "MAIN_TASK"} />
+			</Modal>
+			<Modal title="Attachments" open={attachmentModalOpen} onCancel={() => { setAttachmentModal(false); }} okText={"Update"} onOk={handleTaskUpdate}>
+				<Dragger
+					multiple={true}
+					customRequest={handleFileUpload}
+					defaultFileList={defaultFileList}
+					onRemove={(file) => handleFileRemove(file)}
+				>
+					<p className="ant-upload-drag-icon">
+						<InboxOutlined />
+					</p>
+					<p className="ant-upload-text">Click or drag file to this area to upload</p>
+					<p className="ant-upload-hint">
+						Support for a single or bulk upload. Strictly prohibited from uploading company data or other
+						banned files.
+					</p>
+				</Dragger>
 			</Modal>
 		</div>
 	);

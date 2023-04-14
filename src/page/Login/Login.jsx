@@ -11,6 +11,9 @@ const Login = () =>
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
+	const params = new URLSearchParams(window.location.search);
+	const redirect_url = params.get("redirect");
+
 
 	const handleBlur = (e) =>
 	{
@@ -54,7 +57,14 @@ const Login = () =>
 
 				localStorage.setItem("accessToken", response.data.result.accessToken);
 
-				navigate("/");
+				if (redirect_url)
+				{
+					return navigate(redirect_url);
+				}
+				else
+				{
+					return navigate("/");
+				}
 			}
 		}
 		catch (error)

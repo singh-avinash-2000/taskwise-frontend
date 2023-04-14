@@ -3,13 +3,16 @@ import TextArea from "antd/lib/input/TextArea";
 import { useEffect, useState } from "react";
 import { axiosClient } from "../../../config/axios";
 import { useNavigate } from "react-router";
+import { useStateContext } from "../../../context/ContextProvider";
 import './ProjectDataForm.css';
 
-const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method, project_id }) =>
+const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id }) =>
 {
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
 	const navigate = useNavigate();
+	const { projects, setProjects } = useStateContext();
+
 
 	const handleFormSubmit = async () =>
 	{
@@ -37,7 +40,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, fetchProjects, method, projec
 
 			if (method === "Add")
 			{
-				fetchProjects();
+				setProjects([...projects, response.data.result]);
 			}
 			else
 			{

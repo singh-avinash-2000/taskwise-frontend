@@ -155,28 +155,34 @@ const ProjectMembers = () =>
 
 	const closeModal = () =>
 	{
-		setIsModalOpen(false);
 		setInviteSent(false);
+		setIsModalOpen(false);
 	};
 
 	const handleSendInvite = async () =>
 	{
-		setIsLoading(true);
-		socket.emit("invite-sent", {
-			email: userEmail,
-			role: selectedPermission
-		});
+		try
+		{
+			setIsLoading(true);
+			await axiosClient.post(`/projects/${project_id}/members`, {
+				email: userEmail,
+				role: selectedPermission
+			});
 
-		const response = await axiosClient.post(`/projects/${project_id}/members`, {
-			email: userEmail,
-			role: selectedPermission
-		});
+			socket.emit("invite-sent", {
+				email: userEmail,
+				role: selectedPermission
+			});
 
-
-
-		console.log(response.data);
-		setIsLoading(false);
-		closeModal();
+			message.success("Invite sent successfully");
+			setIsLoading(false);
+			closeModal();
+		} catch (error)
+		{
+			message.error(error.response.data.message);
+			setIsLoading(false);
+			setIsModalOpen(false);
+		}
 	};
 
 	useEffect(() =>

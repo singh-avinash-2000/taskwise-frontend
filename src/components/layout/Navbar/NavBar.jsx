@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Popover, Tooltip, message, Badge, notification } from "antd";
+import { Popover, Tooltip, message, Badge, notification, Divider } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, HeatMapOutlined } from "@ant-design/icons";
 import { TbLogout } from "react-icons/tb";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
 import axios from "axios";
 import Notification from "../../ui/Notification/Notification";
 import Socket from "../../../config/socket";
+import { useStateContext } from "../../../context/ContextProvider";
 
 const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 {
@@ -14,6 +17,9 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 	const [notificationCount, setNotificationCount] = useState(0);
 	const [popOverOpen, setPopOverOpen] = useState(false);
 	const popOverRef = useRef(null);
+	const [settingsPopover, setSettingsPopover] = useState(false);
+	const { userDetails } = useStateContext();
+
 
 	const handleLogout = async () =>
 	{
@@ -56,6 +62,35 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		};
 	}, [Socket]);
 
+	const handleAccountNavigate = () =>
+	{
+		navigate(`/Account/${userDetails._id}`);
+		setSettingsPopover(false);
+	};
+
+	const handleOpenChange = (newOpen) =>
+	{
+		setSettingsPopover(newOpen);
+	};
+
+	const settingsContent = (
+		<div className="settings-content">
+			{/* <Tooltip title="Account"> */}
+			<div className="account-wrapper" onClick={handleAccountNavigate}>
+				<CgProfile size={30} />
+				<span>Account</span>
+			</div>
+			{/* </Tooltip> */}
+			<Divider className="settings-divider" />
+			{/* <Tooltip title="Logout"> */}
+			<div className="logout-wrapper" onClick={handleLogout}>
+				<TbLogout size={30} />
+				<span>Logout</span>
+			</div>
+			{/* </Tooltip> */}
+		</div>
+	);
+
 	return (
 		<div className="navbar-notification-main-wrapper">
 			{
@@ -70,14 +105,18 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			}
 
 			<div className="navbar-notification-wrapper">
-				<Tooltip title="Logout" className="logout-btn">
-					<TbLogout size={30} onClick={handleLogout} />
+				<Tooltip title="Notifications" placement="top">
+					<Popover placement="bottomRight" content={Notification} trigger="click" popupVisible={popOverOpen}>
+						<Badge count={notificationCount} className="navbar-belloutlined-icon">
+							<BellOutlined ref={popOverRef} />
+						</Badge>
+					</Popover>
 				</Tooltip>
-				<Popover placement="bottomRight" content={Notification} trigger="click" popupVisible={popOverOpen}>
-					<Badge count={notificationCount} className="navbar-belloutlined-icon">
-						<BellOutlined ref={popOverRef} />
-					</Badge>
-				</Popover>
+				<Tooltip title="Settings">
+					<Popover placement="bottomRight" content={settingsContent} trigger="click" open={settingsPopover} onOpenChange={handleOpenChange}>
+						<BsThreeDotsVertical size={20} />
+					</Popover>
+				</Tooltip>
 			</div>
 		</div>
 	);

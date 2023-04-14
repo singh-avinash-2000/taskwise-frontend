@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { debounce } from "lodash";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import NavBar from "../Navbar/NavBar";
 import SideBar from "../Sidebar/SideBar";
 import './ProjectLayout.css';
+import { axiosClient } from "../../../config/axios";
 
 const MainLayout = ({ onDashboard }) =>
 {
 	const [position, setPosition] = useState('relative');
 	const [screenHeight, setScreenHeight] = useState(700);
 	const [collapsed, setCollapsed] = useState(false);
+
 
 	const handleResize = debounce(() =>
 	{
@@ -26,6 +28,8 @@ const MainLayout = ({ onDashboard }) =>
 
 		setScreenHeight(window.innerHeight - 70);
 	}, 500);
+
+
 
 	useEffect(() =>
 	{

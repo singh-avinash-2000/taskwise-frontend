@@ -6,21 +6,24 @@ const StateContext = createContext();
 export const ContextProvider = ({ children }) =>
 {
 	const [userDetails, setUserDetails] = useState({});
-	const [projectDetails, setProjectDetails] = useState({});
+	const [projects, setProjects] = useState([]);
 	const [projectMembers, setProjectMembers] = useState({});
+	const [activeProjectName, setActiveProjectName] = useState("");
 	const [loading, setLoading] = useState(true);
 
-	const fetchUserData = async () =>
+	const fetchData = async () =>
 	{
 		setLoading(true);
-		const response = await axiosClient.get("/user");
-		setUserDetails(response.data.result);
+		const Userresponse = await axiosClient.get("/user");
+		setUserDetails(Userresponse.data.result);
+		const Projectresponse = await axiosClient.get("/projects");
+		setProjects(Projectresponse.data.result);
 		setLoading(false);
 	};
 
 	useEffect(() =>
 	{
-		fetchUserData();
+		fetchData();
 	}, []);
 
 	return (
@@ -28,9 +31,10 @@ export const ContextProvider = ({ children }) =>
 			value={
 				{
 					userDetails, setUserDetails,
-					projectDetails, setProjectDetails,
+					projects, setProjects,
 					projectMembers, setProjectMembers,
-					loading, setLoading
+					loading, setLoading,
+					activeProjectName, setActiveProjectName,
 				}}
 		>
 			{children}

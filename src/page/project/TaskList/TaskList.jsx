@@ -4,9 +4,11 @@ import { ClockCircleOutlined, MinusSquareOutlined, PlusSquareOutlined, CheckCirc
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
+import { useLocation } from "react-router-dom";
 import "./TaskList.css";
+import { useStateContext } from "../../../context/ContextProvider";
 
-const TaskList = () =>
+const TaskList = ({ project_name }) =>
 {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [assigneeMembers, setAssigneeMembers] = useState([]);
@@ -16,22 +18,11 @@ const TaskList = () =>
 	const navigate = useNavigate();
 	const { project_id } = useParams();
 
-	useEffect(() =>
-	{
-		fetchProjectName();
-	}, []);
-
-	const fetchProjectName = async () =>
-	{
-		const response = await axiosClient.get(`/projects/${project_id}`);
-		setProjectName(response.data.result.name);
-	};
 
 	const handleStatusChange = async (value, record) =>
 	{
 		try
 		{
-			const project_id = record.project;
 			const task_key = record.task_key;
 			await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, { status: value.toUpperCase() });
 			message.success(`Successfully updated ${record.task_key}'s status`);
@@ -72,7 +63,8 @@ const TaskList = () =>
 			dataIndex: 'assignee',
 			render: (assignee) => (
 				<>
-					<Avatar src="https://picsum.photos/200/300" /> {projectMembers[assignee]}
+
+					<Avatar src={assignee[0]?.profile_picture ? assignee[0]?.profile_picture : "https://picsum.photos/200/300"} /> {assignee[0].display_name}
 				</>
 			),
 		},
@@ -82,7 +74,7 @@ const TaskList = () =>
 			dataIndex: 'reporter',
 			render: (reporter) => (
 				<>
-					<Avatar src="https://picsum.photos/200/300" /> {projectMembers[reporter]}
+					<Avatar src={reporter?.profile_picture ? reporter.profile_picture : "https://picsum.photos/200/300"} /> {reporter.display_name}
 				</>
 			),
 		},
@@ -135,45 +127,45 @@ const TaskList = () =>
 		navigate(`/project/${project_id}/tasks/${row.task_key}`);
 	};
 
-	const fetchProjectMembers = async () =>
+	const fetchProjectData = async () =>
 	{
 		try
 		{
-			const response = await axiosClient.get(`/projects/${project_id}/members`);
+			const membersResponse = await axiosClient.get(`/projects/${project_id}/members`);
+			const tasksResponse = await axiosClient.get(`/projects/${project_id}/tasks`);
+
 			const membersList = {};
-			const members = response.data.result?.members?.map(r =>
+			const members = membersResponse.data.result?.members?.map((r) =>
 			{
-				membersList[r.user._id] = r.user.first_name + " " + r.user.last_name;
+				membersList[r.user._id] = `${r.user.first_name} ${r.user.last_name}`;
 				return {
-					label: r.user.first_name + " " + r.user.last_name,
-					value: r.user._id
+					label: `${r.user.first_name} ${r.user.last_name}`,
+					value: r.user._id,
+				};
+			});
+
+			let tasks = tasksResponse.data?.result;
+			tasks = tasks.map((t) =>
+			{
+				return {
+					...t,
+					key: t._id,
 				};
 			});
 
 			setAssigneeMembers(members);
 			setProjectMembers(membersList);
-		} catch (error)
-		{
-			console.log(error);
-		}
-
-	};
-
-	const fetchTaskList = async () =>
-	{
-		try
-		{
-			const response = await axiosClient.get(`/projects/${project_id}/tasks`);
-			let tasks = response.data?.result;
-			tasks = tasks.map(t =>
-			{
-				return {
-					...t,
-					key: t._id
-				};
-			});
-
 			setProjectTasks(tasks);
+
+			if (!tasksResponse.data?.result[0]?.project?.name)
+			{
+				const projectResponse = await axiosClient.get(`/projects/${project_id}`);
+				setProjectName(projectResponse.data?.result?.name);
+			}
+			else
+			{
+				setProjectName(tasksResponse.data?.result[0]?.project?.name);
+			}
 		} catch (error)
 		{
 			console.log(error);
@@ -182,9 +174,9 @@ const TaskList = () =>
 
 	useEffect(() =>
 	{
-		fetchProjectMembers();
-		fetchTaskList();
+		fetchProjectData();
 	}, []);
+
 
 	return (
 		<div>

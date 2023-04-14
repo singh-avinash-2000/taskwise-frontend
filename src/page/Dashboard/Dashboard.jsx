@@ -7,19 +7,14 @@ import { useEffect, useState } from "react";
 import ProjectDataForm from "../../components/ui/ProjectDataForm/ProjectDataForm";
 import { axiosClient } from "../../config/axios";
 import Socket from "../../config/socket";
+import { useStateContext } from "../../context/ContextProvider";
 
 const Dashboard = () =>
 {
 	const navigate = useNavigate();
 	const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
-	const [projects, setProjects] = useState([]);
 	const [options, setOptions] = useState([]);
-
-	async function fetchProjects()
-	{
-		const response = await axiosClient.get("/projects");
-		setProjects(response.data.result);
-	}
+	const { projects, setProjects } = useStateContext();
 
 	const handleSearch = debounce(async (value) =>
 	{
@@ -27,11 +22,6 @@ const Dashboard = () =>
 		setProjects(response.data.result);
 		setOptions(response.data.result.map(d => ({ value: d.name })));
 	}, 500);
-
-	useEffect(() =>
-	{
-		fetchProjects();
-	}, []);
 
 	const getInitals = (name) =>
 	{
@@ -74,7 +64,7 @@ const Dashboard = () =>
 					{
 						return (
 							<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4} key={id}>
-								<div className="new-project-div" style={{ backgroundColor: colourArray[id % 8] }} onClick={() => navigate(`/project/${d._id}/tasks`)}>
+								<div className="new-project-div" style={{ backgroundColor: colourArray[id % 8] }} onClick={() => navigate(`/project/${d._id}/tasks`, { state: { project_name: d.name } })}>
 									<span className="initials">{getInitals(d.name)}</span>
 								</div>
 								<h3 className="project-title">{d.name}</h3>
@@ -85,7 +75,7 @@ const Dashboard = () =>
 			</Row>
 
 			<Modal title="Add Project" open={newProjectModalOpen} onCancel={() => { setNewProjectModalOpen(false); }} footer={null}>
-				<ProjectDataForm setNewProjectModalOpen={setNewProjectModalOpen} fetchProjects={fetchProjects} method="Add" />
+				<ProjectDataForm setNewProjectModalOpen={setNewProjectModalOpen} method="Add" />
 			</Modal>
 		</div>
 	);

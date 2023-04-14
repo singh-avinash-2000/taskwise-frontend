@@ -3,7 +3,7 @@ import ProjectLayout from "../components/layout/Layout/ProjectLayout";
 import OnlyIfLoggedIn from "../components/ui/Auth/OnlyIfLoggedIn";
 import OnlyIfNotLoggedIn from "../components/ui/Auth/OnlyIfNotLoggedIn";
 import { ContextProvider } from "../context/ContextProvider";
-import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject, DefaultPage, EditProject, ForgotPassword, ResetPassword } from "../page";
+import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject, DefaultPage, EditProject, ForgotPassword, ResetPassword, Account } from "../page";
 
 const RouterComponent = () =>
 {
@@ -18,6 +18,7 @@ const RouterComponent = () =>
 			<Route element={<ContextProvider><OnlyIfLoggedIn /></ContextProvider>}>
 				<Route element={<ProjectLayout onDashboard={true} />}>
 					<Route path='/' element={<Dashboard />} />
+					<Route path='/Account/:userId' element={<Account />} />
 				</Route>
 				<Route element={<ProjectLayout onDashboard={false} />}>
 					<Route path="/project/:project_id/tasks" element={<TaskList />} />

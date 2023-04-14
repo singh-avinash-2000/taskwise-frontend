@@ -1,10 +1,154 @@
-import { Card, Col, Row, Image, Divider, Tabs } from "antd";
+import { Card, Col, Row, Image, Divider, Tabs, Descriptions, Button, Form, Input, Modal, message, Upload } from "antd";
 // import { EllipsisOutlined, SettingOutlined, EditOutlined } from "@ant-design/icons";
 import "./Account.css";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { axiosClient } from "../../../config/axios";
+import { useStateContext } from "../../../context/ContextProvider";
 
-const UserAccount = () => {
+const UserAccount = () =>
+{
+	const [profilePicture, setProfilePicture] = useState("");
+	const { userDetails, setUserDetails } = useStateContext();
 
-	const { Meta } = Card;
+	const changeISODatesToReadable = (ISOdate) =>
+	{
+		const date = new Date(ISOdate);
+		const options = { year: 'numeric', month: 'long', day: 'numeric' };
+		return date.toLocaleDateString('en-US', options);
+	};
+
+	// const { Meta } = Card;
+	const [form] = Form.useForm();
+
+	const Details = () =>
+	{
+		const [open, setOpen] = useState(false);
+		const [confirmLoading, setConfirmLoading] = useState(false);
+
+		const showModal = () =>
+		{
+			setOpen(true);
+		};
+
+		const handleOk = async () =>
+		{
+			setConfirmLoading(true);
+			try
+			{
+				const data = form.getFieldsValue();
+				const response = await axiosClient.put('/user', data);
+
+				response.data.result.created_at = changeISODatesToReadable(response?.data?.result?.created_at);
+				setUserDetails(response.data.result);
+				message.success("User details updated successfully");
+			} catch (error)
+			{
+				console.log(error);
+				message.error(error.response.data.message);
+			}
+			setOpen(false);
+			setConfirmLoading(false);
+		};
+
+		const handleCancel = () =>
+		{
+			setOpen(false);
+		};
+		return (
+			<div>
+				<Descriptions
+					title="User Details"
+					bordered
+					column={{
+						xxl: 4,
+						xl: 3,
+						lg: 3,
+						md: 3,
+						sm: 2,
+						xs: 1,
+					}}
+					extra={<Button type="primary" onClick={showModal}>Edit</Button>}
+				>
+					<Descriptions.Item label="First Name">
+						{userDetails?.first_name}
+					</Descriptions.Item>
+					<Descriptions.Item label="Last Name">
+						{userDetails?.last_name}
+					</Descriptions.Item>
+					<Descriptions.Item label="Display Name">
+						{userDetails?.display_name}
+					</Descriptions.Item>
+					<Descriptions.Item label="Email">
+						{userDetails?.email}
+					</Descriptions.Item>
+				</Descriptions>
+				<Modal
+					title="Edit User Details"
+					open={open}
+					onOk={handleOk}
+					confirmLoading={confirmLoading}
+					onCancel={handleCancel}
+					okText="Save Changes"
+				>
+					<Form
+						name="edit user details"
+						labelCol={{ span: 8 }}
+						wrapperCol={{ span: 16 }}
+						style={{ maxWidth: 600 }}
+						initialValues={{ remember: true }}
+						onFinish={handleOk}
+						autoComplete="off"
+						form={form}
+					>
+						<Form.Item
+							label="First Name"
+							name="first_name"
+							initialValue={userDetails?.first_name}
+						>
+							<Input placeholder="Enter your first name" />
+						</Form.Item>
+						<Form.Item
+							label="Last Name"
+							name="last_name"
+							initialValue={userDetails?.last_name}
+						>
+							<Input placeholder="Enter your last name" />
+						</Form.Item>
+						<Form.Item
+							label="Display Name"
+							name="display_name"
+							initialValue={userDetails?.display_name}
+						>
+							<Input placeholder="Enter your display name" />
+						</Form.Item>
+						<Form.Item
+							label="Email"
+							name="email"
+							initialValue={userDetails?.email}
+						>
+							<Input placeholder="Enter your email" />
+						</Form.Item>
+					</Form>
+				</Modal>
+			</div>
+		);
+	};
+
+	const Security = () =>
+	{
+		return (
+			<h1>Security</h1>
+		);
+	};
+
+	const Social = () =>
+	{
+		return (
+			<h1>Social</h1>
+		);
+	};
+
 	const tabs = [
 		{
 			label: `Details`,
@@ -23,27 +167,67 @@ const UserAccount = () => {
 		}
 	];
 
-	const cp = "https://images.unsplash.com/photo-1423479185712-25d4a4fe1006?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60";
-	const pp = "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
+
+
+
+	const { id } = useParams();
+
+	function fetchUserDetails()
+	{
+		userDetails.created_at = changeISODatesToReadable(userDetails.created_at);
+		setProfilePicture(userDetails.profile_picture ? userDetails?.profile_picture : "https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png");
+	}
+
+	const handleProfileImageUpload = async (options) =>
+	{
+		const formData = new FormData();
+		formData.append('files', options.file);
+		try
+		{
+			const uploadToS3 = await axiosClient.post('/misc/upload-all', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				}
+			});
+			const response = await axiosClient.patch('/user', { profile_picture: uploadToS3.data.result.url });
+			response.data.result.created_at = changeISODatesToReadable(response?.data?.result?.created_at);
+			setUserDetails(response.data.result);
+			setProfilePicture(uploadToS3.data.result.url);
+			message.success("Profile picture updated successfully");
+		}
+		catch (error)
+		{
+			console.log(error);
+			message.error(error.response.data.message);
+		}
+	};
+
+	useEffect(() =>
+	{
+		fetchUserDetails();
+	}, []);
 	return (
 		<Row gutter={[10, 15]}>
 			<Col xs={24} md={8} xl={8}>
 				<div className="card">
 					<div className="info-container">
-						<h2 className="name">@Avinash-UTL</h2>
+						<h2 className="name">{userDetails?.display_name}</h2>
 					</div>
 					<Divider />
 					<div className="image-container">
-						<Image src={cp} alt="profile-picture" className="image" />
-						{/* <Image src={pp} alt="profile-picture" className="image" /> */}
+						<Image src={profilePicture} alt="profile-picture" className="image" />
 					</div>
 					<Divider />
 					<div className="button-container">
-						<button className="upload-button">
-							Upload Photo
-						</button>
+						<Upload
+							accept="image/*"
+							customRequest={handleProfileImageUpload}
+							showUploadList={false}
+						>
+							<Button type="primary" className="upload-button" >Upload Photo</Button>
+						</Upload>
 					</div>
-					<h3 className="display-name">Member Since: 29 September 2022</h3>
+					<h3 className="display-name">Member Since: {userDetails?.created_at}</h3>
 				</div>
 			</Col>
 			<Col xs={24} md={16} xl={16}>
@@ -65,22 +249,6 @@ const UserAccount = () => {
 	);
 };
 
-const Details = () => {
-	return (
-		<h1>Details</h1>
-	);
-};
 
-const Security = () => {
-	return (
-		<h1>Security</h1>
-	);
-};
-
-const Social = () => {
-	return (
-		<h1>Social</h1>
-	);
-};
 
 export default UserAccount;

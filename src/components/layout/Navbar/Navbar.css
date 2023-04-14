@@ -45,6 +45,28 @@
     cursor: pointer;
 }
 
+.settings-content {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.settings-divider {
+    margin-block: 5px;
+}
+
+.account-wrapper, .logout-wrapper {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.account-wrapper:hover, .logout-wrapper:hover {
+    background-color: #f9f9f9;
+}
+
 @media only screen and (max-width: 450px) 
 {
 	.navbar-menu-icon {

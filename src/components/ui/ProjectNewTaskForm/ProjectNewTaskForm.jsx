@@ -22,7 +22,7 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 
 	const handleFormSubmit = async () =>
 	{
-		console.log("fileList: ", fileWithURL);
+		// console.log("fileList: ", fileWithURL);
 		try
 		{
 			const valid = await form.validateFields();
@@ -256,7 +256,6 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 							defaultFileList={defaultFileList}
 							onChange={({ file, fileList }) => setDefaultFileList(fileList)}
 							onRemove={(file) => handleFileRemove(file)}
-
 						>
 							<p className="ant-upload-drag-icon">
 								<InboxOutlined />

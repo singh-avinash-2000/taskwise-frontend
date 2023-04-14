@@ -10,7 +10,7 @@ import { FiEdit } from "react-icons/fi";
 import { GrPlan } from "react-icons/gr";
 import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { axiosClient } from "../../../config/axios";
+import { useStateContext } from "../../../context/ContextProvider";
 
 function getIconComponent(iconName)
 {
@@ -44,24 +44,53 @@ function getIconComponent(iconName)
 const SideBar = ({ setCollapsed }) =>
 {
 	const { project_id } = useParams();
-	const [projectName, setProjectName] = useState("");
-
-	const fetchProjectName = async () =>
+	const NavHeader = ({ title, children, setCollapsed }) =>
 	{
-		const response = await axiosClient.get(`/projects/${project_id}`);
-		setProjectName(response.data.result.name);
+		return (
+			<div className="nav-header-wrapper">
+				{getIconComponent(title)}<span className="nav-header-title">{title}</span>
+				{
+					children.map((child) =>
+					{
+						return (
+							<NavItem title={child.title} to={child.to} key={child.title} setCollapsed={setCollapsed} />
+						);
+					})
+				}
+			</div>
+		);
 	};
 
-
-	useEffect(() =>
+	const NavItem = ({ title, to, setCollapsed }) =>
 	{
-		fetchProjectName();
-	}, []);
+		const handleClick = () =>
+		{
+			if (window.innerWidth < 950 || rdd.isMobile)
+			{
+				setCollapsed(true);
+			}
+		};
+
+
+		return (
+			<NavLink
+				to={to}
+				className={
+					({ isActive }) => isActive ? "nav-item-active nav-item-fixed-style" : "nav-item-fixed-style"
+				}
+				onClick={handleClick}>
+				<div id="nav-item-custom">
+					{getIconComponent(title)}<span className="nav-item-custom-span">{title}</span>
+				</div>
+			</NavLink>
+		);
+	};
+
 	return (
 		<div id="sidebar" >
 			<div className="sidebar-wrapper">
 				<div className="project-title-div">
-					<span className="project-title">{projectName}</span>
+					<span className="project-title">"TESTING"</span>
 				</div>
 				<div className="nav-entries">
 					{
@@ -78,45 +107,6 @@ const SideBar = ({ setCollapsed }) =>
 	);
 };
 
-const NavHeader = ({ title, children, setCollapsed }) =>
-{
-	return (
-		<div className="nav-header-wrapper">
-			{getIconComponent(title)}<span className="nav-header-title">{title}</span>
-			{
-				children.map((child) =>
-				{
-					return (
-						<NavItem title={child.title} to={child.to} key={child.title} setCollapsed={setCollapsed} />
-					);
-				})
-			}
-		</div>
-	);
-};
 
-const NavItem = ({ title, to, setCollapsed }) =>
-{
-	const handleClick = () =>
-	{
-		if (window.innerWidth < 950 || rdd.isMobile)
-		{
-			setCollapsed(true);
-		}
-	};
 
-	return (
-
-		<NavLink
-			to={to}
-			className={
-				({ isActive }) => isActive ? "nav-item-active nav-item-fixed-style" : "nav-item-fixed-style"
-			}
-			onClick={handleClick}>
-			<div id="nav-item-custom">
-				{getIconComponent(title)}<span className="nav-item-custom-span">{title}</span>
-			</div>
-		</NavLink>
-	);
-};
 export default SideBar;

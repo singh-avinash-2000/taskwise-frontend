@@ -1,68 +1,39 @@
-ADD PROJECT
-	NAME
-	STARTING DATE
-	LOGO
-	MEMBERS
+1) CHECK FOR ALREADY EXISTING MEMBERS WHEN ADD NEW MEMBERS - DONE
+2) FETCH PROJECTS WITH JOINED/ACCEPTED STATUS - DONE
+3) USER PROFILE DETAILS UPDATE - DONE
+4) IN COUNTER SCHEMA ID SHOULD BE PROJECT ID AND NOT TASKS - PENDING
+5) CHECK FOR REDIRECT ROUTE STATE, IF EXISTS REDIRECT THE USER POST LOGIN. - DONE
+6) USE ALREADY CONFIGURED CONTEXT API FOR PROJECT, PROJECT MEMBERS, USER DETAILS - WHEREVER USED. - DONE
+7) MODIFY FETCH PROJECT LIST API, MAP OVER PROJECT LIST AND MAKE THE USER JOIN THOSE SOCKET ROOM (ROOM ID WILL BE PROJECT ID). - PENDING
+8) ADD A TAG FOR PRIORITY -> RED - URGENT, BLUE - LOW, GREEN - MEDIUM, YELLOW - HIGH, ALSO CHANGE PRIORITY TO WORD CASE I.E. URGENT -> rgent. - PENDING
+9) when an admin or an owner changes member permission. test this and make appropriate changes. - PENDING
+10) display attached file list in task details - PENDING
+11) add sub task -> modal should be opened with task type and task_key already selected and disabled - PENDING
+12) attach new file or remove a file from a task
+13) history for a task details
+14) subtasks for a task detail - PENDING
+15) show only date in created and updated - DONE
+16) COSMETIC AND FUNCTIONAL FIXES ON REGISTER PAGE
+ 
+-----------------
+10) CREATE A CUSTOM 404 NOT FOUND FALLBACK PAGE - REFER (https://ant.design/components/result) - PENDING
 
-EDIT PROJECT
-
-PROJECT SETTINGS
-	ADD REMOVE MEMBERS
-	LIMIT USERS
-	MAX DEADLINE FOR TASKS
-	DEFAULT REPORTING PERSON
-	MEMBER PERMISSIONS - CAN VIEW ALL TASKS OR ONLY ASSIGNED TASKS
-	ADD REMOVE STATUS
-	ADD REMOVE TASK TYPE
-	DEFAULT STATUS
-
-TEAMS
-	CREATE TEAMS
-
-TASKS
-	ADD TASK
-		-AUTO GENERATE ID
-		-TITLE
-		-DESCRIPTION
-		-IMAGES
-		-PRIORITY
-		-ISSUE TYPE - FEATURE REQUEST, BUG, CHANGE REQUEST
-
-	ASSIGN TO USERS
-	NOTIFICATION ON STATUS CHANGE - ASSIGNEE AND DEFAULT REPORTING PERSON
-
-KANBAN BOARD
-	DRAG AND DROP DISPLAY OF ALL TASKS UNDER THEIR STATUS
-
-	
--------------
-EXPERIMENTAL:
---------------
-ROLES
-CHAT
-WEBRTC
+CHAT AND DOCUMENT IN SIDEBAR SHOULD BE DYNAMIC (SHOW/HIDE BASED ON PROJECT SETTINGS)
 
 
-==========
-Home page
----------
+NOTIFICATION LIST:
+------------------
 
-LIST ALL TASKS FOR TODAY - ALL PROJECTS - VIEW ALL OPTION
-PROJECT CARDS
-FAVOURITE PROJECTS
+collaboration-invite => when we add a new member to a project (member)
 
-==========
+new-member-joined => when a new member joins a project (project)
 
-==========
-SIDEBAR
-==========
+task-status-changed => when a user changes a task status (project)
+
+member-permission-changed => when an admin or an owner changes member permission.
+
+new-task-assigned => when a new task is assgined to you (member)
+
+your-task-updated => when someone updates your task same for edit task (member)
 
 
-
-TASKS
-=======
-
-create a global style class for global settings
--title
--margins
--paddings

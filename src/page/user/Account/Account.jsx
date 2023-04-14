@@ -1,7 +1,6 @@
 import { Card, Col, Row, Image, Divider, Tabs, Descriptions, Button, Form, Input, Modal, message, Upload } from "antd";
 // import { EllipsisOutlined, SettingOutlined, EditOutlined } from "@ant-design/icons";
 import "./Account.css";
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { axiosClient } from "../../../config/axios";
 import { useStateContext } from "../../../context/ContextProvider";
@@ -58,7 +57,6 @@ const UserAccount = () =>
 		return (
 			<div>
 				<Descriptions
-					title="User Details"
 					bordered
 					column={{
 						xxl: 4,
@@ -166,11 +164,6 @@ const UserAccount = () =>
 			children: <Social />,
 		}
 	];
-
-
-
-
-	const { id } = useParams();
 
 	function fetchUserDetails()
 	{

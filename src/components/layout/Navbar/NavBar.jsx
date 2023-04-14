@@ -64,7 +64,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 
 	const handleAccountNavigate = () =>
 	{
-		navigate(`/Account/${userDetails._id}`);
+		navigate(`/user/profile`);
 		setSettingsPopover(false);
 	};
 

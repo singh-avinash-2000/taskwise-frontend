@@ -8,45 +8,21 @@ import { axiosClient } from "../../../config/axios";
 
 import './TaskInfo.css';
 import { useForm } from "antd/lib/form/Form";
+import { useStateContext } from "../../../context/ContextProvider";
 
 const TaskInfo = () =>
 {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [formData] = useForm();
-	const [assigneeMembers, setAssigneeMembers] = useState([]);
 	const [taskDetails, setTaskDetails] = useState({});
-	const [membersList, setMembersList] = useState({});
 	const { project_id, task_key } = useParams();
 	const [modalHeader, setModalHeader] = useState("");
-	const [projectName, setProjectName] = useState("");
+	const { activeProjectName, projectMembersMap } = useStateContext();
 
 
 	const onChange = (key) =>
 	{
 		console.log(key);
-	};
-
-	const fetchProjectMembers = async () =>
-	{
-		try
-		{
-			const response = await axiosClient.get(`/projects/${project_id}/members`);
-			let temp = {};
-			setProjectName(response?.data?.result?.name);
-			const members = response?.data?.result?.members?.map(r =>
-			{
-				temp[r.user._id] = r.user.first_name + " " + r.user.last_name;
-				return {
-					label: r.user.first_name + " " + r.user.last_name,
-					value: r.user._id
-				};
-			});
-			setMembersList(temp);
-			setAssigneeMembers(members);
-		} catch (error)
-		{
-			console.log(error);
-		}
 	};
 
 	const items = [
@@ -100,15 +76,15 @@ const TaskInfo = () =>
 		}
 	};
 
-
-	// const getMemberName = (member_id) =>
-	// {
-	// 	return membersList[member_id];
-	// };
+	const changeISODatesToReadable = (ISOdate) =>
+	{
+		const date = new Date(ISOdate);
+		const options = { year: 'numeric', month: 'long', day: 'numeric' };
+		return date.toLocaleDateString('en-US', options);
+	};
 
 	useEffect(() =>
 	{
-		fetchProjectMembers();
 		fetchTaskDetails();
 	}, []);
 
@@ -117,7 +93,7 @@ const TaskInfo = () =>
 			<Breadcrumb
 				items={[
 					{
-						title: projectName,
+						title: activeProjectName,
 					},
 					{
 						title: "Tasks"
@@ -239,7 +215,7 @@ const TaskInfo = () =>
 										<h3>Assignee</h3>
 									</td>
 									<td>
-										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{taskDetails?.assignee ? membersList[taskDetails?.assignee[0]._id] : ''}</span>
+										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{projectMembersMap[taskDetails?.assignee]?.display_name}</span>
 									</td>
 								</tr>
 								<tr className="task-table-row">
@@ -247,7 +223,8 @@ const TaskInfo = () =>
 										<h3 >Reporter </h3>
 									</td>
 									<td>
-										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{taskDetails?.reporter ? membersList[taskDetails?.reporter?._id] : ''}</span>
+										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{projectMembersMap[taskDetails?.reporter]?.display_name}
+										</span>
 									</td>
 								</tr>
 								<tr className="task-table-row">
@@ -255,7 +232,7 @@ const TaskInfo = () =>
 										<h3 >Created </h3>
 									</td>
 									<td>
-										<h3 style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>{taskDetails?.created_at}</h3>
+										<h3 style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>{changeISODatesToReadable(taskDetails?.created_at)}</h3>
 									</td>
 								</tr>
 								<tr className="task-table-row">
@@ -263,7 +240,7 @@ const TaskInfo = () =>
 										<h3 >Updated </h3>
 									</td>
 									<td>
-										<h3 style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>{taskDetails?.updated_at}</h3>
+										<h3 style={{ fontSize: 18, fontWeight: "600", color: "gray" }}>{changeISODatesToReadable(taskDetails?.updated_at)}</h3>
 									</td>
 								</tr>
 							</tbody>
@@ -275,7 +252,7 @@ const TaskInfo = () =>
 				</Col>
 			</Row>
 			<Modal title={`${modalHeader} Task`} open={modalOpen} onCancel={() => { setModalOpen(false); }} footer={null} className="create-task-modal">
-				<ProjectNewTaskForm formData={formData} assigneeMembers={assigneeMembers} method={modalHeader.toLowerCase()} taskDetails={taskDetails} />
+				<ProjectNewTaskForm formData={formData} method={modalHeader.toLowerCase()} taskDetails={taskDetails} />
 			</Modal>
 		</div>
 	);

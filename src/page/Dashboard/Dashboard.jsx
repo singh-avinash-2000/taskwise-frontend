@@ -6,7 +6,6 @@ import "./Dashboard.css";
 import { useEffect, useState } from "react";
 import ProjectDataForm from "../../components/ui/ProjectDataForm/ProjectDataForm";
 import { axiosClient } from "../../config/axios";
-import Socket from "../../config/socket";
 import { useStateContext } from "../../context/ContextProvider";
 
 const Dashboard = () =>
@@ -14,7 +13,7 @@ const Dashboard = () =>
 	const navigate = useNavigate();
 	const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
 	const [options, setOptions] = useState([]);
-	const { projects, setProjects } = useStateContext();
+	const { projects, setProjects, setActiveProjectName } = useStateContext();
 
 	const handleSearch = debounce(async (value) =>
 	{
@@ -36,6 +35,11 @@ const Dashboard = () =>
 	};
 
 	const colourArray = ["#abdbe3", "#eeeee4", "#ffffcc", "#eab676", "#ffccff", "#cce7e8", "#edb879", "#ccffcc"];
+
+	useEffect(() =>
+	{
+		setActiveProjectName("");
+	}, []);
 
 	return (
 		<div className="project-container">

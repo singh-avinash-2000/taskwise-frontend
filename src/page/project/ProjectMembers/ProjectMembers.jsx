@@ -5,7 +5,7 @@ import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 import { axiosClient } from "../../../config/axios";
 
 import './ProjectMembers.css';
-import socket from "../../../config/socket";
+import { useStateContext } from "../../../context/ContextProvider";
 
 const { Option } = Select;
 
@@ -13,8 +13,8 @@ const ProjectMembers = () =>
 {
 	const [isLoading, setIsLoading] = useState(false);
 	const { project_id } = useParams();
-	const [projectName, setProjectName] = useState("");
 	const [data, setData] = useState([]);
+	const { activeProjectName } = useStateContext();
 
 	const confirm = async (_, record) =>
 	{
@@ -121,10 +121,8 @@ const ProjectMembers = () =>
 	{
 		try
 		{
-
 			const response = await axiosClient.get(`/projects/${project_id}/members`);
-			setProjectName(response.data.result.name);
-			const memberDetails = response.data?.result?.members.map((member) =>
+			const memberDetails = response.data?.result.map((member) =>
 			{
 				return {
 					key: member.user._id,
@@ -169,11 +167,6 @@ const ProjectMembers = () =>
 				role: selectedPermission
 			});
 
-			socket.emit("invite-sent", {
-				email: userEmail,
-				role: selectedPermission
-			});
-
 			message.success("Invite sent successfully");
 			setIsLoading(false);
 			closeModal();
@@ -195,7 +188,7 @@ const ProjectMembers = () =>
 			<Breadcrumb
 				items={[
 					{
-						title: projectName,
+						title: activeProjectName,
 					},
 					{
 						title: "Members"
@@ -216,7 +209,7 @@ const ProjectMembers = () =>
 						?
 						<div className="invite-form">
 							<MailOutlined style={{ fontSize: 20, margin: 20, opacity: 0.5 }} className="invite-form-mailoutlined-icon" />
-							<h3>Invite user to {projectName}</h3>
+							<h3>Invite user to {activeProjectName}</h3>
 							<Space.Compact style={{ width: '100%' }} >
 								<Input placeholder="Please input user email to send invite" value={userEmail} onChange={(e) => { setUserEmail(e.target.value); }} />
 								<Select style={{ width: 100 }} value={selectedPermission} onChange={(value) => { setSelectedPermission(value); }}>
@@ -233,7 +226,7 @@ const ProjectMembers = () =>
 						<Result
 							status="success"
 							title="Successfully sent invite!"
-							subTitle={`User Avinash@2000 has been invited to ${projectName}`}
+							subTitle={`User Avinash@2000 has been invited to ${activeProjectName}`}
 						/>
 					}
 				</Spin>

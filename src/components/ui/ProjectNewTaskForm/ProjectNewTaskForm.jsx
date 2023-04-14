@@ -6,10 +6,11 @@ import ReactQuill from 'react-quill';
 import './ProjectNewTaskForm.css';
 import { axiosClient } from "../../../config/axios";
 import { useParams } from "react-router-dom";
+import { useStateContext } from "../../../context/ContextProvider";
 
 const { Dragger } = Upload;
 
-const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
+const ProjectNewTaskForm = ({ method, taskDetails }) =>
 {
 	const [form] = Form.useForm();
 	const [hideTaskKey, setHideTaskKey] = useState(false);
@@ -20,9 +21,10 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 	const [defaultFileList, setDefaultFileList] = useState([]);
 	const [fileWithURL, setFileWithURL] = useState([]);
 
+	const { labelMembers } = useStateContext();
+
 	const handleFormSubmit = async () =>
 	{
-		// console.log("fileList: ", fileWithURL);
 		try
 		{
 			const valid = await form.validateFields();
@@ -245,7 +247,7 @@ const ProjectNewTaskForm = ({ assigneeMembers, method, taskDetails }) =>
 								width: '100%',
 							}}
 							placeholder="Please select assignees"
-							options={assigneeMembers}
+							options={labelMembers}
 						/>
 					</Form.Item>
 					{method !== "update" && <Form.Item label="Documents" valuePropName="files" name="documents">

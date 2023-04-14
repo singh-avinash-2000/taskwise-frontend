@@ -18,7 +18,7 @@ const RouterComponent = () =>
 			<Route element={<ContextProvider><OnlyIfLoggedIn /></ContextProvider>}>
 				<Route element={<ProjectLayout onDashboard={true} />}>
 					<Route path='/' element={<Dashboard />} />
-					<Route path='/Account/:userId' element={<Account />} />
+					<Route path='/user/profile' element={<Account />} />
 				</Route>
 				<Route element={<ProjectLayout onDashboard={false} />}>
 					<Route path="/project/:project_id/tasks" element={<TaskList />} />

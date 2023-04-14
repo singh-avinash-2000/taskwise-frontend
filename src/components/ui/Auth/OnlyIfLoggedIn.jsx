@@ -18,17 +18,14 @@ const OnlyIfLoggedIn = () =>
 		}
 		else
 		{
-			if (!loading)
-			{
-				Socket.connect();
-			}
+			Socket.connect();
 		}
 
 		return () =>
 		{
 			Socket.disconnect();
 		};
-	}, [loading]);
+	}, []);
 
 	return (
 		<Outlet />

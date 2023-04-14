@@ -11,6 +11,7 @@ import { GrPlan } from "react-icons/gr";
 import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { useStateContext } from "../../../context/ContextProvider";
+import { Spin } from "antd";
 
 function getIconComponent(iconName)
 {
@@ -44,6 +45,8 @@ function getIconComponent(iconName)
 const SideBar = ({ setCollapsed }) =>
 {
 	const { project_id } = useParams();
+	const { activeProjectName } = useStateContext();
+
 	const NavHeader = ({ title, children, setCollapsed }) =>
 	{
 		return (
@@ -90,7 +93,7 @@ const SideBar = ({ setCollapsed }) =>
 		<div id="sidebar" >
 			<div className="sidebar-wrapper">
 				<div className="project-title-div">
-					<span className="project-title">"TESTING"</span>
+					<span className="project-title">{activeProjectName || <Spin />}</span>
 				</div>
 				<div className="nav-entries">
 					{

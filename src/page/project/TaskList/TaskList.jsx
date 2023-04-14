@@ -4,21 +4,16 @@ import { ClockCircleOutlined, MinusSquareOutlined, PlusSquareOutlined, CheckCirc
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
-import { useLocation } from "react-router-dom";
 import "./TaskList.css";
 import { useStateContext } from "../../../context/ContextProvider";
 
 const TaskList = ({ project_name }) =>
 {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [assigneeMembers, setAssigneeMembers] = useState([]);
-	const [projectMembers, setProjectMembers] = useState([]);
 	const [projectTasks, setProjectTasks] = useState([]);
-	const [projectName, setProjectName] = useState("");
 	const navigate = useNavigate();
 	const { project_id } = useParams();
-
-
+	const { activeProjectName, projectMembersMap, loading } = useStateContext();
 	const handleStatusChange = async (value, record) =>
 	{
 		try
@@ -64,7 +59,7 @@ const TaskList = ({ project_name }) =>
 			render: (assignee) => (
 				<>
 
-					<Avatar src={assignee[0]?.profile_picture ? assignee[0]?.profile_picture : "https://picsum.photos/200/300"} /> {assignee[0].display_name}
+					<Avatar src={projectMembersMap[assignee]?.profile_picture || "https://picsum.photos/200/300"} /> {projectMembersMap[assignee]?.display_name}
 				</>
 			),
 		},
@@ -74,7 +69,7 @@ const TaskList = ({ project_name }) =>
 			dataIndex: 'reporter',
 			render: (reporter) => (
 				<>
-					<Avatar src={reporter?.profile_picture ? reporter.profile_picture : "https://picsum.photos/200/300"} /> {reporter.display_name}
+					<Avatar src={projectMembersMap[reporter]?.profile_picture || "https://picsum.photos/200/300"} /> {projectMembersMap[reporter]?.display_name}
 				</>
 			),
 		},
@@ -131,19 +126,7 @@ const TaskList = ({ project_name }) =>
 	{
 		try
 		{
-			const membersResponse = await axiosClient.get(`/projects/${project_id}/members`);
 			const tasksResponse = await axiosClient.get(`/projects/${project_id}/tasks`);
-
-			const membersList = {};
-			const members = membersResponse.data.result?.members?.map((r) =>
-			{
-				membersList[r.user._id] = `${r.user.first_name} ${r.user.last_name}`;
-				return {
-					label: `${r.user.first_name} ${r.user.last_name}`,
-					value: r.user._id,
-				};
-			});
-
 			let tasks = tasksResponse.data?.result;
 			tasks = tasks.map((t) =>
 			{
@@ -153,19 +136,7 @@ const TaskList = ({ project_name }) =>
 				};
 			});
 
-			setAssigneeMembers(members);
-			setProjectMembers(membersList);
 			setProjectTasks(tasks);
-
-			if (!tasksResponse.data?.result[0]?.project?.name)
-			{
-				const projectResponse = await axiosClient.get(`/projects/${project_id}`);
-				setProjectName(projectResponse.data?.result?.name);
-			}
-			else
-			{
-				setProjectName(tasksResponse.data?.result[0]?.project?.name);
-			}
 		} catch (error)
 		{
 			console.log(error);
@@ -174,8 +145,11 @@ const TaskList = ({ project_name }) =>
 
 	useEffect(() =>
 	{
-		fetchProjectData();
-	}, []);
+		if (!loading)
+		{
+			fetchProjectData();
+		}
+	}, [loading]);
 
 
 	return (
@@ -183,7 +157,7 @@ const TaskList = ({ project_name }) =>
 			<Breadcrumb
 				items={[
 					{
-						title: projectName,
+						title: activeProjectName,
 					},
 					{
 						title: "Tasks"
@@ -213,7 +187,7 @@ const TaskList = ({ project_name }) =>
 			/>
 
 			<Modal title="Add Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null} className="create-task-modal">
-				<ProjectNewTaskForm assigneeMembers={assigneeMembers} method="add" taskDetails={{}} />
+				<ProjectNewTaskForm method="add" taskDetails={{}} />
 			</Modal>
 		</div>
 	);

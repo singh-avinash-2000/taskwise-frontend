@@ -13,3 +13,4 @@ export { default as EditProject } from "./project/EditProject/EditProject";
 export { default as ForgotPassword } from "./ForgotPassword/ForgotPassword";
 export { default as ResetPassword } from "./ResetPassword/ResetPassword";
 export { default as Account } from "./User/Account/Account";
+export { default as InviteAccept } from "./project/InviteAccept/InviteAccept";

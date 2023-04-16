@@ -19,6 +19,7 @@ export const ContextProvider = ({ children }) =>
 		setUserDetails(Userresponse.data.result);
 		const Projectresponse = await axiosClient.get("/projects");
 		setProjects(Projectresponse.data.result);
+		setLoading(false);
 	};
 
 	useEffect(() =>

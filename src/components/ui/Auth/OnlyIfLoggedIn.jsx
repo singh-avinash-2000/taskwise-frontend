@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from "react-router-dom";
 import Socket from "../../../config/socket";
 import { useStateContext } from "../../../context/ContextProvider";
+import { Skeleton } from 'antd';
 
 const OnlyIfLoggedIn = () =>
 {
@@ -14,7 +15,8 @@ const OnlyIfLoggedIn = () =>
 
 		if (!token)
 		{
-			navigate("/login");
+			const path = window.location.pathname;
+			navigate("/login?redirect=" + path);
 		}
 		else
 		{
@@ -27,9 +29,16 @@ const OnlyIfLoggedIn = () =>
 		};
 	}, []);
 
-	return (
-		<Outlet />
-	);
+	if (loading)
+	{
+		return <Skeleton active />;
+	}
+	else 
+	{
+		return (
+			<Outlet />
+		);
+	}
 };
 
 export default OnlyIfLoggedIn;

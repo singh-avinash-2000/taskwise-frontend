@@ -89,7 +89,6 @@ const ProjectMembers = () =>
 										disabled: true,
 									}
 								]}
-								disabled={data === 'OWNER'}
 								onChange={(value) => handleActionChange(value, record)}
 							/>
 						</Space>

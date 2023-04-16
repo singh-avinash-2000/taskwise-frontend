@@ -33,7 +33,6 @@ const MainLayout = ({ onDashboard }) =>
 
 	const fetchData = async () =>
 	{
-		setLoading(true);
 		const projectResponse = await axiosClient.get(`/projects/${project_id}`);
 		const result = projectResponse.data.result;
 

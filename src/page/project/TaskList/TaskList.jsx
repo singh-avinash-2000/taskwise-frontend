@@ -13,7 +13,7 @@ const TaskList = ({ project_name }) =>
 	const [projectTasks, setProjectTasks] = useState([]);
 	const navigate = useNavigate();
 	const { project_id } = useParams();
-	const { activeProjectName, projectMembersMap, loading } = useStateContext();
+	const { activeProjectName, projectMembersMap } = useStateContext();
 	const handleStatusChange = async (value, record) =>
 	{
 		try

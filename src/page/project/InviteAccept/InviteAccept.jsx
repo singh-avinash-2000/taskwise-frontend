@@ -121,8 +121,8 @@ function InviteAccept()
 					</Col>
 					<Col span={24}>
 						<div style={{ textAlign: 'right' }}>
-							<Button style={{ marginRight: 16 }} onClick={(e) => handleInvitation(e, "ACCEPT")}>Accept</Button>
-							<Button type="danger" style={{ backgroundColor: '#FF0000 !important' }} onClick={(e) => handleInvitation(e, "REJECT")}>Reject</Button>
+							<Button style={{ marginRight: 16 }} onClick={(e) => handleInvitation(e, "JOINED")}>Accept</Button>
+							<Button type="danger" style={{ backgroundColor: '#FF0000 !important' }} onClick={(e) => handleInvitation(e, "REJECTED")}>Reject</Button>
 						</div>
 					</Col>
 				</Row>

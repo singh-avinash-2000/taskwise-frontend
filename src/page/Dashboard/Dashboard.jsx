@@ -13,7 +13,8 @@ const Dashboard = () =>
 	const navigate = useNavigate();
 	const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
 	const [options, setOptions] = useState([]);
-	const { projects, setProjects, setActiveProjectName } = useStateContext();
+	const { setActiveProjectName } = useStateContext();
+	const [projects, setProjects,] = useState([]);
 
 	const handleSearch = debounce(async (value) =>
 	{
@@ -21,6 +22,18 @@ const Dashboard = () =>
 		setProjects(response.data.result);
 		setOptions(response.data.result.map(d => ({ value: d.name })));
 	}, 500);
+
+	const fetchProjects = async () =>
+	{
+		try
+		{
+			const response = await axiosClient.get("/projects");
+			setProjects(response.data.result);
+		} catch (error)
+		{
+			console.log(error);
+		}
+	};
 
 	const getInitals = (name) =>
 	{
@@ -39,6 +52,7 @@ const Dashboard = () =>
 	useEffect(() =>
 	{
 		setActiveProjectName("");
+		fetchProjects();
 	}, []);
 
 	return (
@@ -79,7 +93,7 @@ const Dashboard = () =>
 			</Row>
 
 			<Modal title="Add Project" open={newProjectModalOpen} onCancel={() => { setNewProjectModalOpen(false); }} footer={null}>
-				<ProjectDataForm setNewProjectModalOpen={setNewProjectModalOpen} method="Add" />
+				<ProjectDataForm setNewProjectModalOpen={setNewProjectModalOpen} method="Add" fetchProjects={fetchProjects} />
 			</Modal>
 		</div>
 	);

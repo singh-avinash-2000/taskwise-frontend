@@ -8,7 +8,7 @@ import { FaTasks } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FiEdit } from "react-icons/fi";
 import { GrPlan } from "react-icons/gr";
-import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText } from "react-icons/ai";
+import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText, AiOutlineDelete } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { useStateContext } from "../../../context/ContextProvider";
 import { Spin } from "antd";
@@ -37,6 +37,8 @@ function getIconComponent(iconName)
 			return <AiOutlineFileText />;
 		case 'Edit Project':
 			return <FiEdit />;
+		case 'Delete Project':
+			return <AiOutlineDelete />;
 		default:
 			return null; // or an error message
 	}

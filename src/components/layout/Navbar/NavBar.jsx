@@ -18,8 +18,6 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 	const [popOverOpen, setPopOverOpen] = useState(false);
 	const popOverRef = useRef(null);
 	const [settingsPopover, setSettingsPopover] = useState(false);
-	const { userDetails } = useStateContext();
-
 
 	const handleLogout = async () =>
 	{
@@ -41,19 +39,10 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 
 	useEffect(() =>
 	{
-		Socket.on("collaboration-invite", (data, callback) =>
+		Socket.on("new-notification", (data) =>
 		{
-
-			console.log(data);
-			message.info({ content: "You are invited to collaborate", icon: <BellOutlined /> });
+			message.info({ content: data.message, icon: <BellOutlined /> });
 			setNotificationCount(notificationCount + 1);
-			callback("success");
-		});
-
-		Socket.on("reached-here", (data) =>
-		{
-			console.log(data);
-			message.info({ content: "Your code reached there", icon: <BellOutlined /> });
 		});
 
 		return () =>
@@ -78,14 +67,14 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			{/* <Tooltip title="Account"> */}
 			<div className="account-wrapper" onClick={handleAccountNavigate}>
 				<CgProfile size={30} />
-				<span>Account</span>
+				<span style={{ fontWeight: "bold" }}>Profile</span>
 			</div>
 			{/* </Tooltip> */}
 			<Divider className="settings-divider" />
 			{/* <Tooltip title="Logout"> */}
 			<div className="logout-wrapper" onClick={handleLogout}>
 				<TbLogout size={30} />
-				<span>Logout</span>
+				<span style={{ fontWeight: "bold" }}>Logout</span>
 			</div>
 			{/* </Tooltip> */}
 		</div>
@@ -105,18 +94,18 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			}
 
 			<div className="navbar-notification-wrapper">
-				<Tooltip title="Notifications" placement="top">
-					<Popover placement="bottomRight" content={Notification} trigger="click" popupVisible={popOverOpen}>
-						<Badge count={notificationCount} className="navbar-belloutlined-icon">
-							<BellOutlined ref={popOverRef} />
-						</Badge>
-					</Popover>
-				</Tooltip>
-				<Tooltip title="Settings">
-					<Popover placement="bottomRight" content={settingsContent} trigger="click" open={settingsPopover} onOpenChange={handleOpenChange}>
-						<BsThreeDotsVertical size={20} />
-					</Popover>
-				</Tooltip>
+				{/* <Tooltip title="Notifications" placement="top"> */}
+				<Popover placement="bottomRight" content={<Notification popOverOpen={popOverOpen} />} trigger="click" popupVisible={popOverOpen}>
+					<Badge count={notificationCount} className="navbar-belloutlined-icon">
+						<BellOutlined ref={popOverRef} />
+					</Badge>
+				</Popover>
+				{/* </Tooltip> */}
+				{/* <Tooltip title="Settings"> */}
+				<Popover placement="bottomRight" content={settingsContent} trigger="click" open={settingsPopover} onOpenChange={handleOpenChange}>
+					<BsThreeDotsVertical size={20} />
+				</Popover>
+				{/* </Tooltip> */}
 			</div>
 		</div>
 	);

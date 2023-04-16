@@ -171,14 +171,12 @@ const TaskInfo = () =>
 								{
 									const icon = docs.name.split(".").pop();
 									return (
-										<>
-											<div style={{ width: 80, height: "auto" }}>
-												<a href={docs.url} download={true}>
-													<FileIcon extension={icon} {...defaultStyles[icon]} />
-													<span style={{ fontWeight: "bold" }}>{docs.name}</span>
-												</a>
-											</div>
-										</>
+										<div style={{ width: 80, height: "auto" }} key={docs._id}>
+											<a href={docs.url} download={true}>
+												<FileIcon extension={icon} {...defaultStyles[icon]} />
+												<span style={{ fontWeight: "bold" }}>{docs.name}</span>
+											</a>
+										</div>
 
 									);
 								})

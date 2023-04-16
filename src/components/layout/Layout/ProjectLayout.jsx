@@ -13,7 +13,7 @@ const MainLayout = ({ onDashboard }) =>
 	const [screenHeight, setScreenHeight] = useState(700);
 	const [collapsed, setCollapsed] = useState(false);
 	const { project_id } = useParams();
-	const { setActiveProjectDetails, setActiveProjectName, setProjectMembersMap, setLabelMembers, setLoading } = useStateContext();
+	const { setActiveProjectDetails, setActiveProjectName, setProjectMembersMap, setLabelMembers } = useStateContext();
 
 	const handleResize = debounce(() =>
 	{
@@ -52,7 +52,6 @@ const MainLayout = ({ onDashboard }) =>
 
 		setLabelMembers(selectLabelMembers);
 		setProjectMembersMap(projectMembersMap);
-		setLoading(false);
 	};
 
 	useEffect(() =>

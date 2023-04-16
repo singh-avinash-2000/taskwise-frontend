@@ -8,22 +8,23 @@ import { useNavigate } from "react-router-dom";
 import './Navbar.css';
 import axios from "axios";
 import Notification from "../../ui/Notification/Notification";
-import Socket from "../../../config/socket";
-import { useStateContext } from "../../../context/ContextProvider";
+import { getSocketInstance } from "../../../config/socket";
+import { axiosClient } from "../../../config/axios";
 
 const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 {
 	const navigate = useNavigate();
 	const [notificationCount, setNotificationCount] = useState(0);
-	const [popOverOpen, setPopOverOpen] = useState(false);
+	const [notifications, setNotifications] = useState([]);
+	const [skip, setSkip] = useState(0);
 	const popOverRef = useRef(null);
 	const [settingsPopover, setSettingsPopover] = useState(false);
-
+	const socket = getSocketInstance();
 	const handleLogout = async () =>
 	{
 		try
 		{
-			Socket.disconnect();
+			socket.disconnect();
 			const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`);
 			localStorage.removeItem("accessToken");
 			message.success(response.data.message);
@@ -37,19 +38,22 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		}
 	};
 
-	useEffect(() =>
+	const fetchNotifications = async () =>
 	{
-		Socket.on("new-notification", (data) =>
+		try
 		{
-			message.info({ content: data.message, icon: <BellOutlined /> });
-			setNotificationCount(notificationCount + 1);
-		});
-
-		return () =>
+			const response = await axiosClient(`/user/notifications?skip=${skip}`);
+			if (response.data?.result?.notifications.length)
+			{
+				setNotifications([...response.data.result?.notifications, ...response.data.result?.notifications, ...response.data.result?.notifications] || []);
+				setNotificationCount(response.data.result?.unReadCount);
+			}
+		} catch (error)
 		{
-			Socket.off();
-		};
-	}, [Socket]);
+			console.log(error);
+			message.error("Something went wrong");
+		}
+	};
 
 	const handleAccountNavigate = () =>
 	{
@@ -62,21 +66,37 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		setSettingsPopover(newOpen);
 	};
 
+	useEffect(() =>
+	{
+		fetchNotifications();
+	}, [skip]);
+
+	useEffect(() =>
+	{
+		socket.on("new-notification", (data) =>
+		{
+			message.info({ content: data.message, icon: <BellOutlined /> });
+			setNotificationCount(notificationCount + 1);
+			setSkip(0);
+		});
+
+		return () =>
+		{
+			socket.off();
+		};
+	}, []);
+
 	const settingsContent = (
 		<div className="settings-content">
-			{/* <Tooltip title="Account"> */}
 			<div className="account-wrapper" onClick={handleAccountNavigate}>
 				<CgProfile size={30} />
 				<span style={{ fontWeight: "bold" }}>Profile</span>
 			</div>
-			{/* </Tooltip> */}
 			<Divider className="settings-divider" />
-			{/* <Tooltip title="Logout"> */}
 			<div className="logout-wrapper" onClick={handleLogout}>
 				<TbLogout size={30} />
 				<span style={{ fontWeight: "bold" }}>Logout</span>
 			</div>
-			{/* </Tooltip> */}
 		</div>
 	);
 
@@ -94,18 +114,14 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			}
 
 			<div className="navbar-notification-wrapper">
-				{/* <Tooltip title="Notifications" placement="top"> */}
-				<Popover placement="bottomRight" content={<Notification popOverOpen={popOverOpen} />} trigger="click" popupVisible={popOverOpen}>
+				<Popover placement="bottomRight" content={<Notification notifications={notifications} setSkip={setSkip} skip={skip} />} trigger="click">
 					<Badge count={notificationCount} className="navbar-belloutlined-icon">
 						<BellOutlined ref={popOverRef} />
 					</Badge>
 				</Popover>
-				{/* </Tooltip> */}
-				{/* <Tooltip title="Settings"> */}
 				<Popover placement="bottomRight" content={settingsContent} trigger="click" open={settingsPopover} onOpenChange={handleOpenChange}>
 					<BsThreeDotsVertical size={20} />
 				</Popover>
-				{/* </Tooltip> */}
 			</div>
 		</div>
 	);

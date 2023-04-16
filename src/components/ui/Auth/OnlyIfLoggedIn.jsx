@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from "react-router-dom";
-import Socket from "../../../config/socket";
-import { useStateContext } from "../../../context/ContextProvider";
+import { getSocketInstance, setAuthToken } from "../../../config/socket";
 import { Skeleton } from 'antd';
+import { ContextProvider } from "../../../context/ContextProvider";
 
 const OnlyIfLoggedIn = () =>
 {
 	const navigate = useNavigate();
-	const { userDetails, loading } = useStateContext();
+	const [loading, setLoading] = useState(true);
+	const socket = getSocketInstance();
 
 	useEffect(() =>
 	{
@@ -18,14 +19,21 @@ const OnlyIfLoggedIn = () =>
 			const path = window.location.pathname;
 			navigate("/login?redirect=" + path);
 		}
-		else
+
+		setAuthToken(token);
+		console.log("socket connection started...");
+
+		socket.on("connect", () =>
 		{
-			Socket.connect();
-		}
+			console.log("socket connected");
+			setLoading(false);
+		});
+
+		socket.connect();
 
 		return () =>
 		{
-			Socket.disconnect();
+			socket.disconnect();
 		};
 	}, []);
 
@@ -36,7 +44,7 @@ const OnlyIfLoggedIn = () =>
 	else 
 	{
 		return (
-			<Outlet />
+			<ContextProvider><Outlet /></ContextProvider>
 		);
 	}
 };

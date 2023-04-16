@@ -13,7 +13,9 @@ const Dashboard = () =>
 	const navigate = useNavigate();
 	const [newProjectModalOpen, setNewProjectModalOpen] = useState(false);
 	const [options, setOptions] = useState([]);
-	const { projects, setProjects, setActiveProjectName } = useStateContext();
+	const [projects, setProjects] = useState([]);
+
+	const { setActiveProjectName } = useStateContext();
 
 	const handleSearch = debounce(async (value) =>
 	{
@@ -36,8 +38,15 @@ const Dashboard = () =>
 
 	const colourArray = ["#abdbe3", "#eeeee4", "#ffffcc", "#eab676", "#ffccff", "#cce7e8", "#edb879", "#ccffcc"];
 
+	const fetchProjects = async () =>
+	{
+		const Projectresponse = await axiosClient.get("/projects");
+		setProjects(Projectresponse.data.result);
+	};
+
 	useEffect(() =>
 	{
+		fetchProjects();
 		setActiveProjectName("");
 	}, []);
 

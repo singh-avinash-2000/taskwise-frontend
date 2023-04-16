@@ -1,55 +1,19 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import "./Notification.css";
-import { Avatar, Button } from "antd";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import Socket from "../../../config/socket";
-import { debounce } from "lodash";
-import { axiosClient } from "../../../config/axios";
+import { Avatar } from "antd";
 
-const Notification = (popOverOpen) =>
+const Notification = ({ notifications, setSkip, skip }) =>
 {
-	const [callApi, setCallApi] = useState(false);
-	const [skip, setSkip] = useState(0);
-	const [unReadCount, setUnReadCount] = useState(0);
-	const [notifications, setNotifications] = useState([]);
-
 	const handleScroll = (event) =>
 	{
 		const { scrollTop, scrollHeight, clientHeight } = event.target;
 
-		if (scrollTop === 0)
+		if (scrollTop + clientHeight === scrollHeight && notifications.length > 14)
 		{
-			console.log("TOP");
-			setSkip(0);
-			setCallApi(!callApi);
-			return;
-		}
-
-		if (scrollTop + clientHeight === scrollHeight)
-		{
-			console.log("load more");
+			console.log(notifications.length);
 			setSkip(skip + 15);
-			setCallApi(!callApi);
-			return;
 		}
 	};
-
-	const fetchNotifications = async () =>
-	{
-		const response = await axiosClient(`/user/notifications?skip=${skip}`);
-		setNotifications(response.data.result?.notifications || []);
-		setUnReadCount(response.data.result?.unReadCount || []);
-	};
-
-	useEffect(() =>
-	{
-		fetchNotifications();
-	}, [callApi]);
-
-	useEffect(() =>
-	{
-		fetchNotifications();
-	}, []);
 
 	return (
 		<div className="navbar-notification-content">

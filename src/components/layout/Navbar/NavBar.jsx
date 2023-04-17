@@ -19,6 +19,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 	const [skip, setSkip] = useState(0);
 	const popOverRef = useRef(null);
 	const [settingsPopover, setSettingsPopover] = useState(false);
+	const [newNotifications, setNewNotifications] = useState(true);
 	const socket = getSocketInstance();
 	const handleLogout = async () =>
 	{
@@ -45,8 +46,13 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			const response = await axiosClient(`/user/notifications?skip=${skip}`);
 			if (response.data?.result?.notifications.length)
 			{
+				setNewNotifications(true);
 				setNotifications([...response.data.result?.notifications, ...response.data.result?.notifications, ...response.data.result?.notifications] || []);
 				setNotificationCount(response.data.result?.unReadCount);
+			}
+			else
+			{
+				setNewNotifications(false);
 			}
 		} catch (error)
 		{
@@ -114,7 +120,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			}
 
 			<div className="navbar-notification-wrapper">
-				<Popover placement="bottomRight" content={<Notification notifications={notifications} setSkip={setSkip} skip={skip} />} trigger="click">
+				<Popover placement="bottomRight" content={<Notification notifications={notifications} setSkip={setSkip} skip={skip} newNotifications={newNotifications} />} trigger="click" onClick={() => setSkip(0)}>
 					<Badge count={notificationCount} className="navbar-belloutlined-icon">
 						<BellOutlined ref={popOverRef} />
 					</Badge>
@@ -122,8 +128,8 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 				<Popover placement="bottomRight" content={settingsContent} trigger="click" open={settingsPopover} onOpenChange={handleOpenChange}>
 					<BsThreeDotsVertical size={20} />
 				</Popover>
-			</div>
-		</div>
+			</div >
+		</div >
 	);
 };
 

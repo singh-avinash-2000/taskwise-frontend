@@ -1,6 +1,6 @@
-import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Input, Result, Spin, Tag, Breadcrumb } from 'antd';
+import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Input, Result, Spin, Tag, Breadcrumb, Avatar } from 'antd';
 import { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { DeleteFilled, MailOutlined } from "@ant-design/icons";
 import { axiosClient } from "../../../config/axios";
 
@@ -14,7 +14,8 @@ const ProjectMembers = () =>
 	const [isLoading, setIsLoading] = useState(false);
 	const { project_id } = useParams();
 	const [data, setData] = useState([]);
-	const { activeProjectName, userDetails } = useStateContext();
+	const { activeProjectName, userDetails, activeProjectDetails } = useStateContext();
+	const navigate = useNavigate();
 
 	const confirm = async (_, record) =>
 	{
@@ -46,10 +47,34 @@ const ProjectMembers = () =>
 		}
 	};
 
+	const disabledStatus = (data, record) =>
+	{
+		const accountUserRole = activeProjectDetails.members?.find((member) => member.user._id === userDetails._id).role;
+		if (accountUserRole === 'OWNER' || accountUserRole === 'ADMIN')
+		{
+			if (data === 'OWNER' || record.id === userDetails._id)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		return true;
+	};
+
 	const columns = [
 		{
 			title: 'Name',
 			dataIndex: 'name',
+			render: (text, record) =>
+			{
+				return (
+					<div className="member-avatar-name">
+						<Avatar size={32} src={record.profile_picture || 'https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png'} />
+						<span>{text}</span>
+					</div>
+				);
+			},
 			ellipsis: true
 		},
 		{
@@ -67,7 +92,7 @@ const ProjectMembers = () =>
 						<Space size="middle">
 							<Select
 								defaultValue={data}
-								disabled={record.id == userDetails._id}
+								disabled={disabledStatus(data, record)}
 								style={{ width: "100px" }}
 								placeholder="Select One"
 								options={[
@@ -93,7 +118,7 @@ const ProjectMembers = () =>
 							/>
 						</Space>
 						{
-							data !== 'OWNER'
+							!disabledStatus(data, record)
 							&&
 							<Popconfirm
 								title="Remove user"
@@ -128,6 +153,7 @@ const ProjectMembers = () =>
 					key: member.user._id,
 					name: member.user.first_name + " " + member.user.last_name,
 					display_name: member.user.display_name,
+					profile_picture: member.user.profile_picture,
 					id: member.user._id,
 					role: member.role,
 					status: member.status,
@@ -138,6 +164,7 @@ const ProjectMembers = () =>
 		} catch (error)
 		{
 			message.error("Something went wrong");
+			navigate('/');
 		}
 	};
 
@@ -169,6 +196,7 @@ const ProjectMembers = () =>
 
 			message.success("Invite sent successfully");
 			setIsLoading(false);
+			fetchProjectMembers();
 			closeModal();
 		} catch (error)
 		{

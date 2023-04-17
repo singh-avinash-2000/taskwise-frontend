@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 import { useStateContext } from "../../../context/ContextProvider";
 import './ProjectDataForm.css';
 
-const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id }) =>
+const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProjects }) =>
 {
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
@@ -40,7 +40,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id }) =>
 
 			if (method === "Add")
 			{
-				setProjects([...projects, response.data.result]);
+				fetchProjects();
 			}
 			else
 			{

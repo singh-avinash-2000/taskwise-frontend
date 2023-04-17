@@ -36,7 +36,11 @@ const getSideBarData = (project_id) =>
 			{
 				"title": "Edit Project",
 				"to": `/project/${project_id}/edit`
-			}
+			},
+			{
+				"title": "Delete Project",
+				"to": `/project/${project_id}/delete`
+			},
 		]
 	};
 };

@@ -2,8 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import ProjectLayout from "../components/layout/Layout/ProjectLayout";
 import OnlyIfLoggedIn from "../components/ui/Auth/OnlyIfLoggedIn";
 import OnlyIfNotLoggedIn from "../components/ui/Auth/OnlyIfNotLoggedIn";
-// import { ContextProvider } from "../context/ContextProvider";
-import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject, DefaultPage, EditProject, ForgotPassword, ResetPassword, Account, InviteAccept } from "../page";
+import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject, DefaultPage, EditProject, ForgotPassword, ResetPassword, Account, InviteAccept, DeleteProject } from "../page";
 
 const RouterComponent = () =>
 {
@@ -27,6 +26,7 @@ const RouterComponent = () =>
 					<Route path="/project/:project_id/tasks/:task_key" element={<TaskInfo />} />
 					<Route path="/project/:project_id/chat" element={<ChatProject />} />
 					<Route path="/project/:project_id/edit" element={<EditProject />} />
+					<Route path="/project/:project_id/delete" element={<DeleteProject />} />
 				</Route>
 			</Route>
 			<Route path="*" element={<DefaultPage />} />

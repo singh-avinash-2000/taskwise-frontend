@@ -46,7 +46,9 @@ function InviteAccept()
 			setUserPermission(user?.role);
 			setPermissionColor(fetchPermissionColor(user?.role));
 
-			const members = response.data?.result?.members?.map((member) =>
+			let members = response.data?.result?.members?.filter((member) => member.user._id !== userDetails._id);
+
+			members = members?.map((member) =>
 			{
 				const name = `${member.user.first_name} ${member.user.last_name}`;
 				const color = fetchPermissionColor(member.role);

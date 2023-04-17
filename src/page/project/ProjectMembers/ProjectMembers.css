@@ -23,3 +23,9 @@
     background-color: vat(--darkgreen);
     color: white;
 }
+
+.member-avatar-name {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}

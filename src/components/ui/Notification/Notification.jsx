@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "./Notification.css";
 import { Avatar } from "antd";
 
-const Notification = ({ notifications, setSkip, skip }) =>
+const Notification = ({ notifications, setSkip, skip, newNotifications }) =>
 {
 	const handleScroll = (event) =>
 	{
 		const { scrollTop, scrollHeight, clientHeight } = event.target;
 
-		if (scrollTop + clientHeight === scrollHeight && notifications.length > 14)
+		if (scrollTop + clientHeight === scrollHeight && newNotifications)
 		{
-			console.log(notifications.length);
 			setSkip(skip + 15);
 		}
 	};

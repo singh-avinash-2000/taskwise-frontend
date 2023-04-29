@@ -14,6 +14,7 @@ const MainLayout = ({ onDashboard }) =>
 	const [screenHeight, setScreenHeight] = useState(700);
 	const [collapsed, setCollapsed] = useState(false);
 	const { project_id } = useParams();
+	const [loading, setLoading] = useState(false);
 	const { setActiveProjectDetails, setActiveProjectName, setProjectMembersMap, setLabelMembers } = useStateContext();
 
 	const handleResize = debounce(() =>
@@ -34,25 +35,36 @@ const MainLayout = ({ onDashboard }) =>
 
 	const fetchData = async () =>
 	{
-		const projectResponse = await axiosClient.get(`/projects/${project_id}`);
-		const result = projectResponse.data.result;
-
-		setActiveProjectDetails(result);
-		setActiveProjectName(result.name);
-
-		const projectMembers = await axiosClient.get(`/projects/${project_id}/members`);
-		let projectMembersMap = {};
-		const selectLabelMembers = projectMembers.data.result.map(m =>
+		try
 		{
-			projectMembersMap[m.user._id] = m.user;
-			return {
-				label: m.user.display_name,
-				value: m.user._id
-			};
-		});
+			setLoading(true);
+			const projectResponse = await axiosClient.get(`/projects/${project_id}`);
+			const result = projectResponse.data.result;
 
-		setLabelMembers(selectLabelMembers);
-		setProjectMembersMap(projectMembersMap);
+			setActiveProjectDetails(result);
+			setActiveProjectName(result.name);
+
+			const projectMembers = await axiosClient.get(`/projects/${project_id}/members`);
+			let projectMembersMap = {};
+			const selectLabelMembers = projectMembers.data.result.map(m =>
+			{
+				projectMembersMap[m.user._id] = m.user;
+				return {
+					label: m.user.display_name,
+					value: m.user._id
+				};
+			});
+
+			setLabelMembers(selectLabelMembers);
+			setProjectMembersMap(projectMembersMap);
+		} catch (error)
+		{
+			console.log(error);
+		}
+		finally
+		{
+			setLoading(false);
+		}
 	};
 
 	useEffect(() =>
@@ -68,21 +80,28 @@ const MainLayout = ({ onDashboard }) =>
 		return () => window.removeEventListener("resize", handleResize);
 	}, [onDashboard]);
 
-	return (<div>
-		<NavBar navIconDisabled={onDashboard} setCollapsed={setCollapsed} collapsed={collapsed} />
-		<div className="sidebar-layout" style={{ height: screenHeight }}>
-			{
-				!collapsed && !onDashboard &&
-				<SideBar setCollapsed={setCollapsed} />
-			}
+	if (loading)
+	{
+		return <Skeleton active />;
+	}
+	else
+	{
+		return (<div>
+			<NavBar navIconDisabled={onDashboard} setCollapsed={setCollapsed} collapsed={collapsed} />
+			<div className="sidebar-layout" style={{ height: screenHeight }}>
+				{
+					!collapsed && !onDashboard &&
+					<SideBar setCollapsed={setCollapsed} />
+				}
 
-			<div style={{ position: position }} className="layout-outlet-wrapper">
-				<div className="layout-outlet-div">
-					<Outlet />
+				<div style={{ position: position }} className="layout-outlet-wrapper">
+					<div className="layout-outlet-div">
+						<Outlet />
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>);
+		</div>);
+	}
 };
 
 export default MainLayout;

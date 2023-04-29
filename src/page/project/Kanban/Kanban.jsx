@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useStateContext } from "../../../context/ContextProvider";
-import { Avatar, Breadcrumb, Card, Divider, Tag, Typography, Badge, Empty } from "antd";
+import { Avatar, Breadcrumb, Card, Typography, Badge, Empty, message } from "antd";
 import "./Kanban.css";
-import Meta from "antd/es/card/Meta";
 import { useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
-import { Draggable, Droppable, DragDropContext } from "react-beautiful-dnd";
-
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import SingleTask from "./SingleTask";
+import '../Kanban/Kanban.css';
 
 function Kanban()
 {
@@ -43,6 +43,7 @@ function Kanban()
 					id: t.key,
 					summary: t.summary,
 					priority: t.priority,
+					task_key: t.task_key,
 					assignee: assigneeDetails?.first_name + " " + assigneeDetails?.last_name || "Unassigned",
 					assignee_id: t.assignee,
 					assignee_img: assigneeDetails?.profile_picture || "https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png",
@@ -81,9 +82,8 @@ function Kanban()
 		fetchProjectTasks();
 	}, []);
 
-	const handleDragEnd = (result) =>
+	const onDragEnd = async (result) =>
 	{
-		console.log(result);
 		const { destination, source, draggableId } = result;
 		if (!destination)
 		{
@@ -95,66 +95,71 @@ function Kanban()
 			return;
 		}
 
-		const task = to_do.find((t) => t.key === draggableId);
-		const taskInProgress = in_progress.find((t) => t.key === draggableId);
-		const taskCompleted = completed.find((t) => t.key === draggableId);
-		const taskClosed = closed.find((t) => t.key === draggableId);
+		let task, ToDo = to_do, InProgress = in_progress, Completed = completed, Closed = closed;
 
-		if (source.droppableId === "to_do_card")
+		//remove from source array
+		if (source.droppableId === "TO_DO")
 		{
-			const newToDo = Array.from(to_do);
-			newToDo.splice(source.index, 1);
-			setTo_do(newToDo);
+			task = ToDo[source.index];
+			ToDo.splice(source.index, 1);
 		}
-		else if (source.droppableId === "in_progress_card")
+		else if (source.droppableId === "IN_PROGRESS")
 		{
-			const newInProgress = Array.from(in_progress);
-			newInProgress.splice(source.index, 1);
-			setIn_progress(newInProgress);
+			task = InProgress[source.index];
+			InProgress.splice(source.index, 1);
 		}
-		else if (source.droppableId === "completed_card")
+		else if (source.droppableId === "COMPLETED")
 		{
-			const newCompleted = Array.from(completed);
-			newCompleted.splice(source.index, 1);
-			setCompleted(newCompleted);
+			task = Completed[source.index];
+			Completed.splice(source.index, 1);
 		}
-		else if (source.droppableId === "closed_card")
+		else if (source.droppableId === "CLOSED")
 		{
-			const newClosed = Array.from(closed);
-			newClosed.splice(source.index, 1);
-			setClosed(newClosed);
+			task = Closed[source.index];
+			Closed.splice(source.index, 1);
 		}
 
-		if (destination.droppableId === "to_do_card")
+
+
+		//add to destination array
+		if (destination.droppableId === "TO_DO")
 		{
-			const newToDo = Array.from(to_do);
-			newToDo.splice(destination.index, 0, task);
-			setTo_do(newToDo);
+			ToDo.splice(destination.index, 0, task);
 		}
-		else if (destination.droppableId === "in_progress_card")
+		else if (destination.droppableId === "IN_PROGRESS")
 		{
-			const newInProgress = Array.from(in_progress);
-			newInProgress.splice(destination.index, 0, taskInProgress);
-			setIn_progress(newInProgress);
+			InProgress.splice(destination.index, 0, task);
 		}
-		else if (destination.droppableId === "completed_card")
+		else if (destination.droppableId === "COMPLETED")
 		{
-			const newCompleted = Array.from(completed);
-			newCompleted.splice(destination.index, 0, taskCompleted);
-			setCompleted(newCompleted);
+			Completed.splice(destination.index, 0, task);
 		}
-		else if (destination.droppableId === "closed_card")
+		else if (destination.droppableId === "CLOSED")
 		{
-			const newClosed = Array.from(closed);
-			newClosed.splice(destination.index, 0, taskClosed);
-			setClosed(newClosed);
+			Closed.splice(destination.index, 0, task);
 		}
+
+		try
+		{
+			const task_key = task.task_key;
+			const value = destination.droppableId;
+			await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, { status: value.toUpperCase() });
+			message.success("Task Moved Successfully");
+		} catch (error)
+		{
+			console.log(error);
+		}
+
+
+		setTo_do(ToDo);
+		setIn_progress(InProgress);
+		setCompleted(Completed);
+		setClosed(Closed);
 	};
 
 
-
 	return (
-		<DragDropContext onDragEnd={handleDragEnd}>
+		<DragDropContext onDragEnd={onDragEnd}>
 			<div>
 				<Breadcrumb
 					items={[
@@ -167,191 +172,113 @@ function Kanban()
 					]}
 				/>
 				<div className="kanban-wrapper">
-					<Droppable droppableId="to_do_card">
-						{
-							(provided) => (
-								<Card className="task-card" ref={provided.innerRef} {...provided.droppableProps}>
+					<Droppable droppableId="TO_DO">
+						{(provided, snapshot) => (
+							<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
+								ref={provided.innerRef}
+								{...provided.droppableProps}
+							>
+								<Card className="task-card">
 									<div className="heading">
 										<Title level={4} type='warning' className="tittle to_do" >TO DO</Title>
 									</div>
-
-									{to_do.length > 0 ? to_do.map((task, index) =>
-									(
-										<Draggable draggableId={task.id} index={index} key={task.id}>
-											{
-												(provided) => (
-													<div className="all-tasks" key={to_do.id} index={index} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-														<Badge.Ribbon
-															text={
-																task.priority
-															}
-															color={task.priority === "LOW" ? "green" : task.priority === "MEDIUM" ? "yellow" : task.priority === "HIGH" ? "orange" : "red"}
-														>
-															<Card
-																title={task.summary}
-																hoverable={true}
-																className="single-task-card"
-															>
-																<Meta
-																	avatar={<Avatar src={task.assignee_img} />}
-																	title={task.assignee}
-																/>
-															</Card>
-														</Badge.Ribbon>
-													</div>
-												)
-											}
-										</Draggable>
-									)) : <Empty
+									{to_do.length === 0 ? <Empty
 										image={Empty.PRESENTED_IMAGE_SIMPLE}
 										description={
 											<span>
-												No Tasks To Do
+												No Data
 											</span>
 										}
-									/>}
-									{provided.placeholder}
+									/> :
+										to_do.map((t, index) =>
+										{
+											return <SingleTask task={t} index={index} key={t.key} />;
+										})}
 								</Card>
-							)
-						}
+								{provided.placeholder}
+							</div>
+						)}
 					</Droppable>
-					<Droppable droppableId="in_progress_card">
-						{
-							(provided) => (
-								<Card className="task-card" ref={provided.innerRef} {...provided.droppableProps} >
+					<Droppable droppableId="IN_PROGRESS">
+						{(provided, snapshot) => (
+							<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
+								ref={provided.innerRef}
+								{...provided.droppableProps}
+							>
+								<Card className="task-card">
 									<div className="heading">
 										<Title level={4} type='secondary' className="tittle in_progess">IN PROGRESS</Title>
 									</div>
-									{in_progress.length > 0 ? in_progress.map((task, index) => (
-										<Draggable draggableId={task.id} index={index} key={task.id}>
-											{
-												(provided) => (
-													<div className="all-tasks" key={in_progress.id} index={index} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-														<Badge.Ribbon
-															text={
-																task.priority
-															}
-															color={task.priority === "LOW" ? "green" : task.priority === "MEDIUM" ? "yellow" : task.priority === "HIGH" ? "orange" : "red"}
-														>
-															<Card
-																title={task.summary}
-																hoverable={true}
-																className="single-task-card"
-															>
-																<Meta
-																	avatar={<Avatar src={task.assignee_img} />}
-																	title={task.assignee}
-																/>
-															</Card>
-														</Badge.Ribbon>
-													</div>
-												)
-											}
-										</Draggable>
-									)) : <Empty
+									{in_progress.length === 0 ? <Empty
 										image={Empty.PRESENTED_IMAGE_SIMPLE}
 										description={
 											<span>
-												No Tasks in Progress
+												No Data
 											</span>
 										}
-									/>}
-									{provided.placeholder}
+									/> :
+										in_progress.map((t, index) =>
+										{
+											return <SingleTask task={t} index={index} key={t.key} />;
+										})}
 								</Card>
-							)
-						}
+								{provided.placeholder}
+							</div>
+						)}
 					</Droppable>
-					<Droppable droppableId="completed_card">
-						{
-							(provided) => (
-								<Card className="task-card" ref={provided.innerRef} {...provided.droppableProps} >
+					<Droppable droppableId="COMPLETED">
+						{(provided, snapshot) => (
+							<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
+								ref={provided.innerRef}
+								{...provided.droppableProps}
+							>
+								<Card className="task-card">
 									<div className="heading">
 										<Title level={4} type='success' className="tittle completed">COMPLETED</Title>
 									</div>
-									{completed.length > 0 ? completed.map((task, index) => (
-										<Draggable draggableId={task.id} index={index} key={task.id}>
-											{
-												(provided) => (
-													<div className="all-tasks" key={completed.id} index={index} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-														<Badge.Ribbon
-															text={
-																task.priority
-															}
-															color={task.priority === "LOW" ? "green" : task.priority === "MEDIUM" ? "yellow" : task.priority === "HIGH" ? "orange" : "red"}
-														>
-															<Card
-																title={task.summary}
-																hoverable={true}
-																className="single-task-card"
-															>
-																<Meta
-																	avatar={<Avatar src={task.assignee_img} />}
-																	title={task.assignee}
-																/>
-															</Card>
-														</Badge.Ribbon>
-													</div>
-												)
-											}
-										</Draggable>
-									)) : <Empty
+									{completed.length === 0 ? <Empty
 										image={Empty.PRESENTED_IMAGE_SIMPLE}
 										description={
 											<span>
-												No Tasks Completed
+												No Data
 											</span>
 										}
-									/>}
-									{provided.placeholder}
+									/> :
+										completed.map((t, index) =>
+										{
+											return <SingleTask task={t} index={index} key={t.key} />;
+										})}
 								</Card>
-							)
-						}
+								{provided.placeholder}
+							</div>
+						)}
 					</Droppable>
-					<Droppable droppableId="closed_card">
-						{
-							(provided) => (
-								<Card className="task-card" ref={provided.innerRef} {...provided.droppableProps} >
+					<Droppable droppableId="CLOSED">
+						{(provided, snapshot) => (
+							<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
+								ref={provided.innerRef}
+								{...provided.droppableProps}
+							>
+								<Card className="task-card">
 									<div className="heading">
 										<Title level={4} type='danger' className="tittle closed">CLOSED</Title>
 									</div>
-									{closed.length > 0 ? closed.map((task, index) => (
-										<Draggable draggableId={task.id} index={index} key={task.id} >
-											{
-												(provided) => (
-													<div className="all-tasks" key={closed.id} index={index} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-														<Badge.Ribbon
-															text={
-																task.priority
-															}
-															color={task.priority === "LOW" ? "green" : task.priority === "MEDIUM" ? "yellow" : task.priority === "HIGH" ? "orange" : "red"}
-														>
-															<Card
-																title={task.summary}
-																hoverable={true}
-																className="single-task-card"
-															>
-																<Meta
-																	avatar={<Avatar src={task.assignee_img} />}
-																	title={task.assignee}
-																/>
-															</Card>
-														</Badge.Ribbon>
-													</div>
-												)
-											}
-										</Draggable>
-									)) : <Empty
+									{closed.length === 0 ? <Empty
 										image={Empty.PRESENTED_IMAGE_SIMPLE}
 										description={
 											<span>
-												No Tasks Closed
+												No Data
 											</span>
 										}
-									/>}
-									{provided.placeholder}
+									/> :
+										closed.map((t, index) =>
+										{
+											return <SingleTask task={t} index={index} key={t.key} />;
+										})}
 								</Card>
-							)
-						}
+								{provided.placeholder}
+							</div>
+						)}
 					</Droppable>
 				</div>
 			</div>

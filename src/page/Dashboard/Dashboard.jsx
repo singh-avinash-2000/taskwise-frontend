@@ -54,7 +54,6 @@ const Dashboard = () =>
 	{
 		fetchProjects();
 		setActiveProjectName("");
-		fetchProjects();
 	}, []);
 
 	return (

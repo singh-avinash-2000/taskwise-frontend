@@ -195,14 +195,19 @@ const ProjectMembers = () =>
 			});
 
 			message.success("Invite sent successfully");
-			setIsLoading(false);
 			fetchProjectMembers();
-			closeModal();
+
 		} catch (error)
 		{
 			message.error(error.response.data.message);
-			setIsLoading(false);
 			setIsModalOpen(false);
+		}
+		finally
+		{
+			setIsLoading(false);
+			closeModal();
+			setUserEmail("");
+
 		}
 	};
 

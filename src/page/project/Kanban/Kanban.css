@@ -1,0 +1,63 @@
+.kanban-wrapper 
+{
+	display: flex;
+	flex-direction: row;
+	padding: 0 10px;
+	gap: 10px;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.task-card {
+	width: 100%;
+	/* overflow-y: auto; */
+	border-radius: 5px;
+	margin-bottom: 5px;
+	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+
+.task-card .ant-card-body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-card .heading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.tittle {
+	padding: 5px;
+	border-radius: 5px;
+	width: 100%;
+}
+
+.kanban-wrapper .to_do {
+	background-color: rgb(255, 233, 193);
+}
+.kanban-wrapper .in_progess {
+	background-color: rgb(230, 229, 229);
+}
+.kanban-wrapper .completed {
+	background-color: rgb(211, 252, 211);
+}
+.kanban-wrapper .closed {
+	background-color: rgb(255, 199, 199);
+}
+
+@media only screen and (max-width: 768px) {
+	.kanban-wrapper {
+		flex-direction: column;
+	}
+}
+	
+
+

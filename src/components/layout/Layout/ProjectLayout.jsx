@@ -6,6 +6,7 @@ import SideBar from "../Sidebar/SideBar";
 import './ProjectLayout.css';
 import { axiosClient } from "../../../config/axios";
 import { useStateContext } from "../../../context/ContextProvider";
+import { Skeleton } from "antd";
 
 const MainLayout = ({ onDashboard }) =>
 {
@@ -67,25 +68,21 @@ const MainLayout = ({ onDashboard }) =>
 		return () => window.removeEventListener("resize", handleResize);
 	}, [onDashboard]);
 
-	return (
-		<>
-			<div>
-				<NavBar navIconDisabled={onDashboard} setCollapsed={setCollapsed} collapsed={collapsed} />
-				<div className="sidebar-layout" style={{ height: screenHeight }}>
-					{
-						!collapsed && !onDashboard &&
-						<SideBar setCollapsed={setCollapsed} />
-					}
+	return (<div>
+		<NavBar navIconDisabled={onDashboard} setCollapsed={setCollapsed} collapsed={collapsed} />
+		<div className="sidebar-layout" style={{ height: screenHeight }}>
+			{
+				!collapsed && !onDashboard &&
+				<SideBar setCollapsed={setCollapsed} />
+			}
 
-					<div style={{ position: position }} className="layout-outlet-wrapper">
-						<div className="layout-outlet-div">
-							<Outlet />
-						</div>
-					</div>
+			<div style={{ position: position }} className="layout-outlet-wrapper">
+				<div className="layout-outlet-div">
+					<Outlet />
 				</div>
 			</div>
-		</>
-	);
+		</div>
+	</div>);
 };
 
 export default MainLayout;

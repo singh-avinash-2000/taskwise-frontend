@@ -49,7 +49,7 @@ const ProjectMembers = () =>
 
 	const disabledStatus = (data, record) =>
 	{
-		const accountUserRole = activeProjectDetails.members?.find((member) => member.user._id === userDetails._id).role;
+		const accountUserRole = activeProjectDetails.members?.find((member) => member.user._id === userDetails._id)?.role;
 		if (accountUserRole === 'OWNER' || accountUserRole === 'ADMIN')
 		{
 			if (data === 'OWNER' || record.id === userDetails._id)

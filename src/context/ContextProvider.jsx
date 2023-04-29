@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { axiosClient } from "../config/axios";
-import { getSocketInstance } from "../config/socket";
 
 const StateContext = createContext();
 

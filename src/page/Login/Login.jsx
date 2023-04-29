@@ -29,11 +29,13 @@ const Login = () =>
 
 	const validateEmail = (email) =>
 	{
-		return String(email)
+		const isValid = String(email)
 			.toLowerCase()
 			.match(
 				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 			);
+
+		setIsValidEmail(isValid);
 	};
 
 	const handleLogin = async () =>
@@ -94,27 +96,27 @@ const Login = () =>
 					<Input
 						className="custom-input"
 						placeholder="Email Address"
-						allowClear
 						type="email"
 						value={email}
+						allowClear
 						onChange={(e) =>
 						{
+							validateEmail(e.target.value);
 							setEmail(e.target.value);
 						}}
-						suffix={isValidEmail ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
-						onBlur={handleBlur}
+						suffix={isValidEmail && email ? <CheckCircleTwoTone twoToneColor="#52c41a" /> : ""}
 						onClick={handleBlur}
 					/>
 					<Input.Password
 						className="custom-input"
 						placeholder="Password"
 						value={password}
+						allowClear
 						onChange={(e) =>
 						{
 							setPassword(e.target.value);
 						}}
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-						allowClear
 					/>
 					<Link to="/forgotPassword" className="forgot-password"><p>Forgot Password?</p></Link>
 					<div >

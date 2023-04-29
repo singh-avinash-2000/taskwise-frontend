@@ -1,16 +1,22 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Button, message } from 'antd';
-import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, AppleFilled, FacebookFilled, LockOutlined, UserOutlined, HeatMapOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, HeatMapOutlined, CloseCircleTwoTone } from '@ant-design/icons';
 // import axios from "axios";
 import { axiosClient } from "../../config/axios";
 
 import "../Login/login.css";
+import { debounce } from "lodash";
 
 const Register = () =>
 {
 	const [isValidEmail, setIsValidEmail] = useState(true);
-	const [formState, setFormState] = useState({});
+	const [isValidDisplayName, setIsValidDisplayName] = useState(false);
+	const [email, setEmail] = useState("");
+	const [displayName, setDisplayName] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+
 	let navigate = useNavigate();
 	const handleBlur = (e) =>
 	{
@@ -26,30 +32,58 @@ const Register = () =>
 
 	const validateEmail = (email) =>
 	{
-		return String(email)
+		const isValid = String(email)
 			.toLowerCase()
 			.match(
 				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 			);
+
+		setIsValidEmail(isValid);
 	};
 
-	const handleFormChange = (e) =>
+	const checkExistingDisplayName = async (displayName) =>
 	{
-		formState[e.target.name] = e.target.value;
-		setFormState(formState);
+		try
+		{
+			setDisplayName(displayName);
+			if (displayName.length > 5)
+			{
+				const response = await axiosClient.get("/auth/check-valid?display_name=" + displayName);
+				setIsValidDisplayName(true);
+			}
+			else
+			{
+				setIsValidDisplayName(false);
+			}
+
+		} catch (error)
+		{
+			setIsValidDisplayName(false);
+		}
 	};
 
 	const handleRegister = async () =>
 	{
 		try
 		{
-			if (formState.password.trim() !== formState.confirm_password.trim())
+			if (password.trim() !== confirmPassword.trim())
 			{
 				alert("passwords doesn't match");
+				return;
+			}
+			else if (!isValidDisplayName)
+			{
+				alert("Display name already taken");
+				return;
 			}
 			else
 			{
-				const response = await axiosClient.post("/auth/register", formState);
+				const response = await axiosClient.post("/auth/register", {
+					email,
+					display_name: displayName,
+					password,
+					confirmPassword
+				});
 				localStorage.setItem("accessToken", response.data.result.accessToken);
 				navigate("/");
 				message.success(response.data.message);
@@ -85,38 +119,49 @@ const Register = () =>
 						className="custom-input"
 						placeholder="Display Name"
 						allowClear
-						value={formState.display_name}
+						value={displayName}
 						name="display_name"
-						onChange={handleFormChange}
+						onChange={(e) =>
+						{
+							checkExistingDisplayName(e.target.value);
+						}}
 						type="text"
+						suffix={displayName ? isValidDisplayName ? <CheckCircleTwoTone twoToneColor="#52c41a" /> : <CloseCircleTwoTone twoToneColor="red" /> : ""}
 					/>
 					<Input
 						className="custom-input"
 						placeholder="Email Address"
 						allowClear
 						type="email"
-						value={formState.email}
+						value={email}
 						name="email"
-						onChange={handleFormChange}
-						suffix={isValidEmail ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" />}
-						onBlur={handleBlur}
-						onClick={handleBlur}
+						onChange={(e) =>
+						{
+							setEmail(e.target.value);
+						}}
+						suffix={email ? isValidEmail ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" /> : ""}
 					/>
 					<Input.Password
 						className="custom-input"
 						placeholder="Password"
-						value={formState.password}
+						value={password}
 						name="password"
-						onChange={handleFormChange}
+						onChange={(e) =>
+						{
+							setPassword(e.target.value);
+						}}
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
 						allowClear
 					/>
 					<Input.Password
 						className="custom-input"
 						placeholder="Confirm Password"
-						value={formState.confirm_password}
+						value={confirmPassword}
 						name="confirm_password"
-						onChange={handleFormChange}
+						onChange={(e) =>
+						{
+							setConfirmPassword(e.target.value);
+						}}
 						iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
 						allowClear
 					/>

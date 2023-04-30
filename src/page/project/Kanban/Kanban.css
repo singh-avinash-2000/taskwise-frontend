@@ -45,6 +45,7 @@
 }
 
 .kanban-add-task {
+	float: right;
 	cursor: pointer;
 }
 

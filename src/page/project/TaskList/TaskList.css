@@ -23,6 +23,10 @@
   text-overflow: ellipsis;
 }
 
+.ant-table-row:hover {
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 500px) 
 {
 	.create-task-modal{

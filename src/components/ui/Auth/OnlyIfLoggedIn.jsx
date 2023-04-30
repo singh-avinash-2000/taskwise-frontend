@@ -7,7 +7,6 @@ import { ContextProvider } from "../../../context/ContextProvider";
 const OnlyIfLoggedIn = () =>
 {
 	const navigate = useNavigate();
-	const [loading, setLoading] = useState(true);
 	const socket = getSocketInstance();
 
 	useEffect(() =>
@@ -26,7 +25,6 @@ const OnlyIfLoggedIn = () =>
 		socket.on("connect", () =>
 		{
 			console.log("socket connected");
-			setLoading(false);
 		});
 
 		socket.connect();
@@ -37,16 +35,9 @@ const OnlyIfLoggedIn = () =>
 		};
 	}, []);
 
-	if (loading)
-	{
-		return <Skeleton active />;
-	}
-	else 
-	{
-		return (
-			<ContextProvider><Outlet /></ContextProvider>
-		);
-	}
+	return (
+		<ContextProvider><Outlet /></ContextProvider>
+	);
 };
 
 export default OnlyIfLoggedIn;

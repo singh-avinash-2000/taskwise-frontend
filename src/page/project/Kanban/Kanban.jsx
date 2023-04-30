@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useStateContext } from "../../../context/ContextProvider";
-import { Breadcrumb, Card, Typography, Empty, message, Tooltip, Modal } from "antd";
+import { Breadcrumb, Card, Typography, Empty, message, Tooltip, Modal, Button } from "antd";
 import { useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -9,6 +9,7 @@ import SingleTask from "./SingleTask";
 
 import "./Kanban.css";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
+import { PlusOutlined } from "@ant-design/icons";
 
 function Kanban()
 {
@@ -147,7 +148,6 @@ function Kanban()
 			const task_key = task.task_key;
 			const value = destination.droppableId;
 			await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, { status: value.toUpperCase() });
-			message.success("Task Moved Successfully");
 		} catch (error)
 		{
 			console.log(error);
@@ -180,6 +180,9 @@ function Kanban()
 							}
 						]}
 					/>
+					<Button type="primary" onClick={handleModalOpen} className="kanban-add-task">
+						<PlusOutlined /> Add Task
+					</Button>
 					<div className="kanban-wrapper">
 						<Droppable droppableId="TO_DO">
 							{(provided, snapshot) => (
@@ -189,7 +192,7 @@ function Kanban()
 								>
 									<Card className="task-card">
 										<div className="heading">
-											<Title level={4} type='warning' className="tittle to_do" >TO DO <Tooltip title="Add a task"><AiOutlinePlus className="kanban-add-task" onClick={handleModalOpen} /></Tooltip></Title>
+											<Title level={4} type='warning' className="tittle to_do" >TO DO</Title>
 										</div>
 										{to_do.length === 0 ? <Empty
 											image={Empty.PRESENTED_IMAGE_SIMPLE}

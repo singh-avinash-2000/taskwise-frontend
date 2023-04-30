@@ -239,7 +239,7 @@ const TaskInfo = () =>
 					<Tabs defaultActiveKey="1" items={items} onChange={onChange} />
 				</Col>
 			</Row>
-			<Modal title={`${modalHeader} Task`} open={modalOpen} onCancel={() => { setModalOpen(false); }} footer={null} className="create-task-modal">
+			<Modal title={`${modalHeader} Task`} open={modalOpen} destroyOnClose={true} onCancel={() => { setModalOpen(false); }} footer={null} className="create-task-modal">
 				<ProjectNewTaskForm method={modalHeader.toLowerCase()} taskDetails={taskDetails} closeModal={() => setModalOpen(false)} task_type={modalHeader == "Sub" ? "SUB_TASK" : "MAIN_TASK"} />
 			</Modal>
 			<Modal title="Attachments" open={attachmentModalOpen} onCancel={() => { setAttachmentModal(false); }} okText={"Update"} onOk={handleTaskUpdate}>

@@ -25,8 +25,9 @@ import io from 'socket.io-client';
 
 const socket = io(process.env.REACT_APP_SOCKET_URL, {
 	autoConnect: false,
+	reconnect: true,
+	reconnectDelay: 1000,
 	reconnectionAttempts: 5,
-	transports: ['websocket'],
 	auth: {
 		token: null, // set to null initially
 	},

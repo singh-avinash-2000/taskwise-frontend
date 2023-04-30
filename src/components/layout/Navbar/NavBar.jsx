@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Popover, Tooltip, message, Badge, notification, Divider } from "antd";
+import React, { useEffect, useState } from "react";
+import { Popover, message, Badge, Divider } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined, BellOutlined, HeatMapOutlined } from "@ant-design/icons";
 import { TbLogout } from "react-icons/tb";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import './Navbar.css';
-import axios from "axios";
+
 import Notification from "../../ui/Notification/Notification";
 import { getSocketInstance } from "../../../config/socket";
 import { axiosClient } from "../../../config/axios";
@@ -14,19 +14,17 @@ import { axiosClient } from "../../../config/axios";
 const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 {
 	const navigate = useNavigate();
-	const [notificationCount, setNotificationCount] = useState(0);
-	const [notifications, setNotifications] = useState([]);
-	const [skip, setSkip] = useState(0);
-	const popOverRef = useRef(null);
 	const [settingsPopover, setSettingsPopover] = useState(false);
-	const [newNotifications, setNewNotifications] = useState(true);
+	const [unReadCount, setUnReadCount] = useState(0);
+	const [notifications, setNotifications] = useState([]);
 	const socket = getSocketInstance();
+
 	const handleLogout = async () =>
 	{
 		try
 		{
 			socket.disconnect();
-			const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`);
+			const response = await axiosClient.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`);
 			localStorage.removeItem("accessToken");
 			message.success(response.data.message);
 			navigate("/login", {
@@ -36,28 +34,6 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		catch (error)
 		{
 			message.error(error.response.data.message);
-		}
-	};
-
-	const fetchNotifications = async () =>
-	{
-		try
-		{
-			const response = await axiosClient(`/user/notifications?skip=${skip}`);
-			if (response.data?.result?.notifications.length)
-			{
-				setNewNotifications(true);
-				setNotifications([...response.data.result?.notifications, ...response.data.result?.notifications, ...response.data.result?.notifications] || []);
-				setNotificationCount(response.data.result?.unReadCount);
-			}
-			else
-			{
-				setNewNotifications(false);
-			}
-		} catch (error)
-		{
-			console.log(error);
-			message.error("Something went wrong");
 		}
 	};
 
@@ -72,18 +48,21 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		setSettingsPopover(newOpen);
 	};
 
-	useEffect(() =>
+	const fetchNotifications = async () =>
 	{
-		fetchNotifications();
-	}, [skip]);
+		const response = await axiosClient.get(`/user/notifications`);
+		const notifications = response.data.result.notifications;
+		setUnReadCount(response.data.result.unReadCount);
+		setNotifications(notifications);
+	};
+
 
 	useEffect(() =>
 	{
+		fetchNotifications();
 		socket.on("new-notification", (data) =>
 		{
 			message.info({ content: data.message, icon: <BellOutlined /> });
-			setNotificationCount(notificationCount + 1);
-			setSkip(0);
 		});
 
 		return () =>
@@ -120,9 +99,9 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			}
 
 			<div className="navbar-notification-wrapper">
-				<Popover placement="bottomRight" content={<Notification notifications={notifications} setSkip={setSkip} skip={skip} newNotifications={newNotifications} />} trigger="click" onClick={() => setSkip(0)}>
-					<Badge count={notificationCount} className="navbar-belloutlined-icon">
-						<BellOutlined ref={popOverRef} />
+				<Popover placement="bottomRight" content={<Notification notifications={notifications} />} trigger="click">
+					<Badge count={unReadCount} className="navbar-belloutlined-icon">
+						<BellOutlined />
 					</Badge>
 				</Popover>
 				<Popover placement="bottomRight" content={settingsContent} trigger="click" open={settingsPopover} onOpenChange={handleOpenChange}>

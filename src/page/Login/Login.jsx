@@ -7,25 +7,12 @@ import { axiosClient } from "../../config/axios";
 import "./login.css";
 const Login = () =>
 {
-	const [isValidEmail, setIsValidEmail] = useState(true);
+	const [isValidEmail, setIsValidEmail] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const navigate = useNavigate();
 	const params = new URLSearchParams(window.location.search);
 	const redirect_url = params.get("redirect");
-
-
-	const handleBlur = (e) =>
-	{
-		if (validateEmail(e.target.value))
-		{
-			setIsValidEmail(false);
-		}
-		else
-		{
-			setIsValidEmail(true);
-		}
-	};
 
 	const validateEmail = (email) =>
 	{
@@ -35,7 +22,14 @@ const Login = () =>
 				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 			);
 
-		setIsValidEmail(isValid);
+		if (isValid !== null)
+		{
+			setIsValidEmail(true);
+		}
+		else
+		{
+			setIsValidEmail(false);
+		}
 	};
 
 	const handleLogin = async () =>
@@ -104,8 +98,7 @@ const Login = () =>
 							validateEmail(e.target.value);
 							setEmail(e.target.value);
 						}}
-						suffix={isValidEmail && email ? <CheckCircleTwoTone twoToneColor="#52c41a" /> : ""}
-						onClick={handleBlur}
+						suffix={email ? isValidEmail ? <CheckCircleTwoTone twoToneColor="#52c41a" /> : <SyncOutlined spin /> : ""}
 					/>
 					<Input.Password
 						className="custom-input"
@@ -123,12 +116,6 @@ const Login = () =>
 						<button className="signin-button" onClick={handleLogin}>Login</button>
 					</div>
 				</div>
-				{/* <h3 className="extra-text"> &mdash; Or Login with &mdash;</h3>
-				<div className="button-container">
-					<Button type="secondary" className="icon-button" shape="round" icon={<GoogleOutlined />} size="large" >
-						Google
-					</Button>
-				</div> */}
 			</div>
 			<h4 className="cr-text">Copyright @ PING {new Date().getFullYear()} | Privacy Policy</h4>
 		</div>

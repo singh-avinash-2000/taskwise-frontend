@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Button, message } from 'antd';
 import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, HeatMapOutlined, CloseCircleTwoTone } from '@ant-design/icons';
-// import axios from "axios";
 import { axiosClient } from "../../config/axios";
 
 import "../Login/login.css";
@@ -10,7 +9,7 @@ import { debounce } from "lodash";
 
 const Register = () =>
 {
-	const [isValidEmail, setIsValidEmail] = useState(true);
+	const [isValidEmail, setIsValidEmail] = useState(false);
 	const [isValidDisplayName, setIsValidDisplayName] = useState(false);
 	const [email, setEmail] = useState("");
 	const [displayName, setDisplayName] = useState("");
@@ -18,6 +17,7 @@ const Register = () =>
 	const [confirmPassword, setConfirmPassword] = useState("");
 
 	let navigate = useNavigate();
+
 	const handleBlur = (e) =>
 	{
 		if (validateEmail(e.target.value))
@@ -38,17 +38,24 @@ const Register = () =>
 				/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 			);
 
-		setIsValidEmail(isValid);
+		if (isValid !== null)
+		{
+			setIsValidEmail(true);
+		}
+		else
+		{
+			setIsValidEmail(false);
+		}
 	};
 
 	const checkExistingDisplayName = async (displayName) =>
 	{
 		try
 		{
-			setDisplayName(displayName);
+			setDisplayName(displayName.toLowerCase());
 			if (displayName.length > 5)
 			{
-				const response = await axiosClient.get("/auth/check-valid?display_name=" + displayName);
+				const response = await axiosClient.get("/auth/check-valid?display_name=" + displayName.toLowerCase());
 				setIsValidDisplayName(true);
 			}
 			else
@@ -131,15 +138,16 @@ const Register = () =>
 					<Input
 						className="custom-input"
 						placeholder="Email Address"
-						allowClear
+						name="email"
 						type="email"
 						value={email}
-						name="email"
+						allowClear
 						onChange={(e) =>
 						{
+							validateEmail(e.target.value);
 							setEmail(e.target.value);
 						}}
-						suffix={email ? isValidEmail ? <SyncOutlined spin /> : <CheckCircleTwoTone twoToneColor="#52c41a" /> : ""}
+						suffix={email ? isValidEmail ? <CheckCircleTwoTone twoToneColor="#52c41a" /> : <SyncOutlined spin /> : ""}
 					/>
 					<Input.Password
 						className="custom-input"

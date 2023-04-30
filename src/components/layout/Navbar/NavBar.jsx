@@ -63,6 +63,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		socket.on("new-notification", (data) =>
 		{
 			message.info({ content: data.message, icon: <BellOutlined /> });
+			fetchNotifications();
 		});
 
 		return () =>

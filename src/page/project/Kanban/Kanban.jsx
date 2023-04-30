@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useStateContext } from "../../../context/ContextProvider";
-import { Avatar, Breadcrumb, Card, Typography, Badge, Empty, message } from "antd";
-import "./Kanban.css";
+import { Breadcrumb, Card, Typography, Empty, message, Tooltip, Modal } from "antd";
 import { useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { AiOutlinePlus } from "react-icons/ai";
 import SingleTask from "./SingleTask";
-import '../Kanban/Kanban.css';
+
+import "./Kanban.css";
+import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
 
 function Kanban()
 {
@@ -16,6 +18,7 @@ function Kanban()
 	const [in_progress, setIn_progress] = useState([]);
 	const [completed, setCompleted] = useState([]);
 	const [closed, setClosed] = useState([]);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { project_id } = useParams();
 
 	const fetchProjectTasks = async () =>
@@ -80,11 +83,11 @@ function Kanban()
 	useEffect(() =>
 	{
 		fetchProjectTasks();
-	}, []);
+	}, [isModalOpen]);
 
 	const onDragEnd = async (result) =>
 	{
-		const { destination, source, draggableId } = result;
+		const { destination, source } = result;
 		if (!destination)
 		{
 			return;
@@ -157,132 +160,142 @@ function Kanban()
 		setClosed(Closed);
 	};
 
+	const handleModalOpen = () =>
+	{
+		setIsModalOpen(true);
+	};
+
 
 	return (
-		<DragDropContext onDragEnd={onDragEnd}>
-			<div>
-				<Breadcrumb
-					items={[
-						{
-							title: activeProjectName,
-						},
-						{
-							title: "Kanban Board"
-						}
-					]}
-				/>
-				<div className="kanban-wrapper">
-					<Droppable droppableId="TO_DO">
-						{(provided, snapshot) => (
-							<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
-								ref={provided.innerRef}
-								{...provided.droppableProps}
-							>
-								<Card className="task-card">
-									<div className="heading">
-										<Title level={4} type='warning' className="tittle to_do" >TO DO</Title>
-									</div>
-									{to_do.length === 0 ? <Empty
-										image={Empty.PRESENTED_IMAGE_SIMPLE}
-										description={
-											<span>
-												No Data
-											</span>
-										}
-									/> :
-										to_do.map((t, index) =>
-										{
-											return <SingleTask task={t} index={index} key={t.key} />;
-										})}
-								</Card>
-								{provided.placeholder}
-							</div>
-						)}
-					</Droppable>
-					<Droppable droppableId="IN_PROGRESS">
-						{(provided, snapshot) => (
-							<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
-								ref={provided.innerRef}
-								{...provided.droppableProps}
-							>
-								<Card className="task-card">
-									<div className="heading">
-										<Title level={4} type='secondary' className="tittle in_progess">IN PROGRESS</Title>
-									</div>
-									{in_progress.length === 0 ? <Empty
-										image={Empty.PRESENTED_IMAGE_SIMPLE}
-										description={
-											<span>
-												No Data
-											</span>
-										}
-									/> :
-										in_progress.map((t, index) =>
-										{
-											return <SingleTask task={t} index={index} key={t.key} />;
-										})}
-								</Card>
-								{provided.placeholder}
-							</div>
-						)}
-					</Droppable>
-					<Droppable droppableId="COMPLETED">
-						{(provided, snapshot) => (
-							<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
-								ref={provided.innerRef}
-								{...provided.droppableProps}
-							>
-								<Card className="task-card">
-									<div className="heading">
-										<Title level={4} type='success' className="tittle completed">COMPLETED</Title>
-									</div>
-									{completed.length === 0 ? <Empty
-										image={Empty.PRESENTED_IMAGE_SIMPLE}
-										description={
-											<span>
-												No Data
-											</span>
-										}
-									/> :
-										completed.map((t, index) =>
-										{
-											return <SingleTask task={t} index={index} key={t.key} />;
-										})}
-								</Card>
-								{provided.placeholder}
-							</div>
-						)}
-					</Droppable>
-					<Droppable droppableId="CLOSED">
-						{(provided, snapshot) => (
-							<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
-								ref={provided.innerRef}
-								{...provided.droppableProps}
-							>
-								<Card className="task-card">
-									<div className="heading">
-										<Title level={4} type='danger' className="tittle closed">CLOSED</Title>
-									</div>
-									{closed.length === 0 ? <Empty
-										image={Empty.PRESENTED_IMAGE_SIMPLE}
-										description={
-											<span>
-												No Data
-											</span>
-										}
-									/> :
-										closed.map((t, index) =>
-										{
-											return <SingleTask task={t} index={index} key={t.key} />;
-										})}
-								</Card>
-								{provided.placeholder}
-							</div>
-						)}
-					</Droppable>
+		<>
+			<DragDropContext onDragEnd={onDragEnd}>
+				<div>
+					<Breadcrumb
+						items={[
+							{
+								title: activeProjectName,
+							},
+							{
+								title: "Kanban Board"
+							}
+						]}
+					/>
+					<div className="kanban-wrapper">
+						<Droppable droppableId="TO_DO">
+							{(provided, snapshot) => (
+								<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
+									ref={provided.innerRef}
+									{...provided.droppableProps}
+								>
+									<Card className="task-card">
+										<div className="heading">
+											<Title level={4} type='warning' className="tittle to_do" >TO DO <Tooltip title="Add a task"><AiOutlinePlus className="kanban-add-task" onClick={handleModalOpen} /></Tooltip></Title>
+										</div>
+										{to_do.length === 0 ? <Empty
+											image={Empty.PRESENTED_IMAGE_SIMPLE}
+											description={
+												<span>
+													No Data
+												</span>
+											}
+										/> :
+											to_do.map((t, index) =>
+											{
+												return <SingleTask task={t} index={index} key={t.key} />;
+											})}
+									</Card>
+									{provided.placeholder}
+								</div>
+							)}
+						</Droppable>
+						<Droppable droppableId="IN_PROGRESS">
+							{(provided, snapshot) => (
+								<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
+									ref={provided.innerRef}
+									{...provided.droppableProps}
+								>
+									<Card className="task-card">
+										<div className="heading">
+											<Title level={4} type='secondary' className="tittle in_progess">IN PROGRESS</Title>
+										</div>
+										{in_progress.length === 0 ? <Empty
+											image={Empty.PRESENTED_IMAGE_SIMPLE}
+											description={
+												<span>
+													No Data
+												</span>
+											}
+										/> :
+											in_progress.map((t, index) =>
+											{
+												return <SingleTask task={t} index={index} key={t.key} />;
+											})}
+									</Card>
+									{provided.placeholder}
+								</div>
+							)}
+						</Droppable>
+						<Droppable droppableId="COMPLETED">
+							{(provided, snapshot) => (
+								<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
+									ref={provided.innerRef}
+									{...provided.droppableProps}
+								>
+									<Card className="task-card">
+										<div className="heading">
+											<Title level={4} type='success' className="tittle completed">COMPLETED</Title>
+										</div>
+										{completed.length === 0 ? <Empty
+											image={Empty.PRESENTED_IMAGE_SIMPLE}
+											description={
+												<span>
+													No Data
+												</span>
+											}
+										/> :
+											completed.map((t, index) =>
+											{
+												return <SingleTask task={t} index={index} key={t.key} />;
+											})}
+									</Card>
+									{provided.placeholder}
+								</div>
+							)}
+						</Droppable>
+						<Droppable droppableId="CLOSED">
+							{(provided, snapshot) => (
+								<div className={`task-column ${snapshot.isDraggingOver && "dragactive"}`}
+									ref={provided.innerRef}
+									{...provided.droppableProps}
+								>
+									<Card className="task-card">
+										<div className="heading">
+											<Title level={4} type='danger' className="tittle closed">CLOSED</Title>
+										</div>
+										{closed.length === 0 ? <Empty
+											image={Empty.PRESENTED_IMAGE_SIMPLE}
+											description={
+												<span>
+													No Data
+												</span>
+											}
+										/> :
+											closed.map((t, index) =>
+											{
+												return <SingleTask task={t} index={index} key={t.key} />;
+											})}
+									</Card>
+									{provided.placeholder}
+								</div>
+							)}
+						</Droppable>
+					</div>
 				</div>
-			</div>
-		</DragDropContext>
+			</DragDropContext>
+			<Modal title="Add Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null} className="create-task-modal" destroyOnClose={true}>
+				<ProjectNewTaskForm method="add" taskDetails={{}} closeModal={() => { setIsModalOpen(); }} task_type="MAIN_TASK" />
+			</Modal>
+		</>
 	);
 }
 

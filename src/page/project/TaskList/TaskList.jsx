@@ -183,7 +183,7 @@ const TaskList = ({ project_name }) =>
 				}}
 			/>
 
-			<Modal title="Add Task" open={isModalOpen} onCancel={() => { setIsModalOpen(false); }} footer={null} className="create-task-modal">
+			<Modal title="Add Task" open={isModalOpen} destroyOnClose={true} onCancel={() => { setIsModalOpen(false); }} footer={null} className="create-task-modal">
 				<ProjectNewTaskForm method="add" taskDetails={{}} closeModal={() => { setIsModalOpen(); }} task_type="MAIN_TASK" />
 			</Modal>
 		</div>

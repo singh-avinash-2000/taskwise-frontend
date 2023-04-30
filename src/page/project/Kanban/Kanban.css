@@ -44,6 +44,10 @@
 	width: 100%;
 }
 
+.kanban-add-task {
+	cursor: pointer;
+}
+
 .kanban-wrapper .to_do {
 	background-color: rgb(255, 233, 193);
 }

@@ -124,7 +124,15 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 		else 
 		{
 			form.resetFields();
+			quillRef.current.getEditor().setContents("");
 		}
+
+		return () =>
+		{
+			form.resetFields();
+			setDescription("");
+			quillRef.current.getEditor().setContents("");
+		};
 	}, []);
 
 	return (

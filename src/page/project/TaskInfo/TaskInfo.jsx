@@ -190,8 +190,8 @@ const TaskInfo = () =>
 						className="to_do"
 						onChange={(value) => { handleStatusChange(value); }}
 					>
-						<Select.Option value="IN_PROGRESS">In-progress</Select.Option>
 						<Select.Option value="TO_DO">To-do</Select.Option>
+						<Select.Option value="IN_PROGRESS">In-progress</Select.Option>
 						<Select.Option value="COMPLETED">Completed</Select.Option>
 						<Select.Option value="CLOSED">Closed</Select.Option>
 					</Select>

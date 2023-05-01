@@ -15,6 +15,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 {
 	const navigate = useNavigate();
 	const [settingsPopover, setSettingsPopover] = useState(false);
+	const [notificationPopover, setNotificationPopover] = useState(false);
 	const [unReadCount, setUnReadCount] = useState(0);
 	const [notifications, setNotifications] = useState([]);
 	const socket = getSocketInstance();
@@ -46,6 +47,11 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 	const handleOpenChange = (newOpen) =>
 	{
 		setSettingsPopover(newOpen);
+	};
+
+	const handleNotificationOpenChange = (newOpen) =>
+	{
+		setNotificationPopover(newOpen);
 	};
 
 	const fetchNotifications = async () =>
@@ -100,7 +106,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			}
 
 			<div className="navbar-notification-wrapper">
-				<Popover placement="bottomRight" content={<Notification notifications={notifications} />} trigger="click">
+				<Popover placement="bottomRight" open={notificationPopover} onOpenChange={handleNotificationOpenChange} content={<Notification setNotificationPopover={setNotificationPopover} notifications={notifications} setUnReadCount={setUnReadCount} unReadCount={unReadCount} />} trigger="click">
 					<Badge count={unReadCount} className="navbar-belloutlined-icon">
 						<BellOutlined />
 					</Badge>

@@ -124,9 +124,11 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 		else 
 		{
 			form.resetFields();
+			setDescription("");
 			if (quillRef.current)
 			{
 				quillRef.current.getEditor().setContents([]);
+				quillRef.current.getEditor().setText("");
 			}
 		}
 
@@ -136,7 +138,8 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 			setDescription("");
 			if (quillRef.current)
 			{
-				quillRef.current.getEditor().setText('');
+				quillRef.current.getEditor().setContents([]);
+				quillRef.current.getEditor().setText("");
 			}
 		};
 	}, []);

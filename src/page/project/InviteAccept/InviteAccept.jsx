@@ -40,27 +40,32 @@ function InviteAccept()
 	{
 		try
 		{
-			const response = await axiosClient.get(`/projects/${project_id}`);
+			const response = await axiosClient.get(`/projects/${project_id}/invite-action`);
 			setInvitedProjectDetails(response.data?.result);
-			const user = response.data?.result?.members?.find((member) => member.user._id === userDetails._id);
-			setUserPermission(user?.role);
-			setPermissionColor(fetchPermissionColor(user?.role));
-
-			let members = response.data?.result?.members?.filter((member) => member.user._id !== userDetails._id);
-
+			setUserPermission(response?.data?.result?.role);
+			setPermissionColor(fetchPermissionColor(response?.data?.result?.role));
+			let members = response?.data?.result?.members;
 			members = members?.map((member) =>
 			{
-				const name = `${member.user.first_name} ${member.user.last_name}`;
+				const name = `${member.first_name} ${member.last_name}`;
 				const color = fetchPermissionColor(member.role);
 				const permission = member.role;
-				const avatar = member?.user?.profile_picture || "https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png";
+				const avatar = member?.profile_picture || "https://www.nicepng.com/png/detail/933-9332131_profile-picture-default-png.png";
 				return { name, color, permission, avatar };
 			});
 			setProjectMembers(members);
 		}
 		catch (error)
 		{
-			console.log(error);
+			if (error.response.status === 400)
+			{
+				message.error("You are already a member of this project");
+				navigate(`/project/${project_id}/tasks`);
+			}
+			else
+			{
+				console.log(error);
+			}
 		}
 	};
 

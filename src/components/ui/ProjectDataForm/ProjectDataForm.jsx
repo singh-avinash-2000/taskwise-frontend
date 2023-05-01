@@ -11,7 +11,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
 	const navigate = useNavigate();
-	const { projects, setProjects } = useStateContext();
+	const { activeProjectDetails, setActiveProjectDetails } = useStateContext();
 
 
 	const handleFormSubmit = async () =>
@@ -44,6 +44,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 			}
 			else
 			{
+				setActiveProjectDetails(response.data.result);
 				navigate(-1);
 			}
 		} catch (error)

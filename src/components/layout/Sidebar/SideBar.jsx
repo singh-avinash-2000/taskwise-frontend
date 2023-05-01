@@ -1,6 +1,5 @@
 import { NavLink, useParams } from "react-router-dom";
 import * as rdd from 'react-device-detect';
-import "./Sidebar.css";
 import projectSideBarData from "../../../config/projectSidebar";
 import { RiRoadMapLine } from "react-icons/ri";
 import { BsKanban, BsChatSquareText } from "react-icons/bs";
@@ -9,9 +8,11 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { FiEdit } from "react-icons/fi";
 import { GrPlan } from "react-icons/gr";
 import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText, AiOutlineDelete } from "react-icons/ai";
-import { useEffect, useState } from "react";
+import { IoBanSharp } from "react-icons/io5";
 import { useStateContext } from "../../../context/ContextProvider";
 import { Spin } from "antd";
+import "./Sidebar.css";
+import { useRef } from "react";
 
 function getIconComponent(iconName)
 {
@@ -47,8 +48,7 @@ function getIconComponent(iconName)
 const SideBar = ({ setCollapsed }) =>
 {
 	const { project_id } = useParams();
-	const { activeProjectName } = useStateContext();
-
+	const { activeProjectName, activeProjectDetails } = useStateContext();
 	const NavHeader = ({ title, children, setCollapsed }) =>
 	{
 		return (
@@ -76,16 +76,22 @@ const SideBar = ({ setCollapsed }) =>
 			}
 		};
 
+		const isChatEnabled = activeProjectDetails.chat_enabled;
+		const isDocumentEnabled = activeProjectDetails.document;
+
+		const isDisabled = (!isChatEnabled && title === 'Chat') || (!isDocumentEnabled && title === 'Documents');
 
 		return (
 			<NavLink
 				to={to}
 				className={
-					({ isActive }) => isActive ? "nav-item-active nav-item-fixed-style" : "nav-item-fixed-style"
+					({ isActive }) => isActive ? "nav-item-active nav-item-fixed-style" : `nav-item-fixed-style ${isDisabled ? 'nav-item-disabled' : ''}`
 				}
-				onClick={handleClick}>
+				onClick={handleClick}
+			>
 				<div id="nav-item-custom">
 					{getIconComponent(title)}<span className="nav-item-custom-span">{title}</span>
+					{isDisabled && <IoBanSharp color="red" className="disable-icon" />}
 				</div>
 			</NavLink>
 		);

@@ -194,20 +194,15 @@ const ProjectMembers = () =>
 				role: selectedPermission
 			});
 
+			setIsLoading(false);
 			message.success("Invite sent successfully");
+			closeModal();
 			fetchProjectMembers();
 
 		} catch (error)
 		{
-			message.error(error.response.data.message);
-			setIsModalOpen(false);
-		}
-		finally
-		{
 			setIsLoading(false);
-			closeModal();
-			setUserEmail("");
-
+			message.error(error.response.data.message);
 		}
 	};
 
@@ -259,7 +254,7 @@ const ProjectMembers = () =>
 						<Result
 							status="success"
 							title="Successfully sent invite!"
-							subTitle={`User Avinash@2000 has been invited to ${activeProjectName}`}
+							subTitle={`User has been invited to ${activeProjectName}`}
 						/>
 					}
 				</Spin>

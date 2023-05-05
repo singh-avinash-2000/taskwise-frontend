@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import "./Notification.css";
 import { Avatar, message } from "antd";
 import { List } from "react-virtualized";

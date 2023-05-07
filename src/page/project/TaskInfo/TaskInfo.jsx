@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb, Space, Button, Upload, Row, Col, Select, Avatar, Image, Tabs, Modal, message } from "antd";
-import { UserOutlined, ApartmentOutlined, LinkOutlined, EditOutlined, InboxOutlined } from "@ant-design/icons";
+import { UserOutlined, ApartmentOutlined, LinkOutlined, EditOutlined, InboxOutlined, HomeOutlined } from "@ant-design/icons";
 import TaskItem from "../../../components/ui/TaskItem/TaskItem";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import './TaskInfo.css';
 import { FileIcon, defaultStyles } from "react-file-icon";
@@ -135,6 +135,9 @@ const TaskInfo = () =>
 		<div>
 			<Breadcrumb
 				items={[
+					{
+						title: <Link to="/"><HomeOutlined /></Link>,
+					},
 					{
 						title: activeProjectName,
 					},

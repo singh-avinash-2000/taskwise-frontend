@@ -232,7 +232,7 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 							multiple={true}
 							customRequest={handleFileUpload}
 							defaultFileList={defaultFileList}
-							onChange={({ file, fileList }) => { console.log(fileList); setDefaultFileList(fileList); }}
+							onChange={({ file, fileList }) => { setDefaultFileList(fileList); }}
 							onRemove={(file) => handleFileRemove(file)}
 						>
 							<p className="ant-upload-drag-icon">

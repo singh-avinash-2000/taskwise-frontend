@@ -1,15 +1,19 @@
-import { Button, Form, Input, Select, Switch, Card, message, } from 'antd';
+import { Button, Form, Input, Select, Switch, Card, message, Upload, } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 import { useEffect, useState } from "react";
 import { axiosClient } from "../../../config/axios";
 import { useNavigate } from "react-router";
 import { useStateContext } from "../../../context/ContextProvider";
 import './ProjectDataForm.css';
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProjects }) =>
 {
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
+	const [defaultFileList, setDefaultFileList] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [fileWithURL, setFileWithURL] = useState("");
 	const navigate = useNavigate();
 	const { activeProjectDetails, setActiveProjectDetails } = useStateContext();
 
@@ -21,7 +25,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 			await form.validateFields();
 
 			const data = form.getFieldsValue();
-
+			data.thumbnail = fileWithURL;
 			let response = {};
 
 			if (method === "Add")
@@ -67,6 +71,33 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 		}
 	};
 
+	const handleFileUpload = async (options) =>
+	{
+		setLoading(true);
+		const { onSuccess, onError, file } = options;
+		const formData = new FormData();
+		formData.append('files', file);
+		try
+		{
+			const response = await axiosClient.post('/misc/upload-all', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				}
+			});
+
+			onSuccess(message.success(`${file.name} file uploaded successfully.`));
+			const newFileListWithURL = response?.data?.result?.url;
+			setFileWithURL(newFileListWithURL);
+			setLoading(false);
+		} catch (error)
+		{
+			console.log(error);
+			const err = new Error(error.message);
+			onError(err);
+			setLoading(false);
+		}
+	};
+
 	const fetchProjectData = async () =>
 	{
 		try
@@ -94,6 +125,35 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 			fetchProjectData();
 		}
 	}, []);
+
+	const uploadButton = (
+		<div style={{ marginLeft: 8 }}>
+			{loading ? <LoadingOutlined /> : <PlusOutlined />}
+			<div
+				style={{
+					marginTop: 8,
+				}}
+			>
+				Upload
+			</div>
+		</div>
+	);
+
+	const handleFileRemove = async (file) =>
+	{
+		try
+		{
+			const fileName = file.name;
+			await axiosClient.delete(`/misc/delete/${fileName}`);
+			message.success(`${file.name} file removed successfully.`);
+			setFileWithURL("");
+		}
+		catch (error)
+		{
+			console.log(error);
+			message.error(`${file.name} file removal failed.`);
+		}
+	};
 
 
 	return (
@@ -163,6 +223,25 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 
 					<Form.Item label="Document" valuePropName="checked" name="document">
 						<Switch />
+					</Form.Item>
+					<Form.Item label={method === "Edit" ? "Change Logo" : "Project Logo"} valuePropName="checked" name="thumbnail">
+						<Upload
+							name="avatar"
+							listType="picture-card"
+							className="avatar-uploader"
+							showUploadList={{
+								showPreviewIcon: false,
+							}}
+							customRequest={handleFileUpload}
+							defaultFileList={defaultFileList}
+							onChange={({ file, fileList }) => { setDefaultFileList(fileList); }}
+							onRemove={(file) => handleFileRemove(file)}
+							maxCount={1}
+						>
+							{
+								uploadButton
+							}
+						</Upload>
 					</Form.Item>
 					<Form.Item
 						className="project-data-form-submit-button"

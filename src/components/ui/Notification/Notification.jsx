@@ -4,8 +4,9 @@ import { Avatar, message } from "antd";
 import { List } from "react-virtualized";
 import { axiosClient } from "../../../config/axios";
 import { useNavigate } from "react-router-dom";
+import { formatRelativeTime } from "../../../config/formatTime";
 
-const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificationPopover }) =>
+const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificationPopover, setNotifications }) =>
 {
 	const navigate = useNavigate();
 	const markAsRead = async (notification) =>
@@ -26,11 +27,12 @@ const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificat
 		}
 	};
 
-	const markAllAsRead = async () =>
+	const markAllAsRead = async (_, notifications) =>
 	{
 		try
 		{
 			await axiosClient.patch(`/user/notifications/mark-all`);
+			setNotifications(notifications.map((notification) => ({ ...notification, is_read: true })));
 			setUnReadCount(0);
 		}
 		catch (error)
@@ -42,6 +44,7 @@ const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificat
 	const rowRenderer = ({ key, index, style }) =>
 	{
 		const notification = notifications[index];
+		const time_ago = formatRelativeTime(notification.created_at);
 		return (
 			<div className={notification.is_read ? "notification-card" : "notification-card un-read"} key={key} style={style} onClick={(e) => markAsRead(notification)}>
 				<Avatar className="notification-avatar" shape="square" src={notification.type == "USER" ? notification.payload.initiator_profile : ""} />
@@ -56,6 +59,10 @@ const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificat
 						</div>
 					}
 				</div>
+				<div className="notification-time">
+					<span className="time-ago">{time_ago}</span>
+				</div>
+
 			</div>
 		);
 	};
@@ -64,7 +71,7 @@ const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificat
 		<div className="navbar-notification-content">
 			<div className="notification-header">
 				<span className="notification-typography">Notifications</span>
-				<span className="mark-read" onClick={markAllAsRead}>Mark all as read</span>
+				<span className="mark-read" onClick={(e) => markAllAsRead(e, notifications)}>Mark all as read</span>
 			</div>
 			<hr />
 			<div >

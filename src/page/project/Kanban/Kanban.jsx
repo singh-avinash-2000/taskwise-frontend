@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useStateContext } from "../../../context/ContextProvider";
 import { Breadcrumb, Card, Typography, Empty, message, Tooltip, Modal, Button } from "antd";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -9,7 +9,7 @@ import SingleTask from "./SingleTask";
 
 import "./Kanban.css";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
-import { PlusOutlined } from "@ant-design/icons";
+import { HomeOutlined, PlusOutlined } from "@ant-design/icons";
 
 function Kanban()
 {
@@ -172,6 +172,9 @@ function Kanban()
 				<div>
 					<Breadcrumb
 						items={[
+							{
+								title: <Link to="/"><HomeOutlined /></Link>,
+							},
 							{
 								title: activeProjectName,
 							},

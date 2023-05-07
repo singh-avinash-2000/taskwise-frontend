@@ -84,7 +84,7 @@ const Dashboard = () =>
 						return (
 							<Col className="project-item" xs={12} sm={8} md={8} lg={6} xl={4} key={id}>
 								<div className="new-project-div" style={{ backgroundColor: colourArray[id % 8] }} onClick={() => navigate(`/project/${d._id}/tasks`, { state: { project_name: d.name } })}>
-									<span className="initials">{getInitals(d.name)}</span>
+									{d.thumbnail ? <img src={d.thumbnail} alt="project" className="project-image" /> : <span className="project-initials">{getInitals(d.name)}</span>}
 								</div>
 								<h3 className="project-title">{d.name}</h3>
 							</Col>

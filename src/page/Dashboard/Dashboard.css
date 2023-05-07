@@ -27,6 +27,13 @@
 	margin: auto;
 }
 
+.project-image {
+	height: 80px;
+	width: 80px;
+	border-radius: 10px;
+	object-fit: cover;
+}
+
 .project-item {
 	text-align: center;
 	padding: 10px;

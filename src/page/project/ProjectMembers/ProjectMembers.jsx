@@ -1,7 +1,7 @@
 import { Divider, Table, Space, Select, Popconfirm, message, Button, Modal, Input, Result, Spin, Tag, Breadcrumb, Avatar } from 'antd';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from "react-router-dom";
-import { DeleteFilled, MailOutlined } from "@ant-design/icons";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { DeleteFilled, HomeOutlined, MailOutlined } from "@ant-design/icons";
 import { axiosClient } from "../../../config/axios";
 
 import './ProjectMembers.css';
@@ -215,6 +215,9 @@ const ProjectMembers = () =>
 		<div>
 			<Breadcrumb
 				items={[
+					{
+						title: <Link to="/"><HomeOutlined /></Link>,
+					},
 					{
 						title: activeProjectName,
 					},

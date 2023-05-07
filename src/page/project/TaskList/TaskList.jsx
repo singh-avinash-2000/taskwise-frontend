@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button, Modal, message } from "antd";
-import { ClockCircleOutlined, MinusSquareOutlined, PlusSquareOutlined, CheckCircleOutlined, CheckOutlined, LineChartOutlined } from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { ClockCircleOutlined, MinusSquareOutlined, PlusSquareOutlined, CheckCircleOutlined, CheckOutlined, LineChartOutlined, HomeOutlined } from "@ant-design/icons";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
 import "./TaskList.css";
@@ -152,6 +152,9 @@ const TaskList = ({ project_name }) =>
 		<div>
 			<Breadcrumb
 				items={[
+					{
+						title: <Link to="/"><HomeOutlined /></Link>,
+					},
 					{
 						title: activeProjectName,
 					},

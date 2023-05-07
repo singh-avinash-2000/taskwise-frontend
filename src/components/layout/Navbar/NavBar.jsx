@@ -101,7 +101,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 					:
 					<div className="logo-container" >
 						<HeatMapOutlined className="logo" onClick={() => navigate("/")} />
-						<span className="ping-typography" onClick={() => navigate("/")}>PING</span>
+						<span className="ping-typography" onClick={() => navigate("/")}>Task Wise</span>
 					</div>
 			}
 

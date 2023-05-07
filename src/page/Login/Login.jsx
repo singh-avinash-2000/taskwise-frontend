@@ -74,9 +74,9 @@ const Login = () =>
 			<div className="nav-container">
 				<div className="logo-container">
 					<HeatMapOutlined className="logo" />
-					<span className="logo-text">PING</span>
+					<span className="logo-text">Task Wise</span>
 					<hr />
-					<span className="email">CONNECT@PING.CO</span>
+					<span className="email">CONNECT@TASKWISE.CO</span>
 				</div>
 				<div>
 					<Link to="/register"><button className="request-button">Create Account</button></Link>
@@ -117,7 +117,7 @@ const Login = () =>
 					</div>
 				</div>
 			</div>
-			<h4 className="cr-text">Copyright @ PING {new Date().getFullYear()} | Privacy Policy</h4>
+			<h4 className="cr-text">Copyright @ Task Wise {new Date().getFullYear()} | Privacy Policy</h4>
 		</div>
 	);
 };

@@ -106,7 +106,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			}
 
 			<div className="navbar-notification-wrapper">
-				<Popover placement="bottomRight" open={notificationPopover} onOpenChange={handleNotificationOpenChange} content={<Notification setNotificationPopover={setNotificationPopover} notifications={notifications} setUnReadCount={setUnReadCount} unReadCount={unReadCount} />} trigger="click">
+				<Popover placement="bottomRight" open={notificationPopover} onOpenChange={handleNotificationOpenChange} content={<Notification setNotificationPopover={setNotificationPopover} notifications={notifications} setUnReadCount={setUnReadCount} unReadCount={unReadCount} setNotifications={setNotifications} />} trigger="click">
 					<Badge count={unReadCount} className="navbar-belloutlined-icon">
 						<BellOutlined />
 					</Badge>

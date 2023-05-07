@@ -12,22 +12,22 @@ export const formatRelativeTime = (createdAt) =>
 
 	if (seconds < 60)
 	{
-		return `${seconds}s`;
+		return `${seconds}s ago`;
 	} else if (minutes < 60)
 	{
-		return `${minutes}m`;
+		return `${minutes}m ago`;
 	} else if (hours < 24)
 	{
-		return `${hours}h`;
+		return `${hours}h ago`;
 	} else if (days < 30)
 	{
-		return `${days}d`;
+		return `${days}d ago`;
 	} else if (months < 12)
 	{
-		return `${months}mo`;
+		return `${months}mo ago`;
 	} else
 	{
-		return `${years}y`;
+		return `${years}y ago`;
 	}
 }
 

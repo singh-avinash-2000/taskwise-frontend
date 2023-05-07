@@ -203,7 +203,7 @@ const TaskInfo = () =>
 										<h3>Assignee</h3>
 									</td>
 									<td>
-										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{projectMembersMap[taskDetails?.assignee]?.display_name}</span>
+										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar src={projectMembersMap[taskDetails?.assignee]?.profile_picture} style={{ marginRight: 5 }} />{projectMembersMap[taskDetails?.assignee]?.display_name}</span>
 									</td>
 								</tr>
 								<tr className="task-table-row">
@@ -211,7 +211,7 @@ const TaskInfo = () =>
 										<h3 >Reporter </h3>
 									</td>
 									<td>
-										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar icon={<UserOutlined />} style={{ marginRight: 5 }} />{projectMembersMap[taskDetails?.reporter]?.display_name}
+										<span style={{ fontSize: 18, fontWeight: "600", color: "gray" }}><Avatar src={projectMembersMap[taskDetails?.reporter]?.profile_picture} style={{ marginRight: 5 }} />{projectMembersMap[taskDetails?.reporter]?.display_name}
 										</span>
 									</td>
 								</tr>

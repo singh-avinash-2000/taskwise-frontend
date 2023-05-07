@@ -218,7 +218,6 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 						]}
 					>
 						<Select
-							mode="multiple"
 							allowClear
 							style={{
 								width: '100%',

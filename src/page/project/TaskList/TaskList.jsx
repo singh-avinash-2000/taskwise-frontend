@@ -53,18 +53,17 @@ const TaskList = ({ project_name }) =>
 			render: (summary) => <div style={{ width: '100%', textOverflow: 'ellipsis', overflow: 'hidden' }}>{summary}</div>
 		},
 		{
-			title: 'Assignee',
+			title: 'Assigned To',
 			key: "assignee",
 			dataIndex: 'assignee',
 			render: (assignee) => (
 				<>
-
 					<Avatar src={projectMembersMap[assignee]?.profile_picture || "https://picsum.photos/200/300"} /> {projectMembersMap[assignee]?.display_name}
 				</>
 			),
 		},
 		{
-			title: 'Reporter',
+			title: 'Created By',
 			key: 'reporter',
 			dataIndex: 'reporter',
 			render: (reporter) => (

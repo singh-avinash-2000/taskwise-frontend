@@ -78,7 +78,7 @@ const MainLayout = ({ onDashboard }) =>
 		window.addEventListener("resize", handleResize);
 
 		return () => window.removeEventListener("resize", handleResize);
-	}, [onDashboard]);
+	}, [onDashboard, project_id]);
 
 	if (loading)
 	{

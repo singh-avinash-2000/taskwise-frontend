@@ -129,7 +129,7 @@ const TaskInfo = () =>
 	useEffect(() =>
 	{
 		fetchTaskDetails();
-	}, [modalOpen]);
+	}, [modalOpen, task_key]);
 
 	return (
 		<div>

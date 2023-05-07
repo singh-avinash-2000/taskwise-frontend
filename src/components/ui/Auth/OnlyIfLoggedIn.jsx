@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from "react-router-dom";
 import { getSocketInstance, setAuthToken } from "../../../config/socket";
-import { Skeleton } from 'antd';
 import { ContextProvider } from "../../../context/ContextProvider";
 import { axiosClient } from "../../../config/axios";
 
 const OnlyIfLoggedIn = () =>
 {
+	const [socketState, setSocketState] = useState(null);
 	const navigate = useNavigate();
-	const socket = getSocketInstance();
+
 	const path = window.location.pathname;
 
 	const establishSocketConnection = () =>
@@ -23,46 +23,55 @@ const OnlyIfLoggedIn = () =>
 		console.log("socket connection started...");
 		setAuthToken(token);
 		console.log("socket auth token set");
-		socket.connect();
+		socketState.connect();
 	};
 
 	useEffect(() =>
 	{
-		establishSocketConnection();
+		const socket = getSocketInstance();
+		setSocketState(socket);
 
-		socket.on("connect", () =>
-		{
-			console.log("socket connected");
-		});
+		return () => socket.close();
+	}, []);
 
-		socket.on('connect_error', async (error) =>
+	useEffect(() =>
+	{
+		if (socketState)
 		{
-			try
+			establishSocketConnection();
+			socketState.on("connect", () =>
 			{
-				if (error.message === "TokenExpiredError: jwt expired")
+				console.log("socket connected");
+			});
+
+			socketState.on("reconnect", () =>
+			{
+				console.log("socket reconnected");
+			});
+
+			socketState.on('connect_error', async (error) =>
+			{
+				try
 				{
-					console.log("socket");
-					const responseFromRefresh = await axiosClient.get('/auth/refresh');
-					localStorage.setItem("accessToken", responseFromRefresh.data?.result?.accessToken);
-					establishSocketConnection();
-				}
-				else
+					if (error.message === "TokenExpiredError: jwt expired")
+					{
+						const responseFromRefresh = await axiosClient.get('/auth/refresh');
+						localStorage.setItem("accessToken", responseFromRefresh.data?.result?.accessToken);
+						establishSocketConnection();
+					}
+					else
+					{
+						localStorage.removeItem("accessToken");
+						navigate("/login?redirect_url=" + path);
+					}
+				} catch (error)
 				{
 					localStorage.removeItem("accessToken");
 					navigate("/login?redirect_url=" + path);
 				}
-			} catch (error)
-			{
-				localStorage.removeItem("accessToken");
-				navigate("/login?redirect_url=" + path);
-			}
-		});
-
-		return () =>
-		{
-			socket.disconnect();
-		};
-	}, [socket]);
+			});
+		}
+	}, [socketState]);
 
 	return (
 		<ContextProvider><Outlet /></ContextProvider>

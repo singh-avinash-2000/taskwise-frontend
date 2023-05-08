@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Switch, Card, message, Upload, } from 'antd';
+import { Button, Form, Input, Select, Switch, Card, message, Upload, Modal, } from 'antd';
 import TextArea from "antd/lib/input/TextArea";
 import { useEffect, useState } from "react";
 import { axiosClient } from "../../../config/axios";
@@ -11,9 +11,15 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 {
 	const [form] = Form.useForm();
 	const [isChatVisible, setIsChatVisible] = useState(false);
-	const [defaultFileList, setDefaultFileList] = useState([]);
 	const [loading, setLoading] = useState(false);
+
 	const [fileWithURL, setFileWithURL] = useState("");
+	const [defaultFileList, setDefaultFileList] = useState([]);
+	const [previewOpen, setPreviewOpen] = useState(false);
+	const [previewImage, setPreviewImage] = useState("");
+	const [previewTitle, setPreviewTitle] = useState("");
+
+
 	const navigate = useNavigate();
 	const { activeProjectDetails, setActiveProjectDetails } = useStateContext();
 
@@ -58,6 +64,29 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 		}
 	};
 
+	const getBase64 = (file) =>
+		new Promise((resolve, reject) =>
+		{
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = () => resolve(reader.result);
+			reader.onerror = (error) => reject(error);
+		});
+
+	const handlePreview = async (file) =>
+	{
+		if (!file.url && !file.preview)
+		{
+			file.preview = await getBase64(file.originFileObj);
+		}
+		setPreviewImage(file.url || file.preview);
+		setPreviewOpen(true);
+		setPreviewTitle(
+			file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+		);
+	};
+
+	const handleCancel = () => setPreviewOpen(false);
 
 	const handleDropDownChange = (value) =>
 	{
@@ -104,6 +133,21 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 		{
 			const response = await axiosClient.get(`/projects/${project_id}`);
 			form.setFieldsValue(response.data.result);
+
+			if (response.data.result.thumbnail.length > 0)
+			{
+
+				setFileWithURL(response.data.result.thumbnail);
+				setDefaultFileList([
+					{
+						uid: "-1",
+						name: "Project Logo",
+						status: "done",
+						url: response.data.result.thumbnail,
+					},
+				]);
+			}
+
 			if (response.data.result.type == "SHARED")
 			{
 				setIsChatVisible(true);
@@ -229,19 +273,32 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 							name="avatar"
 							listType="picture-card"
 							className="avatar-uploader"
-							showUploadList={{
-								showPreviewIcon: false,
-							}}
 							customRequest={handleFileUpload}
-							defaultFileList={defaultFileList}
+							fileList={defaultFileList}
 							onChange={({ file, fileList }) => { setDefaultFileList(fileList); }}
 							onRemove={(file) => handleFileRemove(file)}
 							maxCount={1}
+							onPreview={handlePreview}
 						>
 							{
-								uploadButton
+								defaultFileList.length >= 1 ? null :
+									uploadButton
 							}
 						</Upload>
+						<Modal
+							open={previewOpen}
+							title={previewTitle}
+							footer={null}
+							onCancel={handleCancel}
+						>
+							<img
+								alt="project-logo"
+								style={{
+									width: "100%"
+								}}
+								src={previewImage}
+							/>
+						</Modal>
 					</Form.Item>
 					<Form.Item
 						className="project-data-form-submit-button"

@@ -18,6 +18,7 @@ const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificat
 			{
 				setUnReadCount(unReadCount - 1);
 			}
+			setNotifications(notifications.map((item) => item._id === notification._id ? { ...item, is_read: true } : item));
 			navigate(notification.payload.redirect_url);
 			setNotificationPopover(false);
 		}
@@ -26,6 +27,7 @@ const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificat
 			message.error(error.response.data.message);
 		}
 	};
+
 
 	const markAllAsRead = async (_, notifications) =>
 	{
@@ -47,7 +49,7 @@ const Notification = ({ notifications, setUnReadCount, unReadCount, setNotificat
 		const time_ago = formatRelativeTime(notification.created_at);
 		return (
 			<div className={notification.is_read ? "notification-card" : "notification-card un-read"} key={key} style={style} onClick={(e) => markAsRead(notification)}>
-				<Avatar className="notification-avatar" shape="square" src={notification.type == "USER" ? notification.payload.initiator_profile : ""} />
+				<Avatar className="notification-avatar" shape="square" src={notification.payload.initiator_profile} />
 				<div className="notification-content">
 					<span className="mention-title">{notification.payload.initiator_name}</span>
 					<br />

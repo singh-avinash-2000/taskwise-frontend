@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Space, Button, Upload, Row, Col, Select, Avatar, Image, Tabs, Modal, message, Empty } from "antd";
-import { UserOutlined, ApartmentOutlined, LinkOutlined, EditOutlined, InboxOutlined, HomeOutlined } from "@ant-design/icons";
+import { Breadcrumb, Space, Button, Upload, Row, Col, Select, Avatar, Tabs, Modal, message, Empty } from "antd";
+import { ApartmentOutlined, LinkOutlined, EditOutlined, InboxOutlined, HomeOutlined } from "@ant-design/icons";
 import TaskItem from "../../../components/ui/TaskItem/TaskItem";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
 import { Link, useParams } from "react-router-dom";
@@ -31,10 +31,10 @@ const TaskInfo = () =>
 			label: `Subtasks`,
 			children: <>
 				{
-					taskDetails?.type === "MAIN_TASK" ?
+					subtasks?.length > 0 ?
 						subtasks?.map((subtask) => (
-							<TaskItem key={subtask._id} summary={subtask?.summary} task_key={subtask?.task_key} status={subtask?.status.toLowerCase()} setSubtasks={setSubtasks} />
-						)) : <Empty description="Not a main task" />}
+							<TaskItem key={subtask._id} summary={subtask?.summary} task_key={subtask?.task_key} status={subtask?.status.toLowerCase()} parent_id={subtask?.parent_task} />
+						)) : <Empty description="No sub tasks found" />}
 			</>,
 		}
 	];
@@ -49,12 +49,13 @@ const TaskInfo = () =>
 	{
 		const response = await axiosClient.get(`/projects/${project_id}/tasks/${task_key}`);
 		setTaskDetails(response.data?.result);
+		fetchSubtasks(response.data?.result?._id);
 		setDefaultFileList(response.data?.result?.documents);
 	};
 
-	const fetchSubtasks = async () =>
+	const fetchSubtasks = async (parent_id) =>
 	{
-		const response = await axiosClient.get(`/projects/${project_id}/tasks/${task_key}/subtasks`);
+		const response = await axiosClient.get(`/projects/${project_id}/tasks/${parent_id}/subtasks`);
 		setSubtasks(response.data?.result);
 	};
 
@@ -131,12 +132,8 @@ const TaskInfo = () =>
 	useEffect(() =>
 	{
 		fetchTaskDetails();
-	}, [modalOpen, task_key]);
-
-	useEffect(() =>
-	{
-		fetchSubtasks();
-	}, [project_id, task_key]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [modalOpen, task_key, project_id]);
 
 	return (
 		<div>
@@ -250,7 +247,7 @@ const TaskInfo = () =>
 				</Col>
 			</Row>
 			<Modal title={`${modalHeader} Task`} open={modalOpen} destroyOnClose={true} onCancel={() => { setModalOpen(false); }} footer={null} className="create-task-modal">
-				<ProjectNewTaskForm method={modalHeader.toLowerCase()} taskDetails={taskDetails} closeModal={() => setModalOpen(false)} task_type={modalHeader == "Sub" ? "SUB_TASK" : "MAIN_TASK"} />
+				<ProjectNewTaskForm method={modalHeader.toLowerCase()} taskDetails={taskDetails} closeModal={() => setModalOpen(false)} task_type={modalHeader === "Sub" ? "SUB_TASK" : "MAIN_TASK"} />
 			</Modal>
 			<Modal title="Attachments" open={attachmentModalOpen} onCancel={() => { setAttachmentModal(false); }} okText={"Update"} onOk={handleTaskUpdate}>
 				<Dragger

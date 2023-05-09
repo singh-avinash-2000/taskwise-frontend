@@ -1,8 +1,7 @@
 import React from 'react';
-import { Avatar, Badge, Card, Empty } from "antd";
+import { Avatar, Badge, Card } from "antd";
 import Meta from "antd/es/card/Meta";
 import { Draggable } from "react-beautiful-dnd";
-import { useStateContext } from "../../../context/ContextProvider";
 
 function SingleTask({ task, index })
 {

@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
-import { useLocation } from "react-router-dom";
-import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
+import React from 'react';
 
 
 const NewTask = () =>
 {
-	const location = useLocation();
-	const [formData, setFormData] = useState({});
 
 	return (
 		<></>

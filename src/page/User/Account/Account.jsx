@@ -1,4 +1,4 @@
-import { Card, Col, Row, Image, Divider, Tabs, Descriptions, Button, Form, Input, Modal, message, Upload } from "antd";
+import { Col, Row, Image, Divider, Tabs, Descriptions, Button, Form, Input, Modal, message, Upload } from "antd";
 // import { EllipsisOutlined, SettingOutlined, EditOutlined } from "@ant-design/icons";
 import "./Account.css";
 import { useEffect, useState } from "react";
@@ -198,6 +198,7 @@ const UserAccount = () =>
 	useEffect(() =>
 	{
 		fetchUserDetails();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
 		<Row gutter={[10, 15]}>

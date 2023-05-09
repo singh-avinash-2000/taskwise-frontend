@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useStateContext } from "../../../context/ContextProvider";
-import { Breadcrumb, Card, Typography, Empty, message, Tooltip, Modal, Button } from "antd";
+import { Breadcrumb, Card, Typography, Empty, Modal, Button } from "antd";
 import { Link, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { AiOutlinePlus } from "react-icons/ai";
 import SingleTask from "./SingleTask";
 
 import "./Kanban.css";
@@ -39,6 +38,7 @@ function Kanban()
 			let inProgress = [];
 			let completed = [];
 			let closed = [];
+			// eslint-disable-next-line array-callback-return
 			tasks.map((t) =>
 			{
 				const assigneeDetails = projectMembersMap[t.assignee];
@@ -84,6 +84,7 @@ function Kanban()
 	useEffect(() =>
 	{
 		fetchProjectTasks();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isModalOpen]);
 
 	const onDragEnd = async (result) =>

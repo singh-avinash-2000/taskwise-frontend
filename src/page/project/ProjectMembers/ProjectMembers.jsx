@@ -209,6 +209,7 @@ const ProjectMembers = () =>
 	useEffect(() =>
 	{
 		fetchProjectMembers();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

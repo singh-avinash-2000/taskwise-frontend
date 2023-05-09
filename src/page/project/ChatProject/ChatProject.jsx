@@ -3,12 +3,13 @@ import { Layout, Avatar, Input, Tooltip, Image } from 'antd';
 import { ImAttachment } from 'react-icons/im';
 import { GrEmoji } from 'react-icons/gr';
 import { IoSend } from 'react-icons/io5';
-import { AiFillFile, AiFillFilePdf } from 'react-icons/ai';
+import { AiFillFile } from 'react-icons/ai';
 import './ChatProject.css';
 
 const { Content } = Layout;
 
-function ChatProject() {
+function ChatProject()
+{
     const [chatData, setChatData] = useState({});
 
     const lastMessageRef = useRef(null);
@@ -16,12 +17,14 @@ function ChatProject() {
     const [chatmessage, setchatmessage] = useState('');
     const [attachments, setattachments] = useState([]);
 
-    const scrollToBottom = () => {
+    const scrollToBottom = () =>
+    {
         lastMessageRef?.current?.scrollIntoView({ behavior: "smooth" });
     };
 
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         setChatData({     //change data to orginal chat data from backend
             name: 'Bentley Systems',
             messages: [
@@ -99,14 +102,17 @@ function ChatProject() {
         });
     }, []);
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         scrollToBottom();
     }, [chatData]);
 
-    function handleSend(e) {
+    function handleSend(e)
+    {
         e.preventDefault();
         const message = chatmessage;
-        if (attachments || (message && message.length > 0)) {
+        if (attachments || (message && message.length > 0))
+        {
             const newMessage = {
                 id: chatData.messages.length + 1,
                 message: message,
@@ -124,16 +130,19 @@ function ChatProject() {
         }
     }
 
-    function handleImageChange(e) {
+    function handleImageChange(e)
+    {
         e.preventDefault();
         setattachments([]);
-        for (let i = 0; i < e.target.files.length; i++) {
+        for (let i = 0; i < e.target.files.length; i++)
+        {
             const file = e.target.files[i];
             console.log(file);
             if (!file) return;
             const fileReader = new FileReader();
             fileReader.readAsDataURL(file);
-            fileReader.onloadend = function (e) {
+            fileReader.onloadend = function (e)
+            {
                 const newAttachment = {
                     id: attachments.length + 1,
                     name: file.name,
@@ -142,7 +151,7 @@ function ChatProject() {
                     url: e.target.result
                 };
                 setattachments([...attachments, newAttachment]);
-            }
+            };
         }
         e.target.value = '';
     }
@@ -160,7 +169,8 @@ function ChatProject() {
             </div>
             <Content className='content'>
                 <div className="chat-messages" style={{ height: window.innerHeight - 200 }}>
-                    {chatData.messages && chatData.messages.map((message, index) => {   //change data to orginal chat data from backend
+                    {chatData.messages && chatData.messages.map((message, index) =>
+                    {   //change data to orginal chat data from backend
                         return (
                             <div className='chat-message' key={index} >
                                 <div className={`${message.sender === 'user' ? 'chat-message-user' : 'chat-message-other'}`}>
@@ -172,8 +182,10 @@ function ChatProject() {
                                             {message.time}
                                         </div>
                                     </div>
-                                    {message?.attachments && message?.attachments?.map((attachment, index) => {
-                                        if (attachment.type === 'image') {
+                                    {message?.attachments && message?.attachments?.map((attachment, index) =>
+                                    {
+                                        if (attachment.type === 'image')
+                                        {
                                             return (
                                                 <div className="chat-message-image" key={index}>
                                                     <Image key={index}
@@ -181,34 +193,37 @@ function ChatProject() {
                                                         src={attachment.url}
                                                     />
                                                 </div>
-                                            )
+                                            );
                                         }
-                                        else if (attachment.type === 'video') {
+                                        else if (attachment.type === 'video')
+                                        {
                                             return (
                                                 <div className="chat-message-image" key={index}>
                                                     <video width="320" height="240" controls>
                                                         <source src={attachment.url} type="video/mp4" />
                                                     </video>
                                                 </div>
-                                            )
+                                            );
                                         }
 
-                                        else if (attachment.type === 'application' && attachment?.fullType === 'application/pdf') {
+                                        else if (attachment.type === 'application' && attachment?.fullType === 'application/pdf')
+                                        {
                                             return (
                                                 <div className="chat-message-image" key={index}>
                                                     {/* <AiFillFilePdf />
                                                     <span>{attachment.name}</span> */}
-                                                    <iframe src={attachment.url} width="100%" height="500px"></iframe>
+                                                    <iframe src={attachment.url} width="100%" height="500px" title="attachment-file"></iframe>
                                                 </div>
-                                            )
+                                            );
                                         }
-                                        else {
+                                        else
+                                        {
                                             return (
                                                 <div className="chat-message-image" key={index}>
                                                     <AiFillFile />
                                                     <span>{attachment.name}</span>
                                                 </div>
-                                            )
+                                            );
                                         }
 
                                     })}

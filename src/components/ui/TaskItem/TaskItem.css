@@ -5,6 +5,11 @@
     margin: 5px;
 }
 
+.taskitem-wrapper:hover {
+    background-color: #f4f4f4;
+    cursor: pointer;
+}
+
 .taskitem-row {
     padding: 0px 10px;
 }

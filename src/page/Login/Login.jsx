@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, message } from 'antd';
-import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, GoogleOutlined, HeatMapOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, HeatMapOutlined } from '@ant-design/icons';
 import { axiosClient } from "../../config/axios";
 
 import "./login.css";

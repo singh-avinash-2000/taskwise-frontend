@@ -21,7 +21,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 
 
 	const navigate = useNavigate();
-	const { activeProjectDetails, setActiveProjectDetails } = useStateContext();
+	const { setActiveProjectDetails } = useStateContext();
 
 
 	const handleFormSubmit = async () =>
@@ -148,7 +148,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 				]);
 			}
 
-			if (response.data.result.type == "SHARED")
+			if (response.data.result.type === "SHARED")
 			{
 				setIsChatVisible(true);
 			}
@@ -168,6 +168,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 		{
 			fetchProjectData();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const uploadButton = (
@@ -303,7 +304,7 @@ const ProjectDataForm = ({ setNewProjectModalOpen, method, project_id, fetchProj
 					<Form.Item
 						className="project-data-form-submit-button"
 					>
-						<Button htmlType="submit" className='add-project-submit-btn'>{method == "Add" ? "Submit" : "Update"}</Button>
+						<Button htmlType="submit" className='add-project-submit-btn'>{method === "Add" ? "Submit" : "Update"}</Button>
 					</Form.Item>
 				</Form>
 			</Card >

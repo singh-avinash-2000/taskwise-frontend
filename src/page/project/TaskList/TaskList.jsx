@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Breadcrumb, Select, Table, Tooltip, Typography, Tag, Button, Modal, message } from "antd";
-import { ClockCircleOutlined, MinusSquareOutlined, PlusSquareOutlined, CheckCircleOutlined, CheckOutlined, LineChartOutlined, HomeOutlined } from "@ant-design/icons";
+import { Avatar, Breadcrumb, Select, Table, Tooltip, Tag, Button, Modal, message } from "antd";
+import { MinusSquareOutlined, PlusSquareOutlined, HomeOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
 import "./TaskList.css";
 import { useStateContext } from "../../../context/ContextProvider";
 
-const TaskList = ({ project_name }) =>
+const TaskList = () =>
 {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [projectTasks, setProjectTasks] = useState([]);
@@ -145,6 +145,7 @@ const TaskList = ({ project_name }) =>
 	useEffect(() =>
 	{
 		fetchProjectData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isModalOpen]);
 
 

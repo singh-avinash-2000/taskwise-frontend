@@ -1,23 +1,23 @@
-import { Col, Row, Select, message } from "antd";
 import React from 'react';
+import { Col, Row, Select, message } from "antd";
 import "./TaskItem.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 
-const TaskItem = ({ summary, task_key, status, setSubtasks }) =>
+const TaskItem = ({ summary, task_key, status }) =>
 {
 
 	const { project_id } = useParams();
+	const navigate = useNavigate();
 
 	const handleStatusChange = async (value) =>
 	{
-		const response = await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, { status: value.toUpperCase() });
-		console.log(response.data?.result);
+		await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, { status: value.toUpperCase() });
 		message.success("Sub-Task status updated successfully");
 	};
 
 	return (
-		<div className="taskitem-wrapper">
+		<div className="taskitem-wrapper" onClick={() => navigate(`/project/${project_id}/tasks/${task_key}`)}>
 			<Row className="taskitem-row">
 				<Col xs={24} md={24} lg={16}>
 					<h3>{summary}</h3>
@@ -26,7 +26,7 @@ const TaskItem = ({ summary, task_key, status, setSubtasks }) =>
 					<h3>{task_key}</h3>
 				</Col>
 				<Col xs={16} md={16} lg={4} >
-					<Select defaultValue={status} className="progress-select" onChange={(value) => { handleStatusChange(value); }}>
+					<Select defaultValue={status} className="progress-select" onChange={(value) => { handleStatusChange(value); }} onClick={(e) => e.stopPropagation()}>
 						<Select.Option value="to_do">To do</Select.Option>
 						<Select.Option value="in_progress">In progress</Select.Option>
 						<Select.Option value="completed">Completed</Select.Option>

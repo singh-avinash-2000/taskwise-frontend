@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Button, List, Tag, Avatar, message } from 'antd';
 import { UsergroupAddOutlined } from '@ant-design/icons';
-import { useStateContext } from "../../../context/ContextProvider";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../../config/axios";
 
 function InviteAccept()
 {
 	const { project_id } = useParams();
-	const { userDetails } = useStateContext();
 	const navigate = useNavigate();
 	const [invitedProjectDetails, setInvitedProjectDetails] = useState({});
 	const [userPermission, setUserPermission] = useState("");
@@ -87,6 +85,7 @@ function InviteAccept()
 	useEffect(() =>
 	{
 		fetchProjectDetails();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
 		<div>

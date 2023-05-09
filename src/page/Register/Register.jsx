@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Input, Button, message } from 'antd';
+import { Input, message } from 'antd';
 import { EyeInvisibleOutlined, CheckCircleTwoTone, EyeOutlined, SyncOutlined, HeatMapOutlined, CloseCircleTwoTone } from '@ant-design/icons';
 import { axiosClient } from "../../config/axios";
 
 import "../Login/login.css";
-import { debounce } from "lodash";
 
 const Register = () =>
 {
@@ -18,17 +17,17 @@ const Register = () =>
 
 	let navigate = useNavigate();
 
-	const handleBlur = (e) =>
-	{
-		if (validateEmail(e.target.value))
-		{
-			setIsValidEmail(false);
-		}
-		else
-		{
-			setIsValidEmail(true);
-		}
-	};
+	// const handleBlur = (e) =>
+	// {
+	// 	if (validateEmail(e.target.value))
+	// 	{
+	// 		setIsValidEmail(false);
+	// 	}
+	// 	else
+	// 	{
+	// 		setIsValidEmail(true);
+	// 	}
+	// };
 
 	const validateEmail = (email) =>
 	{
@@ -55,7 +54,7 @@ const Register = () =>
 			setDisplayName(displayName.toLowerCase());
 			if (displayName.length > 5)
 			{
-				const response = await axiosClient.get("/auth/check-valid?display_name=" + displayName.toLowerCase());
+				await axiosClient.get("/auth/check-valid?display_name=" + displayName.toLowerCase());
 				setIsValidDisplayName(true);
 			}
 			else

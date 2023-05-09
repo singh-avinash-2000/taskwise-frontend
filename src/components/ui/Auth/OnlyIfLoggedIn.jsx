@@ -39,6 +39,7 @@ const OnlyIfLoggedIn = () =>
 			setIsSocketConnected(false);
 			socket.close();
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() =>
@@ -79,6 +80,7 @@ const OnlyIfLoggedIn = () =>
 				}
 			});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [socketState]);
 
 	if (!isSocketConnected)

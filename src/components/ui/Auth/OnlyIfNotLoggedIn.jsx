@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 // import axios from "axios";
 
 const OnlyIfNotLoggedIn = () =>
@@ -28,6 +28,7 @@ const OnlyIfNotLoggedIn = () =>
 		{
 			navigate("/");
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

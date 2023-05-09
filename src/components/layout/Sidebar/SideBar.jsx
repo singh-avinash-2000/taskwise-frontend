@@ -12,7 +12,6 @@ import { IoBanSharp } from "react-icons/io5";
 import { useStateContext } from "../../../context/ContextProvider";
 import { Spin } from "antd";
 import "./Sidebar.css";
-import { useRef } from "react";
 
 function getIconComponent(iconName)
 {

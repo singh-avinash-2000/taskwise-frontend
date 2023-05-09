@@ -42,7 +42,7 @@ const Dashboard = () =>
 		let str = "";
 		wordArr.map(w =>
 		{
-			str += w[0].toUpperCase() + " ";
+			return str += w[0].toUpperCase() + " ";
 		});
 
 		return str;
@@ -54,6 +54,7 @@ const Dashboard = () =>
 	{
 		fetchProjects();
 		setActiveProjectName("");
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (

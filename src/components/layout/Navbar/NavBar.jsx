@@ -76,6 +76,7 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 		{
 			socket.off();
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const settingsContent = (

@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Card, Upload, message, AutoComplete } from 'antd';
+import { Button, Form, Input, Select, Card, Upload, message } from 'antd';
 import { useEffect, useRef, useState } from "react";
 import 'react-quill/dist/quill.snow.css';
 import { InboxOutlined } from "@ant-design/icons";
@@ -34,7 +34,7 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 				values.documents = fileWithURL;
 
 				let response = {};
-				if (method != "update")
+				if (method !== "update")
 				{
 					if (task_type === "SUB_TASK")
 					{
@@ -121,7 +121,7 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 
 	useEffect(() =>
 	{
-		if (method == "update")
+		if (method === "update")
 		{
 			form.setFieldsValue(taskDetails);
 		}
@@ -135,17 +135,18 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 				quillRef.current.getEditor().setText("");
 			}
 		}
-
+		const quillCurrent = quillRef.current;
 		return () =>
 		{
 			form.resetFields();
 			setDescription("");
-			if (quillRef.current)
+			if (quillCurrent)
 			{
-				quillRef.current.getEditor().setContents([]);
-				quillRef.current.getEditor().setText("");
+				quillCurrent.getEditor().setContents([]);
+				quillCurrent.getEditor().setText("");
 			}
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -252,7 +253,7 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 					<Form.Item
 						style={{ textAlign: "center" }}
 					>
-						<Button htmlType="submit" shape="round" className='add-project-task-btn'>{method == "update" ? "Update" : "Submit"}</Button>
+						<Button htmlType="submit" shape="round" className='add-project-task-btn'>{method === "update" ? "Update" : "Submit"}</Button>
 					</Form.Item>
 				</Form>
 			</Card >

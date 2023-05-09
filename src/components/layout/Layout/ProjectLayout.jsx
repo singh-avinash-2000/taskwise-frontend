@@ -6,7 +6,7 @@ import SideBar from "../Sidebar/SideBar";
 import './ProjectLayout.css';
 import { axiosClient } from "../../../config/axios";
 import { useStateContext } from "../../../context/ContextProvider";
-import { Skeleton } from "antd";
+import { Spin } from "antd";
 
 const MainLayout = ({ onDashboard }) =>
 {
@@ -82,7 +82,7 @@ const MainLayout = ({ onDashboard }) =>
 
 	if (loading)
 	{
-		return <Skeleton active />;
+		return (<Spin size="large" className="spinner" />);
 	}
 	else
 	{

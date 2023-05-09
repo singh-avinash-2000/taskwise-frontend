@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Space, Button, Upload, Row, Col, Select, Avatar, Image, Tabs, Modal, message } from "antd";
+import { Breadcrumb, Space, Button, Upload, Row, Col, Select, Avatar, Image, Tabs, Modal, message, Empty } from "antd";
 import { UserOutlined, ApartmentOutlined, LinkOutlined, EditOutlined, InboxOutlined, HomeOutlined } from "@ant-design/icons";
 import TaskItem from "../../../components/ui/TaskItem/TaskItem";
 import ProjectNewTaskForm from "../../../components/ui/ProjectNewTaskForm/ProjectNewTaskForm";
@@ -14,6 +14,7 @@ const TaskInfo = () =>
 	const [modalOpen, setModalOpen] = useState(false);
 	const [attachmentModalOpen, setAttachmentModal] = useState(false);
 	const [taskDetails, setTaskDetails] = useState({});
+	const [subtasks, setSubtasks] = useState([]);
 	const { project_id, task_key } = useParams();
 	const [modalHeader, setModalHeader] = useState("");
 	const [fileWithURL, setFileWithURL] = useState([]);
@@ -24,21 +25,16 @@ const TaskInfo = () =>
 	{
 		console.log(key);
 	};
-
 	const items = [
 		{
 			key: '1',
 			label: `Subtasks`,
 			children: <>
-				<TaskItem />
-				<TaskItem />
-				<TaskItem />
-				<TaskItem />
-				<TaskItem />
-				<TaskItem />
-				<TaskItem />
-				<TaskItem />
-				<TaskItem />
+				{
+					taskDetails?.type === "MAIN_TASK" ?
+						subtasks?.map((subtask) => (
+							<TaskItem key={subtask._id} summary={subtask?.summary} task_key={subtask?.task_key} status={subtask?.status.toLowerCase()} setSubtasks={setSubtasks} />
+						)) : <Empty description="Not a main task" />}
 			</>,
 		}
 	];
@@ -54,6 +50,12 @@ const TaskInfo = () =>
 		const response = await axiosClient.get(`/projects/${project_id}/tasks/${task_key}`);
 		setTaskDetails(response.data?.result);
 		setDefaultFileList(response.data?.result?.documents);
+	};
+
+	const fetchSubtasks = async () =>
+	{
+		const response = await axiosClient.get(`/projects/${project_id}/tasks/${task_key}/subtasks`);
+		setSubtasks(response.data?.result);
 	};
 
 	const handleStatusChange = async (value) =>
@@ -130,6 +132,11 @@ const TaskInfo = () =>
 	{
 		fetchTaskDetails();
 	}, [modalOpen, task_key]);
+
+	useEffect(() =>
+	{
+		fetchSubtasks();
+	}, [project_id, task_key]);
 
 	return (
 		<div>

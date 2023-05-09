@@ -36,11 +36,15 @@ const ProjectNewTaskForm = ({ method, taskDetails, closeModal, task_type }) =>
 				let response = {};
 				if (method != "update")
 				{
+					if (task_type === "SUB_TASK")
+					{
+						values.parent_task = taskDetails._id;
+					}
 					response = await axiosClient.post(`/projects/${project_id}/tasks`, values);
 				}
 				else
 				{
-					values.parent_task_key = task_key;
+					// values.parent_task = task_key;
 					response = await axiosClient.patch(`/projects/${project_id}/tasks/${task_key}`, values);
 				}
 

@@ -3,10 +3,13 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { getSocketInstance, setAuthToken } from "../../../config/socket";
 import { ContextProvider } from "../../../context/ContextProvider";
 import { axiosClient } from "../../../config/axios";
+import { Spin } from "antd";
 
 const OnlyIfLoggedIn = () =>
 {
 	const [socketState, setSocketState] = useState(null);
+	const [isSocketConnected, setIsSocketConnected] = useState(false);
+
 	const navigate = useNavigate();
 
 	const path = window.location.pathname;
@@ -31,7 +34,11 @@ const OnlyIfLoggedIn = () =>
 		const socket = getSocketInstance();
 		setSocketState(socket);
 
-		return () => socket.close();
+		return () =>
+		{
+			setIsSocketConnected(false);
+			socket.close();
+		};
 	}, []);
 
 	useEffect(() =>
@@ -42,6 +49,7 @@ const OnlyIfLoggedIn = () =>
 			socketState.on("connect", () =>
 			{
 				console.log("socket connected");
+				setIsSocketConnected(true);
 			});
 
 			socketState.on("reconnect", () =>
@@ -73,8 +81,15 @@ const OnlyIfLoggedIn = () =>
 		}
 	}, [socketState]);
 
+	if (!isSocketConnected)
+	{
+		return (<Spin size="large" className="spinner" />);
+	}
+
 	return (
-		<ContextProvider><Outlet /></ContextProvider>
+		<ContextProvider>
+			<Outlet />
+		</ContextProvider>
 	);
 };
 

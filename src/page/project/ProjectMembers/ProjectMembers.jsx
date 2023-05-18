@@ -64,8 +64,8 @@ const ProjectMembers = () =>
 
 	const columns = [
 		{
-			title: 'Name',
-			dataIndex: 'name',
+			title: 'Display Name',
+			dataIndex: 'display_name',
 			render: (text, record) =>
 			{
 				return (
@@ -75,11 +75,6 @@ const ProjectMembers = () =>
 					</div>
 				);
 			},
-			ellipsis: true
-		},
-		{
-			title: 'Display Name',
-			dataIndex: 'display_name',
 			ellipsis: true
 		},
 		{

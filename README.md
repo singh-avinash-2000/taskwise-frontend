@@ -1,3 +1,26 @@
+# Task-Wise
+
+Task-Wise is a real-time project-based task management application that simplifies task management and collaboration within teams. The application allows users to create tasks, add subtasks, upload attachment files, and engage in project-based chat room discussions, all in one centralized platform.
+
+## Features
+
+- **Task Creation**: Easily create tasks with detailed descriptions, due dates, priorities, and assign them to team members.
+- **Subtask Management**: Break down complex tasks into smaller subtasks, assign them to different team members, and track their progress individually.
+- **Attachment Upload**: Attach relevant files, documents, or images to tasks or subtasks, ensuring all essential information is in one place.
+- **Project Chat Room**: Engage in real-time discussions and collaborate effectively with your team members within dedicated project-based chat rooms.
+- **User Management**: Invite team members to join projects, assign roles and permissions, and manage user access to ensure effective collaboration.
+
+## Installation
+
+To run Task-Wise locally, follow the steps below:
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/Task-Wise.git
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

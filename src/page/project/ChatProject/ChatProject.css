@@ -2,6 +2,14 @@
     background-color: rgba(255, 255, 255, 0.619);
 }
 
+.image-list {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
 /* Header Here */
 
 .header {
@@ -144,7 +152,7 @@
     border-radius: 10px;
     max-width: 600px;
     word-wrap: break-word;
-
+    margin-bottom: 5px;
 }
 
 .chat-bubble-other {
@@ -258,6 +266,13 @@
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
+}
+
+.emoji-picker-container {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    z-index: 1;
 }
 
 @media only screen and (max-width: 750px) {

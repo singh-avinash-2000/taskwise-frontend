@@ -17,6 +17,8 @@ import { formatTimeForChat } from "../../../config/formatTime.js";
 import ImageModal from "./ImageModal.jsx";
 import VideoModal from "./VideoModal.jsx";
 import AudioModal from "./AudioModal.jsx";
+import data from '@emoji-mart/data';
+import Picker from '@emoji-mart/react';
 
 const { Content } = Layout;
 
@@ -35,10 +37,8 @@ function ChatProject()
     const { activeProjectName, activeProjectDetails, userDetails } = useStateContext();
     const socket = getSocketInstance();
 
-    // For previewing different types of attachments
-    const [imageModalOpen, setImageModalOpen] = useState(false);
-    const [videoModalOpen, setVideoModalOpen] = useState(false);
-    const [audioModalOpen, setAudioModalOpen] = useState(false);
+    //emoji-mart
+    const [emojiClick, setEmojiClick] = useState(false);
 
 
     const showDrawer = () =>
@@ -69,65 +69,6 @@ function ChatProject()
             console.log(error);
         }
     };
-
-
-    // const message = [
-    //     {
-    //         id: 1,
-    //         type: 'TEXT',
-    //         message: 'Hello',
-    //         sender: {
-    //             display_name: 'Rahul',
-    //             email: 'rahul@gmail.com',
-    //             profile_picture: 'www.placeholder.com/200x200',
-    //             _id: jdfgnsnsidfnsein,
-    //         },
-    //         sent_at: new Date(),
-    //         read_by: [
-    //             {
-    //                 display_name: 'Rahul',
-    //                 email: 'rahul@gmail.com',
-    //                 profile_picture: 'www.placeholder.com/200x200',
-    //                 _id: fdkjvndvdvnsdv,
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         id: 2,
-    //         type: 'IMAGE',
-    //         document: [
-    //             {
-    //                 name: 'image1.jpg',
-    //                 url: 'www.placeholder.com/200x200',
-    //                 _id: 'jdfgnsnsidfnsein',
-    //             },
-    //             {
-
-    //             }
-    //         ]
-    //         sender: {
-    //             display_name: 'Rahul',
-    //             email: 'rahul@gmail.com',
-    //             profile_picture: 'www.placeholder.com/200x200',
-    //             _id: jdfgnsnsidfnsein,
-    //         },
-    //         sent_at: new Date(),
-    //         read_by: [
-    //             {
-    //                 display_name: 'Rahul',
-    //                 email: 'rahul@gmail.com',
-    //                 profile_picture: 'www.placeholder.com/200x200',
-    //                 _id: fdkjvndvdvnsdv,
-    //             }
-    //         ]
-
-    //     },
-    //     {
-
-    //     }
-    // ];
-
-
 
     useEffect(() =>
     {
@@ -174,7 +115,6 @@ function ChatProject()
         return (
             <Image.PreviewGroup>
                 {mappedAttachments.map((attachment) =>
-
                 (
                     <Image width={200} src={attachment.url} key={attachment.id} />
                 ))}
@@ -323,7 +263,6 @@ function ChatProject()
             setchatmessage('');
             setattachments([]);
             setOpen(false);
-            console.log(response.data);
         } catch (error)
         {
             console.log(error);
@@ -370,6 +309,13 @@ function ChatProject()
         e.target.value = "";
         setPopoverVisible(false);
         showDrawer(true);
+    }
+
+    function handleEmojiCLick(emojiData)
+    {
+        const newMessage = chatmessage + emojiData.native;
+        setchatmessage(newMessage);
+        setEmojiClick(false);
     }
 
 
@@ -468,58 +414,28 @@ function ChatProject()
                                         <Avatar src={<img src={message.sender.profile_picture} alt="avatar" />} className={userDetails._id === message.sender._id ? "chat-avatar-user" : "chat-avatar-other"} />
                                         {message.type === 'IMAGE' &&
                                             <div className={`${message.sender._id === userDetails._id ? 'chat-bubble-user' : 'chat-bubble-other'}`}>
-                                                {message.document.map((image) =>
-                                                {
-                                                    return (
-                                                        <Tooltip title="Preview Image" key={image.name}>
-                                                            <div className="image-box" onClick={() => setImageModalOpen(true)}>
-                                                                <BsImageFill />
-                                                                <span>{image.name}</span>
-                                                            </div>
-                                                            <ImageModal name={image.name} url={image.url} imageModalOpen={imageModalOpen} setImageModalOpen={setImageModalOpen} />
-                                                        </Tooltip>);
-                                                })}
+                                                <ImageModal images={message.document} />
                                             </div>
                                         }
 
                                         {message.type === 'VIDEO' &&
                                             <div className={`${message.sender._id === userDetails._id ? 'chat-bubble-user' : 'chat-bubble-other'}`}>
-                                                {message.document.map((video) =>
-                                                {
-                                                    return (
-                                                        <Tooltip title="Preview Video" key={video._id}>
-                                                            <div className="image-box" onClick={() => setVideoModalOpen(true)}>
-                                                                <BsCameraVideoFill />
-                                                                <span>{video.name}</span>
-                                                            </div>
-                                                            <VideoModal name={video.name} url={video.url} videoModalOpen={videoModalOpen} setVideoModalOpen={setVideoModalOpen} />
-                                                        </Tooltip>);
-                                                })}
+                                                <VideoModal videos={message.document} />
                                             </div>
                                         }
 
                                         {message.type === 'AUDIO' &&
                                             <div className={`${message.sender._id === userDetails._id ? 'chat-bubble-user' : 'chat-bubble-other'}`}>
-                                                {message.document.map((audio) =>
-                                                {
-                                                    return (
-                                                        <Tooltip title="Preview Audio" key={audio._id}>
-                                                            <div className="image-box" onClick={() => setAudioModalOpen(true)}>
-                                                                <FaFileAudio />
-                                                                <span>{audio.name}</span>
-                                                            </div>
-                                                            <AudioModal name={audio.name} url={audio.url} audioModalOpen={audioModalOpen} setAudioModalOpen={setAudioModalOpen} />
-                                                        </Tooltip>);
-                                                })}
+                                                <AudioModal audios={message.document} />
                                             </div>
                                         }
                                         {message.type === 'FILE' &&
-                                            <div className={`${message.sender._id === userDetails._id ? 'chat-bubble-user' : 'chat-bubble-other'}`}>
+                                            <div>
                                                 {message.document.map((file) =>
                                                 {
                                                     return (
                                                         <Tooltip title="Click To Download File" key={file._id}>
-                                                            <div className="image-box">
+                                                            <div className={`${message.sender._id === userDetails._id ? 'chat-bubble-user' : 'chat-bubble-other'}`}>
                                                                 <BsFillFileEarmarkFill />
                                                                 <a href={file.url} download={file.name} className="file-attachment">
                                                                     {file.name}
@@ -529,7 +445,6 @@ function ChatProject()
                                                 })}
                                             </div>
                                         }
-
                                     </div>
                                 </div>
                             </div>);
@@ -547,7 +462,8 @@ function ChatProject()
                         <Popover content={Attachments} trigger="click" open={popoverVisible} onOpenChange={setPopoverVisible}>
                             <ImAttachment className="attachment-icon" size={25} />
                         </Popover>
-                        <GrEmoji className="emoji-icon" size={25} />
+                        <GrEmoji className="emoji-icon" size={25} onClick={() => setEmojiClick(!emojiClick)} />
+                        {emojiClick && <div className="emoji-picker-container"><Picker previewPosition='top' data={data} onEmojiSelect={handleEmojiCLick} /></div>}
                     </div>
                     <Input placeholder="Type a Message" className='chat-input' value={chatmessage} onChange={(e) => setchatmessage(e.target.value)} onPressEnter={handleSend} />
                     <div className="chat-send-button" onClick={handleSend}>

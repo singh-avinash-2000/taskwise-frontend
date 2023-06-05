@@ -1,18 +1,32 @@
 import { Modal } from "antd";
-import React from 'react';
+import React, { useState } from 'react';
 import ReactAudioPlayer from "react-audio-player";
+import { FaFileAudio } from "react-icons/fa";
 
-function ImageModal({ name, url, audioModalOpen, setAudioModalOpen })
+function ImageModal({ audios })
 {
+	const [audioModalOpen, setAudioModalOpen] = useState(false);
 
 	const handleCancel = () =>
 	{
 		setAudioModalOpen(false);
 	};
+
+
 	return (
-		<Modal title={name} open={audioModalOpen} onCancel={handleCancel} footer={null} destroyOnClose={true}>
-			<ReactAudioPlayer src={url} controls />
-		</Modal>
+		<>
+			<div className="image-list" onClick={() => setAudioModalOpen(true)}>
+				<FaFileAudio className="image-icon" />
+				<span>{audios.length === 1 ? '1 audio attached' : `${audios.length} audios attached`}</span>
+			</div>
+			<Modal title="Preview Audios attached" open={audioModalOpen} onCancel={handleCancel} footer={null} destroyOnClose={true}>
+				{
+					audios.map((audio, index) => (
+						<ReactAudioPlayer src={audio.url} controls key={index} />
+					))
+				}
+			</Modal>
+		</>
 	);
 }
 

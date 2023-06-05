@@ -1,17 +1,39 @@
 import { Modal, Image } from "antd";
-import React from 'react';
+import React, { useState } from 'react';
+import { BsImageFill } from "react-icons/bs";
 
-function ImageModal({ name, url, imageModalOpen, setImageModalOpen })
+function ImageModal({ images })
 {
-
+	const [imageModalOpen, setImageModalOpen] = useState(false);
 	const handleCancel = () =>
 	{
 		setImageModalOpen(false);
 	};
 	return (
-		<Modal title={name} open={imageModalOpen} onCancel={handleCancel} footer={null} destroyOnClose={true}>
-			<Image src={url} alt={name} />
-		</Modal>
+		<>
+			<div className="image-list" onClick={() => setImageModalOpen(true)}>
+				<BsImageFill className="image-icon" />
+				<span>{images.length === 1 ? '1 image attached' : `${images.length} images attached`}</span>
+			</div>
+			<Modal
+				open={imageModalOpen}
+				onCancel={handleCancel}
+				footer={null}
+				title="Preview Images Attached"
+			>
+				<Image.PreviewGroup>
+					{
+						images.map((image, index) => (
+							<Image
+								key={index}
+								src={image.url}
+								style={{ objectFit: "contain" }}
+							/>
+						))
+					}
+				</Image.PreviewGroup>
+			</Modal>
+		</>
 	);
 }
 

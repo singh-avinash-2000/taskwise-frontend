@@ -72,6 +72,12 @@ const NavBar = ({ navIconDisabled, collapsed, setCollapsed }) =>
 			fetchNotifications();
 		});
 
+		socket.on("chat-message", (data) =>
+		{
+			console.log('sa');
+			message.info({ content: `New Chat message from ${data.project_name}`, icon: <BellOutlined /> });
+		});
+
 		return () =>
 		{
 			socket.off();

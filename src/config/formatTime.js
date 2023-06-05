@@ -29,5 +29,23 @@ export const formatRelativeTime = (createdAt) =>
 	{
 		return `${years}y ago`;
 	}
-}
+};
+
+export const formatTimeForChat = (time) =>
+{
+	const date = new Date(time);
+	const hours = date.getHours();
+	const minutes = date.getMinutes();
+	const amOrPm = hours >= 12 ? 'PM' : 'AM';
+	const formattedHours = hours % 12 || 12;
+	const month = date.toLocaleString('default', { month: 'short' });
+	const day = date.getDate();
+
+	return `${formattedHours}:${padZero(minutes)} ${amOrPm} | ${month} ${day}`;
+};
+
+const padZero = (number) =>
+{
+	return number.toString().padStart(2, '0');
+};
 

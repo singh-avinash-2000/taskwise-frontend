@@ -51,13 +51,14 @@
     flex-direction: column;
     flex-wrap: wrap;
     gap: 10px;
-    width: 100%;
-    padding: 10px;
+    /* width: 100%; */
+    height: fit-content;
+    /* min-width: fit-content; */
+    margin: 10px;
 }
 
 .chat-message-owner-user {
     color: grey;
-    align-self: flex-end;
 }
 
 .chat-message-owner-other {
@@ -74,6 +75,16 @@
     gap: 5px;
 }
 
+.chat-message-time-user {
+    color: grey;
+    font-size: 0.7rem;
+}
+
+.chat-message-time-other {
+    color: grey;
+    font-size: 0.7rem;
+}
+
 
 .chat-message-other {
     align-self: flex-start;
@@ -84,17 +95,41 @@
     gap: 5px;
 }
 
-.chat-message-header {
+.chat-message-header-user {
     display: flex;
     gap: 2px;
     align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    position: relative;
+    padding-right: 43px;
+    height: 68px;
+    min-width: fit-content;
 }
 
-.chat-message-time {
-    /* font-size: 0.5rem; */
-    margin-top: 2px;
-    float: right;
+.chat-message-header-other {
+    display: flex;
+    gap: 2px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+    padding-left: 43px;
+    min-width: fit-content;
+    height: 68px;
 }
+
+.chat-avatar-user {
+    position: absolute;
+    right: 0;
+}
+
+.chat-avatar-other {
+    position: absolute;
+    left: 0;
+}
+
 
 /* .header-container{
 	display: flex;
@@ -109,6 +144,7 @@
     border-radius: 10px;
     max-width: 600px;
     word-wrap: break-word;
+
 }
 
 .chat-bubble-other {
@@ -118,6 +154,19 @@
     border-radius: 10px;
     max-width: 600px;
     word-wrap: break-word;
+}
+
+/* image styling */
+.image-box {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.file-attachment {
+    text-decoration: none;
+    color: inherit;
 }
 
 /* FOOTER HERE */
@@ -169,6 +218,45 @@
 }
 
 .chat-send-button {
+    cursor: pointer;
+}
+
+.attachment-types {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.each-attach-type {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 5px;
+}
+
+.each-attach-type:hover {
+    background-color: rgb(229,246,249);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#image-upload, #file-upload, #video-upload, #audio-upload {
+    display: none;
+}
+
+.file-attachment-preview {
+    display: flex;
+    align-items: center;
+}
+
+.chat-profile-image {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
     cursor: pointer;
 }
 

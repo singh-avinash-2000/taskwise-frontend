@@ -1,0 +1,54 @@
+{
+    "terminal.integrated.tabs.enabled": true,
+    "editor.formatOnSave": true,
+    "bracket-pair-colorizer-2.excludedLanguages": [ ],
+    "editor.insertSpaces": false,
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "editor.formatOnPaste": true,
+    "prettier.tabWidth": 4,
+    "prettier.useTabs": true,
+    "explorer.confirmDelete": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "prettier.requireConfig": true,
+    "explorer.confirmDragAndDrop": false,
+    "bracket-pair-colorizer-2.depreciation-notice": false,
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    },
+    "liveServer.settings.donotShowInfoMsg": true,
+    "git.autofetch": true,
+    "git.ignoreMissingGitWarning": true,
+    "javascript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+    "typescript.format.placeOpenBraceOnNewLineForControlBlocks": true,
+    "typescript.format.placeOpenBraceOnNewLineForFunctions": true,
+    "files.insertFinalNewline": true,
+    "scss.format.braceStyle": "expand",
+    "javascript.format.placeOpenBraceOnNewLineForFunctions": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "javascript.preferences.quoteStyle": "double",
+    "typescript.preferences.quoteStyle": "double",
+    "javascript.format.semicolons": "insert",
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "typescript.format.semicolons": "insert",
+    "json.format.keepLines": true,
+    "css.format.braceStyle": "expand",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "workbench.editor.enablePreview": false,
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    },
+    "window.zoomLevel": 0.8
+}

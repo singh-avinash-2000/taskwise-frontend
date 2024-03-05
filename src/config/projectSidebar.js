@@ -1,6 +1,5 @@
 
-const getSideBarData = (project_id) =>
-{
+const getSideBarData = (project_id) => {
 	return {
 		"PLANNING": [
 			{
@@ -30,8 +29,8 @@ const getSideBarData = (project_id) =>
 				"to": `/project/${project_id}/chat`
 			},
 			{
-				"title": "Documents",
-				"to": `/project/${project_id}/documents`
+				"title": "Collaborative IDE",
+				"to": `/project/${project_id}/collab`
 			},
 			{
 				"title": "Edit Project",

@@ -6,6 +6,7 @@
 		"@ant-design/icons": "^4.7.0",
 		"@emoji-mart/data": "^1.1.2",
 		"@emoji-mart/react": "^1.1.1",
+		"@monaco-editor/react": "^4.6.0",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^13.4.0",
 		"@testing-library/user-event": "^13.5.0",
@@ -14,7 +15,8 @@
 		"emoji-mart": "^5.5.2",
 		"i": "^0.3.7",
 		"lodash": "^4.17.21",
-		"npm": "^8.19.3",
+		"npm": "^8.19.4",
+		"randomcolor": "^0.6.2",
 		"react": "^18.2.0",
 		"react-audio-player": "^0.17.0",
 		"react-beautiful-dnd": "^13.1.1",
@@ -28,6 +30,7 @@
 		"react-scripts": "5.0.1",
 		"react-virtualized": "^9.22.5",
 		"socket.io-client": "^4.6.1",
+		"uuid": "^9.0.1",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {

@@ -3,6 +3,8 @@ import ProjectLayout from "../components/layout/Layout/ProjectLayout";
 import OnlyIfLoggedIn from "../components/ui/Auth/OnlyIfLoggedIn";
 import OnlyIfNotLoggedIn from "../components/ui/Auth/OnlyIfNotLoggedIn";
 import { Login, Register, Dashboard, ProjectMembers, TaskInfo, TaskList, ChatProject, DefaultPage, EditProject, ForgotPassword, ResetPassword, Account, InviteAccept, DeleteProject, Kanban } from "../page";
+import Collab from '../page/project/Collab/Collab';
+import CollabIntro from "../page/project/Collab/CollabIntro";
 
 const RouterComponent = () =>
 {
@@ -28,6 +30,8 @@ const RouterComponent = () =>
 					<Route path="/project/:project_id/edit" element={<EditProject />} />
 					<Route path="/project/:project_id/delete" element={<DeleteProject />} />
 					<Route path="/project/:project_id/kanban" element={<Kanban />} />
+					<Route path="/project/:project_id/collab" element={<CollabIntro />} />
+					<Route path="/project/:project_id/collab/:collabId" element={<Collab />} />
 				</Route>
 			</Route>
 			<Route path="*" element={<DefaultPage />} />

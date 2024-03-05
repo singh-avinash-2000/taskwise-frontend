@@ -26,33 +26,20 @@ import io from 'socket.io-client';
 const socket = io(process.env.REACT_APP_SOCKET_URL, {
 	autoConnect: false,
 	reconnect: true,
-	reconnectDelay: 1000,
-	reconnectionAttempts: 5,
+	// reconnectDelay: 1000,
+	// reconnectionAttempts: 5,
 	auth: {
 		token: null, // set to null initially
 	},
 });
 
 // // set auth token after user logs in
-export const setAuthToken = (token) =>
-{
+export const setAuthToken = (token) => {
 	socket.auth.token = token;
 	console.log("socket header set");
 };
 
-export const getSocketInstance = () =>
-{
+export const getSocketInstance = () => {
 	return socket;
 };
 
-// // connect socket
-// export const connectSocket = () =>
-// {
-// 	socket.connect();
-// };
-
-// // disconnect socket
-// export const disconnectSocket = () =>
-// {
-// 	socket.disconnect();
-// };

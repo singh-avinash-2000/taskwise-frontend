@@ -7,16 +7,15 @@ import { FaTasks } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 import { FiEdit } from "react-icons/fi";
 import { GrPlan } from "react-icons/gr";
-import { AiOutlineInteraction, AiOutlineTeam, AiOutlineFileText, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineInteraction, AiOutlineTeam, AiOutlineDelete } from "react-icons/ai";
+import { FaCode } from "react-icons/fa";
 import { IoBanSharp } from "react-icons/io5";
 import { useStateContext } from "../../../context/ContextProvider";
 import { Spin } from "antd";
 import "./Sidebar.css";
 
-function getIconComponent(iconName)
-{
-	switch (iconName)
-	{
+function getIconComponent(iconName) {
+	switch (iconName) {
 		case 'Roadmap':
 			return <RiRoadMapLine />;
 		case 'Kanban Board':
@@ -33,8 +32,8 @@ function getIconComponent(iconName)
 			return <AiOutlineTeam />;
 		case 'Chat':
 			return <BsChatSquareText />;
-		case 'Documents':
-			return <AiOutlineFileText />;
+		case 'Collaborative IDE':
+			return <FaCode />;
 		case 'Edit Project':
 			return <FiEdit />;
 		case 'Delete Project':
@@ -44,18 +43,15 @@ function getIconComponent(iconName)
 	}
 }
 
-const SideBar = ({ setCollapsed }) =>
-{
+const SideBar = ({ setCollapsed }) => {
 	const { project_id } = useParams();
 	const { activeProjectName, activeProjectDetails } = useStateContext();
-	const NavHeader = ({ title, children, setCollapsed }) =>
-	{
+	const NavHeader = ({ title, children, setCollapsed }) => {
 		return (
 			<div className="nav-header-wrapper">
 				{getIconComponent(title)}<span className="nav-header-title">{title}</span>
 				{
-					children.map((child) =>
-					{
+					children.map((child) => {
 						return (
 							<NavItem title={child.title} to={child.to} key={child.title} setCollapsed={setCollapsed} />
 						);
@@ -65,12 +61,9 @@ const SideBar = ({ setCollapsed }) =>
 		);
 	};
 
-	const NavItem = ({ title, to, setCollapsed }) =>
-	{
-		const handleClick = () =>
-		{
-			if (window.innerWidth < 950 || rdd.isMobile)
-			{
+	const NavItem = ({ title, to, setCollapsed }) => {
+		const handleClick = () => {
+			if (window.innerWidth < 950 || rdd.isMobile) {
 				setCollapsed(true);
 			}
 		};
@@ -104,8 +97,7 @@ const SideBar = ({ setCollapsed }) =>
 				</div>
 				<div className="nav-entries">
 					{
-						Object.entries(projectSideBarData(project_id)).map(([key, value]) =>
-						{
+						Object.entries(projectSideBarData(project_id)).map(([key, value]) => {
 							return (
 								<NavHeader title={key} children={value} key={key} setCollapsed={setCollapsed} />
 							);

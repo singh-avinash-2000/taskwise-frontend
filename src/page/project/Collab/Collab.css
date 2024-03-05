@@ -1,0 +1,83 @@
+.connect-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    padding-block: 20px !important;
+}
+
+.badge-container {
+    /* position: relative; */
+    display: inline-block;
+    position: absolute;
+}
+
+.badge {
+    color: white;
+    padding: 5px 10px;
+    border-radius: 25px;
+    transform: translateY(40px)
+}
+
+.pointer {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: rotate(45deg);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 10px solid transparent;
+    /* border-right: 20px solid #FF5733; */
+    border-radius: 20px
+}
+
+.collab-writing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 120px;
+    width: 60%;
+    text-align: center;
+    margin-inline: auto;
+}
+
+.collab-writing h1 {
+    margin-bottom: 50px;
+}
+
+.collab-writing span {
+    font-size: larger;
+}
+
+.collab-join-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    gap: 50px;
+}
+
+.editor-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+}
+
+.editor-upper-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.collab-invite-wrapper {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    width: 30%;
+}
